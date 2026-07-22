@@ -3,6 +3,7 @@ import { Upload, X, Image, Film, FileUp, CheckCircle2, AlertCircle } from "lucid
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { pfmCreateUploadUrl } from "@/lib/api";
+import { uuid } from "@/lib/uuid";
 
 interface UploadedFile {
   id: string;
@@ -114,7 +115,7 @@ export function MediaUploader({
       if (toAdd.length === 0) return;
 
       const entries: UploadedFile[] = toAdd.map((file) => ({
-        id: crypto.randomUUID(),
+        id: uuid(),
         file,
         previewUrl: URL.createObjectURL(file),
         hostedUrl: null,

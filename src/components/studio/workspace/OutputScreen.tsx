@@ -27,6 +27,7 @@ import { CaptionEditor } from "@/components/studio/CaptionEditor";
 import { targetAspectFor, fitImageToAspect, isVideoUrl } from "@/lib/media-fit";
 import type { Platform } from "@/types";
 import type { StudioDoc } from "./types";
+import { uuid } from "@/lib/uuid";
 
 function isHttp(u?: string): boolean { return !!u && /^https?:\/\//.test(u); }
 
@@ -168,7 +169,7 @@ export function OutputScreen({
       for (const url of media) {
         if (url.startsWith("data:")) {
           const blob = dataUrlToBlob(url);
-          const path = `studio/${user.id}/gal_${crypto.randomUUID()}.png`;
+          const path = `studio/${user.id}/gal_${uuid()}.png`;
           const { error } = await supabase.storage.from("media").upload(path, blob, { contentType: "image/png" });
           if (!error) urls.push(supabase.storage.from("media").getPublicUrl(path).data.publicUrl);
         } else if (isHttp(url)) urls.push(url);

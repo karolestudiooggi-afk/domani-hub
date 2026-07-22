@@ -10,6 +10,7 @@ import { searchStockImages, type StockImage } from "@/lib/api";
 import { ArtStyles } from "./ArtStyles";
 import { useStudio } from "./StudioProvider";
 import { uid, type El } from "./types";
+import { uuid } from "@/lib/uuid";
 
 export function AssetsRail() {
   const { user } = useAuth();
@@ -44,7 +45,7 @@ export function AssetsRail() {
     setUploading(true);
     try {
       const ext = file.name.split(".").pop() || "png";
-      const path = `studio/${user.id}/upload_${crypto.randomUUID()}.${ext}`;
+      const path = `studio/${user.id}/upload_${uuid()}.${ext}`;
       const { error } = await supabase.storage.from("media").upload(path, file);
       if (error) throw error;
       applyImage(supabase.storage.from("media").getPublicUrl(path).data.publicUrl);

@@ -4,6 +4,7 @@
 
 import { supabase } from "@/integrations/supabase/client";
 import { requireOrgId } from "@/lib/org";
+import { uuid } from "@/lib/uuid";
 
 export interface Creation {
   id: string;
@@ -176,7 +177,7 @@ async function persistUrls(urls: string[]): Promise<string[]> {
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) continue;
         // Path deve começar com o user.id pra bater com a RLS INSERT do bucket "media".
-        const path = `${user.id}/gallery/${crypto.randomUUID()}.${ext}`;
+        const path = `${user.id}/gallery/${uuid()}.${ext}`;
         const { error } = await supabase.storage.from("media").upload(path, bytes, { contentType: mime });
         if (!error) {
           out.push(supabase.storage.from("media").getPublicUrl(path).data.publicUrl);

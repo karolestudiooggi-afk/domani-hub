@@ -14,6 +14,7 @@ import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
+import { uuid } from "@/lib/uuid";
 import {
   Plus, Loader2, Trash2, FileText, ImageIcon, Link2, Type, Upload, FolderOpen,
 } from "lucide-react";
@@ -93,7 +94,7 @@ export function BrandMaterials({ brandId, brandName }: { brandId?: string | null
 
       if (file) {
         const ext = file.name.split(".").pop() || "bin";
-        const path = `marca/${orgId}/${crypto.randomUUID()}.${ext}`;
+        const path = `marca/${orgId}/${uuid()}.${ext}`;
         const { error: upErr } = await supabase.storage.from("media").upload(path, file);
         if (upErr) throw upErr;
         const { data: pub } = supabase.storage.from("media").getPublicUrl(path);

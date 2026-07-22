@@ -24,26 +24,30 @@ declare
   ];
 begin
   foreach t in array tabelas loop
-    -- Só move se existir em domani_hub e ainda não existir em public
+    -- Já existe com o prefixo? Nada a fazer.
     if exists (select 1 from information_schema.tables
-               where table_schema = 'domani_hub' and table_name = t)
-       and not exists (select 1 from information_schema.tables
-               where table_schema = 'public' and table_name = 'hub_' || t)
-    then
-      execute format('alter table domani_hub.%I set schema public', t);
-      execute format('alter table public.%I rename to %I', t, 'hub_' || t);
-      raise notice 'movida: domani_hub.% -> public.hub_%', t, t;
+               where table_schema = 'public' and table_name = 'hub_' || t) then
+      continue;
+    end if;
 
-    -- Se já existe em public sem prefixo (execução parcial), só renomeia
-    elsif exists (select 1 from information_schema.tables
-                  where table_schema = 'public' and table_name = t)
-       and not exists (select 1 from information_schema.tables
-                  where table_schema = 'public' and table_name = 'hub_' || t)
-       and t not in ('user_configs','user_roles','brand_profiles','brand_materials',
-                     'activity_logs','creations','saved_sources','analytics_snapshots',
-                     'autopilot_configs','autopilot_calendars','autopilot_posts','system_settings')
-    then
-      null; -- não mexe nas tabelas do Agentes
+    if exists (select 1 from information_schema.tables
+               where table_schema = 'domani_hub' and table_name = t) then
+      -- Cria a cópia em public com estrutura idêntica. O INCLUDING ALL gera
+      -- nomes NOVOS para chaves e índices — por isso não colide com as
+      -- tabelas de mesmo nome que o Agentes já tem em public.
+      execute format(
+        'create table public.%I (like domani_hub.%I including all)',
+        'hub_' || t, t);
+
+      -- Move os dados
+      execute format(
+        'insert into public.%I select * from domani_hub.%I',
+        'hub_' || t, t);
+
+      -- Remove a original
+      execute format('drop table domani_hub.%I cascade', t);
+
+      raise notice 'criada: public.hub_% (dados copiados)', t;
     end if;
   end loop;
 end $$;

@@ -25,6 +25,7 @@ import { BrandMaterials } from "@/components/brands/BrandMaterials";
 import { Checkbox } from "@/components/ui/checkbox";
 import { usePfmAccounts } from "@/hooks/use-social";
 import { requireOrgId } from "@/lib/org";
+import { uuid } from "@/lib/uuid";
 
 interface BrandProfile {
   id: string;
@@ -268,7 +269,7 @@ export default function Brands() {
     if (!file || !user) return;
     setUploading(true);
     const ext = file.name.split(".").pop();
-    const path = `brands/${user.id}/${crypto.randomUUID()}.${ext}`;
+    const path = `brands/${user.id}/${uuid()}.${ext}`;
     const { error } = await supabase.storage.from("media").upload(path, file);
     if (error) {
       toast.error("Erro no upload");
@@ -633,7 +634,7 @@ export default function Brands() {
                         if (!file || !user) return;
                         setUploading(true);
                         const ext = file.name.split(".").pop();
-                        const path = `brands/${user.id}/pfp_${crypto.randomUUID()}.${ext}`;
+                        const path = `brands/${user.id}/pfp_${uuid()}.${ext}`;
                         const { error } = await supabase.storage.from("media").upload(path, file);
                         if (error) { toast.error("Erro no upload"); setUploading(false); return; }
                         const { data: urlData } = supabase.storage.from("media").getPublicUrl(path);
