@@ -133,7 +133,7 @@ Deno.serve(async (req: Request) => {
       )
       .filter(Boolean);
 
-    return new Response(JSON.stringify({ images, model: payload.model }), {
+    return new Response(JSON.stringify({ images, model: useModel }), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
