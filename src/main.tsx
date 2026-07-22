@@ -3,14 +3,14 @@ import App from "./App.tsx";
 import { installSupabaseTracker } from "./lib/dev/supabase-tracker";
 // DEV-only: rastreia todas as payloads de/para o Supabase (window.__supabaseTraffic / __dumpTraffic()).
 if (import.meta.env.DEV) installSupabaseTracker();
-// @bilhon/ds fonts (Inter + IBM Plex Mono) — remover esta linha reverte
-import "./bilhon-fonts.css";
+// Fontes do design system (Inter + IBM Plex Mono)
+import "./domani-fonts.css";
 import "./index.css";
-// @bilhon/ds tokens --bl-* (define o namespace p/ bos-web/effects/motion) — remover reverte
-import "./bilhon-tokens.css";
-import "./bilhon-ds.tokens.css"; // @bilhon/ds re-skin (shadcn bridge, !important) — remover esta linha reverte
-import "./bilhon-bosweb.css";    // @bilhon/ds bos-web layer (card-premium/eyebrow/text-h2/gradiente) — reversível
-import "./bilhon-effects.css";   // @bilhon/ds effects (glow/glass/shimmer) — reversível
+// Tokens de cor e espaçamento do design system
+import "./domani-tokens.css";
+import "./domani-ds.tokens.css"; // Design system: ponte com o shadcn
+import "./domani-bosweb.css";    // Camada de componentes (card-premium, eyebrow, text-h2, gradiente)
+import "./domani-effects.css";   // Efeitos visuais (glow, glass, shimmer)
 // Bilhon Light Violeta — tema ÚNICO light. Sem alternância dark, sem data-theme legado.
 (function () {
   try {
@@ -23,6 +23,6 @@ import "./bilhon-effects.css";   // @bilhon/ds effects (glow/glass/shimmer) — 
     document.documentElement.classList.add("light");
   }
 })();
-import "./bilhon-effects.js";    // engine (magnetic/tilt/reveal) — reversível
+import "./domani-effects.js";    // Engine de interação (magnetic, tilt, reveal)
 
 createRoot(document.getElementById("root")!).render(<App />);

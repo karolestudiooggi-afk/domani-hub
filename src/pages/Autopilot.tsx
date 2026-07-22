@@ -147,7 +147,7 @@ export default function Autopilot() {
         </div>
         <div className="text-center space-y-2">
           <h1 className="text-3xl md:text-4xl font-semibold tracking-tight">
-            <span className="text-gradient-bilhon">Autopilot</span>
+            <span className="text-gradient-domani">Autopilot</span>
           </h1>
           <p className="text-muted-foreground max-w-md">
             Pesquisa, cria, gera visuais e agenda publicações recorrentes — no automático.
@@ -175,7 +175,7 @@ export default function Autopilot() {
           </div>
           <div>
             <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">
-              <span className="text-gradient-bilhon">Autopilot</span>
+              <span className="text-gradient-domani">Autopilot</span>
             </h1>
             <p className="text-sm text-muted-foreground">Esteira de conteúdo automatizado</p>
           </div>

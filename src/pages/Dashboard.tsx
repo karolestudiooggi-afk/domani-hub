@@ -117,13 +117,13 @@ export default function Dashboard() {
   const scheduledCount = scheduledPostsQuery.data?.data?.length ?? 0;
   const isLoading = pfmAccountsQuery.isLoading;
 
-  // Cor de chart resolvida do token --bl-accent: atributo SVG fill/stroke não
+  // Cor de chart resolvida do token --dm-accent: atributo SVG fill/stroke não
   // resolve var() de CSS (vira preto), então lemos o valor concreto em JS.
   const [chartColor, setChartColor] = useState<string>("#e85600");
   useEffect(() => {
     const read = () => {
       const node = document.querySelector(".bos-scope") ?? document.documentElement;
-      const raw = getComputedStyle(node as Element).getPropertyValue("--bl-accent").trim();
+      const raw = getComputedStyle(node as Element).getPropertyValue("--dm-accent").trim();
       if (raw) setChartColor(raw);
     };
     read();
@@ -283,7 +283,7 @@ export default function Dashboard() {
       <div>
         <h1 className="flex items-center gap-2 text-h2Sm md:text-h2">
           <LayoutDashboard className="h-6 w-6 text-primary" />
-          <span className="text-gradient-bilhon">Dashboard</span>
+          <span className="text-gradient-domani">Dashboard</span>
         </h1>
         <p className="mt-1 text-muted-foreground">
           Visão geral da sua automação de redes sociais

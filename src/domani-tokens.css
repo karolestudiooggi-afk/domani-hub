@@ -1,0 +1,1282 @@
+/* GERADO por apply-bilhon-ds — tokens --dm-* (tokens.css + themes.css do design system). Define os --dm-* p/ bos-web/effects/motion resolverem. Reverter: remover import + arquivo. */
+
+/* ============================================================
+   BILHON OS Design System v2.0 — Design Tokens
+   Single source of truth for ALL custom properties.
+   Prefix: --dm-
+   Author: Homer (Romulo Henricco)
+   ============================================================ */
+
+:root {
+  /* ── Background Scale ── */
+  --dm-bg-0: #030303;
+  --dm-bg-1: #050505;
+  --dm-bg-2: #09090c;
+  --dm-bg-3: #0c0c0e;
+  --dm-bg-4: #0f0f14;
+  --dm-bg-5: #18181b;
+
+  /* ── Background Semantic ── */
+  --dm-bg-primary:    #09090c;
+  --dm-bg-elevated:   #0f0f14;
+  --dm-bg-surface:    #0F0F11;
+  --dm-bg-surface-alt:#1C1E19;
+  --dm-bg-card:       rgba(17, 17, 20, 0.35);
+  --dm-bg-card-solid: rgba(28, 28, 30, 0.65);
+  --dm-bg-card-hover: rgba(35, 35, 38, 0.75);
+  --dm-bg-input:      #131316;
+
+  /* ── Foreground / Text ── */
+  --dm-text-primary:  #f4f4e8;
+  --dm-text-secondary:#a1a1aa;
+  --dm-text-dim:      #71717a;
+  --dm-text-muted:    #52525b;
+  --dm-text-ghost:    #3f3f46;
+
+  /* ── Brand ── */
+  --dm-green:         #6bc950;
+  --dm-green-dim:     rgba(107, 201, 80, 0.15);
+  --dm-green-glow:    rgba(107, 201, 80, 0.25);
+  --dm-green-soft:    rgba(107, 201, 80, 0.08);
+  --dm-green-rgb:     107, 201, 80;
+
+  /* ── Brand Green Scale ── */
+  --dm-green-100: #CCFFE1;
+  --dm-green-200: #99FFc4;
+  --dm-green-300: #5CFF9D;
+  --dm-green-400: #33E87B;
+  --dm-green-500: #6bc950;
+  --dm-green-600: #00B848;
+  --dm-green-700: #009038;
+  --dm-green-800: #006828;
+  --dm-green-900: #004018;
+
+  /* ── Dynamic Accent (fúcsia Bilhon Social) ── */
+  --dm-accent:        #F97316;
+  --dm-accent-dim:    rgba(192, 38, 211, 0.15);
+  --dm-accent-glow:   rgba(192, 38, 211, 0.25);
+  --dm-accent-soft:   rgba(192, 38, 211, 0.08);
+  --dm-accent-rgb:    192, 38, 211;
+
+  /* ── Semantic Colors ── */
+  --dm-blue:          #60a5fa;
+  --dm-blue-bright:   #0099FF;
+  --dm-purple:        #a855f7;
+  --dm-orange:        #fb923c;
+  --dm-red:           #ef4444;
+  --dm-cyan:          #06b6d4;
+  --dm-yellow:        #fbbf24;
+  --dm-pink:          #ec4899;
+  --dm-gold:          #D4A853;
+  --dm-emerald:       #34c759;
+  --dm-indigo:        #6366f1;
+  --dm-amber:        #F59E0B;
+  --dm-amber:         #d97706;
+  --dm-teal:          #059669;
+  --dm-rose:          #ec4899;
+  --dm-gray:          #6b7280;
+
+  /* ── ClickMax Brand Colors ── */
+  --dm-clickmax-white:  #F9FAFB;
+  --dm-clickmax-dark:   #292929;
+  --dm-clickmax-acid:   #DCFF31;
+  --dm-clickmax-green:  #B3FF53;
+  --dm-clickmax-teal:   #84DDDB;
+  --dm-clickmax-mint:   #89E1AF;
+  --dm-clickmax-lime:   #B5ED7A;
+
+  /* ── Status Colors ── */
+  --dm-success: #6bc950;
+  --dm-info:    #60a5fa;
+  --dm-warning: #fbbf24;
+  --dm-danger:  #ef4444;
+
+  /* ── Borders (numeric tiers) ── */
+  --dm-border-1: rgba(255, 255, 255, 0.04);
+  --dm-border-2: rgba(255, 255, 255, 0.06);
+  --dm-border-3: rgba(255, 255, 255, 0.08);
+  --dm-border-4: rgba(255, 255, 255, 0.12);
+  /* ── Borders (semantic) ── */
+  --dm-border:        rgba(255, 255, 255, 0.06);
+  --dm-border-hover:  rgba(255, 255, 255, 0.12);
+  --dm-border-accent: rgba(107, 201, 80, 0.2);
+
+  /* ── Shadows ── */
+  --dm-shadow-xs:     0 1px 2px rgba(0, 0, 0, 0.3);
+  --dm-shadow-sm:     0 2px 4px rgba(0, 0, 0, 0.35);
+  --dm-shadow-md:     0 4px 12px rgba(0, 0, 0, 0.4);
+  --dm-shadow-lg:     0 8px 24px rgba(0, 0, 0, 0.5);
+  --dm-shadow-xl:     0 16px 48px rgba(0, 0, 0, 0.6);
+  --dm-shadow-glow:   0 0 20px rgba(var(--dm-accent-rgb), 0.15),
+                      0 0 40px rgba(var(--dm-accent-rgb), 0.05);
+  --dm-shadow-glow-lg:0 0 30px rgba(var(--dm-accent-rgb), 0.25),
+                      0 0 60px rgba(var(--dm-accent-rgb), 0.1),
+                      0 0 100px rgba(var(--dm-accent-rgb), 0.05);
+
+  /* ── Glow Effects ── */
+  --dm-glow-green:    0 0 20px rgba(107, 201, 80, 0.30), 0 0 60px rgba(107, 201, 80, 0.12);
+  --dm-glow-blue:     0 0 20px rgba(0, 153, 255, 0.30), 0 0 60px rgba(0, 153, 255, 0.12);
+  --dm-glow-gold:     0 0 20px rgba(212, 168, 83, 0.30), 0 0 60px rgba(212, 168, 83, 0.12);
+  --dm-glow-red:      0 0 20px rgba(239, 68, 68, 0.30), 0 0 60px rgba(239, 68, 68, 0.12);
+
+  /* ── Border Radius (v2.1 — scaled) ── */
+  --dm-radius-xs:     5px;
+  --dm-radius-sm:     8px;
+  --dm-radius-md:     10px;
+  --dm-radius-lg:     14px;
+  --dm-radius-xl:     20px;
+  --dm-radius-2xl:    26px;
+  --dm-radius-3xl:    30px;
+  --dm-radius-full:   9999px;
+
+  /* ── Typography ── */
+  --dm-font-sans:     'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --dm-font-mono:     'IBM Plex Mono', 'SF Mono', monospace;
+  --dm-font-mono-alt: 'Space Mono', 'IBM Plex Mono', monospace;
+  --dm-font-display:  'Inter', system-ui, sans-serif;
+
+  /* ── Font Sizes (v2.1 — +30% readability scale) ── */
+  --dm-text-xs:       14px;
+  --dm-text-sm:       16px;
+  --dm-text-base:     18px;
+  --dm-text-md:       21px;
+  --dm-text-lg:       23px;
+  --dm-text-xl:       29px;
+  --dm-text-2xl:      39px;
+  --dm-text-3xl:      47px;
+
+  /* ── Line Heights ── */
+  --dm-leading-tight:   1.2;
+  --dm-leading-normal:  1.5;
+  --dm-leading-relaxed: 1.65;
+
+  /* ── Letter Spacing ── */
+  --dm-tracking-tight:  -0.02em;
+  --dm-tracking-normal: 0;
+  --dm-tracking-wide:   0.02em;
+  --dm-tracking-wider:  0.05em;
+
+  /* ── Spacing (5px grid — v2.1 +30% readability) ── */
+  --dm-space-0:       0;
+  --dm-space-1:       5px;
+  --dm-space-2:       10px;
+  --dm-space-3:       15px;
+  --dm-space-4:       20px;
+  --dm-space-5:       25px;
+  --dm-space-6:       30px;
+  --dm-space-8:       40px;
+  --dm-space-10:      50px;
+  --dm-space-12:      60px;
+  --dm-space-16:      80px;
+
+  /* ── Transitions ── */
+  --dm-ease:          cubic-bezier(0.32, 0.72, 0, 1);
+  --dm-ease-bounce:   cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --dm-ease-out:      cubic-bezier(0, 0, 0.2, 1);
+  --dm-duration-fast: 120ms;
+  --dm-duration-base: 200ms;
+  --dm-duration-slow: 350ms;
+  --dm-duration-slower: 500ms;
+
+  /* ── Z-Index ── */
+  --dm-z-base:        0;
+  --dm-z-dropdown:    100;
+  --dm-z-sticky:      200;
+  --dm-z-sidebar:     300;
+  --dm-z-modal-backdrop: 900;
+  --dm-z-modal:       1000;
+  --dm-z-topbar:      9999;
+  --dm-z-toast:       10000;
+
+  /* ── Layout (v2.1 — sidebar scaled, topbar=56px canonical) ── */
+  --dm-topbar-h:      56px;
+  --dm-topbar-bg:     rgba(9, 9, 12, 0.85);
+  --dm-sidebar-rail-w:80px;
+  --dm-sidebar-panel-w:320px;
+  --dm-content-max-w: 1400px;
+
+  /* ── Glass ── */
+  --dm-glass-blur:     40px;
+  --dm-glass-saturate: 180%;
+  --dm-glass-bg:       rgba(17, 17, 20, 0.25);
+  --dm-glass-bg-heavy: rgba(17, 17, 20, 0.55);
+
+  /* ── Grid Background ── */
+  --dm-grid-opacity:  0.02;
+  --dm-grid-size:     60px;
+
+  /* ── Scrollbar ── */
+  --dm-scroll-width:  6px;
+  --dm-scroll-track:  transparent;
+  --dm-scroll-thumb:  rgba(255, 255, 255, 0.08);
+  --dm-scroll-hover:  rgba(255, 255, 255, 0.14);
+
+  /* ── Kanban Board ── */
+  /* Scrollbar: usa accent do produto. Override --dm-kanban-scroll per-app.
+     Padrao: accent generico rgba(var(--dm-accent-rgb), 0.35)
+     comercial-bos: verde   rgba(107, 201, 80, 0.35)
+     valkyria-bos:  amarelo  rgba(251, 191, 36, 0.35)
+     Column max-height: 65vh com overflow-y auto.
+     Scrollbar width: 6px, border-radius 999px, track transparente. */
+  --dm-kanban-scroll:       rgba(var(--dm-accent-rgb), 0.35);
+  --dm-kanban-scroll-hover: rgba(var(--dm-accent-rgb), 0.55);
+  --dm-kanban-col-max-h:    65vh;
+}
+
+/* ── Light-first overrides (aplicam quando html.light) ── */
+html.light,
+:root:not(.dark) {
+  --dm-bg-0: #ffffff;
+  --dm-bg-1: #fafafa;
+  --dm-bg-2: #f6f6f8;
+  --dm-bg-3: #f1f1f4;
+  --dm-bg-4: #ececf0;
+  --dm-bg-5: #e4e4ea;
+  --dm-bg-primary:  #ffffff;
+  --dm-bg-elevated: #ffffff;
+  --dm-bg-surface:  #ffffff;
+  --dm-bg-surface-alt: #f7f7fa;
+  --dm-bg-card:       rgba(255, 255, 255, 0.85);
+  --dm-bg-card-solid: #ffffff;
+  --dm-bg-card-hover: #fafafa;
+  --dm-bg-input:      #ffffff;
+  --dm-text-primary:  #0f0f14;
+  --dm-text-secondary:#3f3f46;
+  --dm-text-dim:      #52525b;
+  --dm-text-muted:    #71717a;
+  --dm-text-ghost:    #a1a1aa;
+  --dm-border-1: rgba(15, 15, 20, 0.04);
+  --dm-border-2: rgba(15, 15, 20, 0.06);
+  --dm-border-3: rgba(15, 15, 20, 0.08);
+  --dm-border-4: rgba(15, 15, 20, 0.12);
+  --dm-border:        rgba(15, 15, 20, 0.08);
+  --dm-border-hover:  rgba(15, 15, 20, 0.14);
+  --dm-scroll-thumb:  rgba(15, 15, 20, 0.14);
+  --dm-scroll-hover:  rgba(15, 15, 20, 0.22);
+  --dm-topbar-bg:     rgba(255, 255, 255, 0.85);
+  --dm-glass-bg:      rgba(255, 255, 255, 0.55);
+  --dm-glass-bg-heavy:rgba(255, 255, 255, 0.85);
+}
+
+/* ── Base body ── */
+body {
+  background: var(--dm-bg-primary);
+  color: var(--dm-text-primary);
+  font-family: var(--dm-font-sans);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+button {
+  cursor: pointer;
+}
+
+/* ── Product-specific accent overrides ── */
+[data-product="comercial"] { --dm-accent: #3b82f6; --dm-accent-dim: rgba(59,130,246,0.15); --dm-accent-glow: rgba(59,130,246,0.25); --dm-accent-rgb: 59, 130, 246; }
+[data-product="rh"]        { --dm-accent: #6bc950; --dm-accent-dim: rgba(107,201,80,0.15); --dm-accent-glow: rgba(107,201,80,0.25); --dm-accent-rgb: 107, 201, 80; }
+[data-product="reports"]   { --dm-accent: #a855f7; --dm-accent-dim: rgba(168,85,247,0.15); --dm-accent-glow: rgba(168,85,247,0.25); --dm-accent-rgb: 168, 85, 247; }
+[data-product="forms"]     { --dm-accent: #f59e0b; --dm-accent-dim: rgba(245,158,11,0.15); --dm-accent-glow: rgba(245,158,11,0.25); --dm-accent-rgb: 245, 158, 11; }
+[data-product="gestao"]    { --dm-accent: #6bc950; --dm-accent-dim: rgba(107,201,80,0.15); --dm-accent-glow: rgba(107,201,80,0.25); --dm-accent-rgb: 107, 201, 80; }
+[data-product="valkyria"]  { --dm-accent: #ec4899; --dm-accent-dim: rgba(236,72,153,0.15); --dm-accent-glow: rgba(236,72,153,0.25); --dm-accent-rgb: 236, 72, 153; }
+[data-product="educacao"]  { --dm-accent: #06b6d4; --dm-accent-dim: rgba(6,182,212,0.15); --dm-accent-glow: rgba(6,182,212,0.25); --dm-accent-rgb: 6, 182, 212; }
+
+/* ── Executor Colors (HybridOps) ── */
+[data-executor="ai"]     { --dm-executor: #0099FF; --dm-executor-glow: rgba(0,153,255,0.30); }
+[data-executor="hybrid"] { --dm-executor: #D4A853; --dm-executor-glow: rgba(212,168,83,0.30); }
+[data-executor="human"]  { --dm-executor: #f4f4e8; --dm-executor-glow: rgba(244,244,232,0.15); }
+
+/* ============================================================================
+ * design-system-bos . themes.css -- CAMADA RUNTIME MULTI-TEMA
+ * ----------------------------------------------------------------------------
+ * Camada RUNTIME de temas. Espelha o padrao [data-product] de tokens.css:
+ * assim como [data-product="X"] troca a marca por produto, [data-theme="X"]
+ * troca a PALETA inteira do app por tema. Cada bloco [data-theme] sobrescreve
+ * SOMENTE o subconjunto temavel (~47 tokens --dm-*); tudo que e estrutural
+ * (radius, tipografia, spacing, transitions, z-index, layout, paleta semantica
+ * fixa --dm-blue/purple/...) permanece no :root de tokens.css e NUNCA e tocado.
+ *
+ * GERADO a partir do design system (src/app/globals.css) via mapping-contract.md.
+ * CARREGAR DEPOIS de tokens.css:
+ *   <link rel="stylesheet" href="tokens.css">
+ *   <link rel="stylesheet" href="themes.css">
+ * Selecionar tema em runtime: <html data-theme="bos"> (ou moon, sun, dark, ...).
+ * Default sem [data-theme] = :root de tokens.css (== bos). O bloco
+ * [data-theme="bos"] esta incluido explicitamente para selecao explicita.
+ *
+ * Temas claros (light/paper/sun) usam bordas + scrollbar com alpha de PRETO e
+ * glass de alpha alto (>0.5), por contrato. Temas escuros usam alpha de BRANCO.
+ * Valores HEX/rgba ja resolvidos (lighten/darken/mix/alpha do contrato).
+ * ============================================================================ */
+
+
+[data-theme="bos"] {
+  /* BOS - identidade Bilhon (default) - ESCURO | primary #e85600 - marca BOS quente (laranja acao + cobre acento) */
+  /* PORTE FIEL do SSOT design-system-bos/shared/tokens.css (:root). Acento = laranja, NAO verde. */
+  /* Backgrounds (tokens.css :root) */
+  --dm-bg-0: #070708;
+  --dm-bg-1: #0a0a0b;
+  --dm-bg-2: #0e0f11;
+  --dm-bg-3: #141414;
+  --dm-bg-4: #161616;
+  --dm-bg-5: #1f2020;
+  --dm-bg-primary: #0e0f11;
+  --dm-bg-elevated: #161616;
+  --dm-bg-surface: #161616;
+  --dm-bg-surface-alt: #1f2020;
+  --dm-bg-input: #1a1a1a;
+  --dm-bg-card: rgba(22, 22, 22, 0.35);
+  --dm-bg-card-solid: rgba(31, 32, 32, 0.65);
+  --dm-bg-card-hover: rgba(40, 40, 40, 0.75);
+  /* Texto (tokens.css :root — cream) */
+  --dm-text-primary: #f4f1ea;
+  --dm-text-secondary: #c7c7c7;
+  --dm-text-dim: #8d8d8d;
+  --dm-text-muted: #6b6b6b;
+  --dm-text-ghost: #4a4a4a;
+  /* Acento + marca (tokens.css :root — warm: laranja acao #e85600) */
+  --dm-green: #e85600;
+  --dm-green-dim: rgba(232, 86, 0, 0.15);
+  --dm-green-glow: rgba(232, 86, 0, 0.25);
+  --dm-green-soft: rgba(232, 86, 0, 0.08);
+  --dm-green-rgb: 232, 86, 0;
+  --dm-green-300: #FFAA73;
+  --dm-accent: #e85600;
+  --dm-accent-dim: rgba(232, 86, 0, 0.15);
+  --dm-accent-glow: rgba(232, 86, 0, 0.25);
+  --dm-accent-rgb: 232, 86, 0;
+  /* Status (tokens.css :root) */
+  --dm-success: #22c55e;
+  --dm-info: #a5d2ff;
+  --dm-warning: #ff8f39;
+  --dm-danger: #df4a63;
+  /* Bordas (tokens.css :root) */
+  --dm-border-1: rgba(255, 255, 255, 0.04);
+  --dm-border-2: rgba(255, 255, 255, 0.06);
+  --dm-border-3: rgba(255, 255, 255, 0.08);
+  --dm-border-4: rgba(255, 255, 255, 0.12);
+  --dm-border: rgba(255, 255, 255, 0.06);
+  --dm-border-hover: rgba(255, 255, 255, 0.12);
+  --dm-border-accent: rgba(232, 86, 0, 0.2);
+  /* Glass / topbar (tokens.css :root) */
+  --dm-glass-bg: rgba(22, 22, 22, 0.25);
+  --dm-glass-bg-heavy: rgba(22, 22, 22, 0.55);
+  --dm-topbar-bg: rgba(14, 15, 17, 0.85);
+  /* Scrollbar (tokens.css :root) */
+  --dm-scroll-thumb: rgba(255, 255, 255, 0.08);
+  --dm-scroll-hover: rgba(255, 255, 255, 0.14);
+  /* Glow + grid (tokens.css :root) */
+  --dm-glow-green: 0 0 20px rgba(232, 86, 0, 0.3), 0 0 60px rgba(232, 86, 0, 0.12);
+  --dm-grid-opacity: 0.02;
+}
+
+[data-theme="gestao"] {
+  /* Gestao - cores ORIGINAIS de gestao.bilhon.space (BOS classico verde) - ESCURO | primary #6bc950 */
+  /* PORTE FIEL de gestao-bos/src/app/globals.css (:root). Acento = verde Bilhon. */
+  /* Backgrounds */
+  --dm-bg-0: #030303;
+  --dm-bg-1: #050505;
+  --dm-bg-2: #0a0a0c;
+  --dm-bg-3: #0c0c0e;
+  --dm-bg-4: #111114;
+  --dm-bg-5: #18181b;
+  --dm-bg-primary: #030303;
+  --dm-bg-elevated: #111114;
+  --dm-bg-surface: #0c0c0e;
+  --dm-bg-surface-alt: #18181b;
+  --dm-bg-input: #131316;
+  --dm-bg-card: rgba(17, 17, 20, 0.25);
+  --dm-bg-card-solid: rgba(28, 28, 30, 0.65);
+  --dm-bg-card-hover: rgba(35, 35, 38, 0.75);
+  /* Texto */
+  --dm-text-primary: #f4f4e8;
+  --dm-text-secondary: #a1a1aa;
+  --dm-text-dim: #71717a;
+  --dm-text-muted: #52525b;
+  --dm-text-ghost: #3f3f46;
+  /* Acento + marca (verde Bilhon classico) */
+  --dm-green: #6bc950;
+  --dm-green-dim: rgba(107, 201, 80, 0.15);
+  --dm-green-glow: rgba(107, 201, 80, 0.25);
+  --dm-green-soft: rgba(107, 201, 80, 0.08);
+  --dm-green-rgb: 107, 201, 80;
+  --dm-green-300: #9ae07e;
+  --dm-accent: #6bc950;
+  --dm-accent-dim: rgba(107, 201, 80, 0.15);
+  --dm-accent-glow: rgba(107, 201, 80, 0.25);
+  --dm-accent-rgb: 107, 201, 80;
+  /* Status (gestao globals.css) */
+  --dm-success: #6bc950;
+  --dm-info: #5ac8fa;
+  --dm-warning: #f59e0b;
+  --dm-danger: #ff453a;
+  /* Bordas (gestao: alpha de branco .04/.08/.12/.16) */
+  --dm-border-1: rgba(255, 255, 255, 0.04);
+  --dm-border-2: rgba(255, 255, 255, 0.08);
+  --dm-border-3: rgba(255, 255, 255, 0.12);
+  --dm-border-4: rgba(255, 255, 255, 0.16);
+  --dm-border: rgba(255, 255, 255, 0.08);
+  --dm-border-hover: rgba(255, 255, 255, 0.12);
+  --dm-border-accent: rgba(107, 201, 80, 0.25);
+  /* Glass / topbar */
+  --dm-glass-bg: rgba(17, 17, 20, 0.25);
+  --dm-glass-bg-heavy: rgba(17, 17, 20, 0.55);
+  --dm-topbar-bg: rgba(9, 9, 12, 0.85);
+  /* Scrollbar */
+  --dm-scroll-thumb: rgba(255, 255, 255, 0.12);
+  --dm-scroll-hover: rgba(255, 255, 255, 0.16);
+  /* Glow + grid */
+  --dm-glow-green: 0 0 20px rgba(107, 201, 80, 0.3), 0 0 60px rgba(107, 201, 80, 0.12);
+  --dm-grid-opacity: 0.02;
+}
+
+[data-theme="dark"] {
+  /* Void - ESCURO | primary #22d3ee */
+  /* Backgrounds */
+  --dm-bg-0: #0b0d12;
+  --dm-bg-1: #0f141d;
+  --dm-bg-2: #131a24;
+  --dm-bg-3: #1b2431;
+  --dm-bg-4: #29313d;
+  --dm-bg-5: #363e4a;
+  --dm-bg-primary: #0b0d12;
+  --dm-bg-elevated: #1b2431;
+  --dm-bg-surface: #131a24;
+  --dm-bg-surface-alt: #1b2431;
+  --dm-bg-input: #0e121a;
+  --dm-bg-card: rgba(19, 26, 36, 0.35);
+  --dm-bg-card-solid: rgba(27, 36, 49, 0.65);
+  --dm-bg-card-hover: rgba(41, 49, 61, 0.75);
+  /* Texto */
+  --dm-text-primary: #f2f4f8;
+  --dm-text-secondary: #d8dbe3;
+  --dm-text-dim: #b9bec9;
+  --dm-text-muted: #8a91a3;
+  --dm-text-ghost: #515662;
+  /* Acento + marca (derivam do primary do tema) */
+  --dm-green: #22d3ee;
+  --dm-green-dim: rgba(34, 211, 238, 0.15);
+  --dm-green-glow: rgba(34, 211, 238, 0.25);
+  --dm-green-soft: rgba(34, 211, 238, 0.08);
+  --dm-green-rgb: 34, 211, 238;
+  --dm-green-300: #6fe2f4;
+  --dm-accent: #22d3ee;
+  --dm-accent-dim: rgba(34, 211, 238, 0.15);
+  --dm-accent-glow: rgba(34, 211, 238, 0.25);
+  --dm-accent-rgb: 34, 211, 238;
+  /* Status */
+  --dm-success: #22c55e;
+  --dm-info: #3892ff;
+  --dm-warning: #f59e0b;
+  --dm-danger: #e85a6b;
+  /* Bordas */
+  --dm-border-1: rgba(255, 255, 255, 0.04);
+  --dm-border-2: rgba(255, 255, 255, 0.06);
+  --dm-border-3: rgba(255, 255, 255, 0.08);
+  --dm-border-4: rgba(255, 255, 255, 0.12);
+  --dm-border: rgba(255, 255, 255, 0.06);
+  --dm-border-hover: rgba(255, 255, 255, 0.12);
+  --dm-border-accent: rgba(34, 211, 238, 0.2);
+  /* Glass / topbar */
+  --dm-glass-bg: rgba(19, 26, 36, 0.25);
+  --dm-glass-bg-heavy: rgba(19, 26, 36, 0.55);
+  --dm-topbar-bg: rgba(11, 13, 18, 0.85);
+  /* Scrollbar */
+  --dm-scroll-thumb: rgba(255, 255, 255, 0.08);
+  --dm-scroll-hover: rgba(255, 255, 255, 0.14);
+  /* Glow + grid */
+  --dm-glow-green: 0 0 20px rgba(34, 211, 238, 0.3), 0 0 60px rgba(34, 211, 238, 0.12);
+  --dm-grid-opacity: 0.02;
+}
+
+[data-theme="midnight-blue"] {
+  /* Midnight Blue - ESCURO | primary #3c83f6 */
+  /* Backgrounds */
+  --dm-bg-0: #070a13;
+  --dm-bg-1: #0b111d;
+  --dm-bg-2: #141a29;
+  --dm-bg-3: #1f2533;
+  --dm-bg-4: #2c323f;
+  --dm-bg-5: #3a3f4b;
+  --dm-bg-primary: #070a13;
+  --dm-bg-elevated: #1f2533;
+  --dm-bg-surface: #141a29;
+  --dm-bg-surface-alt: #1f2533;
+  --dm-bg-input: #0a0f1a;
+  --dm-bg-card: rgba(20, 26, 41, 0.35);
+  --dm-bg-card-solid: rgba(31, 37, 51, 0.65);
+  --dm-bg-card-hover: rgba(44, 50, 63, 0.75);
+  /* Texto */
+  --dm-text-primary: #e7eaef;
+  --dm-text-secondary: #cfd4de;
+  --dm-text-dim: #b2bbca;
+  --dm-text-muted: #8794ab;
+  --dm-text-ghost: #4d5667;
+  /* Acento + marca (derivam do primary do tema) */
+  --dm-green: #3c83f6;
+  --dm-green-dim: rgba(60, 131, 246, 0.15);
+  --dm-green-glow: rgba(60, 131, 246, 0.25);
+  --dm-green-soft: rgba(60, 131, 246, 0.08);
+  --dm-green-rgb: 60, 131, 246;
+  --dm-green-300: #80aef9;
+  --dm-accent: #3c83f6;
+  --dm-accent-dim: rgba(60, 131, 246, 0.15);
+  --dm-accent-glow: rgba(60, 131, 246, 0.25);
+  --dm-accent-rgb: 60, 131, 246;
+  /* Status */
+  --dm-success: #3bce9d;
+  --dm-info: #3c83f6;
+  --dm-warning: #f59f0a;
+  --dm-danger: #e85a6b;
+  /* Bordas */
+  --dm-border-1: rgba(255, 255, 255, 0.04);
+  --dm-border-2: rgba(255, 255, 255, 0.06);
+  --dm-border-3: rgba(255, 255, 255, 0.08);
+  --dm-border-4: rgba(255, 255, 255, 0.12);
+  --dm-border: rgba(255, 255, 255, 0.06);
+  --dm-border-hover: rgba(255, 255, 255, 0.12);
+  --dm-border-accent: rgba(60, 131, 246, 0.2);
+  /* Glass / topbar */
+  --dm-glass-bg: rgba(20, 26, 41, 0.25);
+  --dm-glass-bg-heavy: rgba(20, 26, 41, 0.55);
+  --dm-topbar-bg: rgba(7, 10, 19, 0.85);
+  /* Scrollbar */
+  --dm-scroll-thumb: rgba(255, 255, 255, 0.08);
+  --dm-scroll-hover: rgba(255, 255, 255, 0.14);
+  /* Glow + grid */
+  --dm-glow-green: 0 0 20px rgba(60, 131, 246, 0.3), 0 0 60px rgba(60, 131, 246, 0.12);
+  --dm-grid-opacity: 0.02;
+}
+
+[data-theme="synthwave"] {
+  /* Synthwave - ESCURO | primary #f17eb8 */
+  /* Backgrounds */
+  --dm-bg-0: #0d0911;
+  --dm-bg-1: #170f1f;
+  --dm-bg-2: #21182a;
+  --dm-bg-3: #2e2438;
+  --dm-bg-4: #3b3144;
+  --dm-bg-5: #473e50;
+  --dm-bg-primary: #0d0911;
+  --dm-bg-elevated: #2e2438;
+  --dm-bg-surface: #21182a;
+  --dm-bg-surface-alt: #2e2438;
+  --dm-bg-input: #140d1b;
+  --dm-bg-card: rgba(33, 24, 42, 0.35);
+  --dm-bg-card-solid: rgba(46, 36, 56, 0.65);
+  --dm-bg-card-hover: rgba(59, 49, 68, 0.75);
+  /* Texto */
+  --dm-text-primary: #ede9ed;
+  --dm-text-secondary: #d8d0dc;
+  --dm-text-dim: #bfb1c6;
+  --dm-text-muted: #9a83a7;
+  --dm-text-ghost: #5b4c64;
+  /* Acento + marca (derivam do primary do tema) */
+  --dm-green: #f17eb8;
+  --dm-green-dim: rgba(241, 126, 184, 0.15);
+  --dm-green-glow: rgba(241, 126, 184, 0.25);
+  --dm-green-soft: rgba(241, 126, 184, 0.08);
+  --dm-green-rgb: 241, 126, 184;
+  --dm-green-300: #f6abd1;
+  --dm-accent: #f17eb8;
+  --dm-accent-dim: rgba(241, 126, 184, 0.15);
+  --dm-accent-glow: rgba(241, 126, 184, 0.25);
+  --dm-accent-rgb: 241, 126, 184;
+  /* Status */
+  --dm-success: #30e8d6;
+  --dm-info: #cc66ff;
+  --dm-warning: #ffcc33;
+  --dm-danger: #e8304f;
+  /* Bordas */
+  --dm-border-1: rgba(255, 255, 255, 0.04);
+  --dm-border-2: rgba(255, 255, 255, 0.06);
+  --dm-border-3: rgba(255, 255, 255, 0.08);
+  --dm-border-4: rgba(255, 255, 255, 0.12);
+  --dm-border: rgba(255, 255, 255, 0.06);
+  --dm-border-hover: rgba(255, 255, 255, 0.12);
+  --dm-border-accent: rgba(241, 126, 184, 0.2);
+  /* Glass / topbar */
+  --dm-glass-bg: rgba(33, 24, 42, 0.25);
+  --dm-glass-bg-heavy: rgba(33, 24, 42, 0.55);
+  --dm-topbar-bg: rgba(13, 9, 17, 0.85);
+  /* Scrollbar */
+  --dm-scroll-thumb: rgba(255, 255, 255, 0.08);
+  --dm-scroll-hover: rgba(255, 255, 255, 0.14);
+  /* Glow + grid */
+  --dm-glow-green: 0 0 20px rgba(241, 126, 184, 0.3), 0 0 60px rgba(241, 126, 184, 0.12);
+  --dm-grid-opacity: 0.02;
+}
+
+[data-theme="solarized-dark"] {
+  /* Solarized Dark - ESCURO | primary #b38600 */
+  /* Backgrounds */
+  --dm-bg-0: #00141a;
+  --dm-bg-1: #041e25;
+  --dm-bg-2: #0f272e;
+  --dm-bg-3: #1b3037;
+  --dm-bg-4: #293c43;
+  --dm-bg-5: #36494f;
+  --dm-bg-primary: #00141a;
+  --dm-bg-elevated: #1b3037;
+  --dm-bg-surface: #0f272e;
+  --dm-bg-surface-alt: #1b3037;
+  --dm-bg-input: #031b22;
+  --dm-bg-card: rgba(15, 39, 46, 0.35);
+  --dm-bg-card-solid: rgba(27, 48, 55, 0.65);
+  --dm-bg-card-hover: rgba(41, 60, 67, 0.75);
+  /* Texto */
+  --dm-text-primary: #d1cec7;
+  --dm-text-secondary: #babfbd;
+  --dm-text-dim: #9eaeb2;
+  --dm-text-muted: #7593a0;
+  --dm-text-ghost: #405a64;
+  /* Acento + marca (derivam do primary do tema) */
+  --dm-green: #b38600;
+  --dm-green-dim: rgba(179, 134, 0, 0.15);
+  --dm-green-glow: rgba(179, 134, 0, 0.25);
+  --dm-green-soft: rgba(179, 134, 0, 0.08);
+  --dm-green-rgb: 179, 134, 0;
+  --dm-green-300: #ceb059;
+  --dm-accent: #b38600;
+  --dm-accent-dim: rgba(179, 134, 0, 0.15);
+  --dm-accent-glow: rgba(179, 134, 0, 0.25);
+  --dm-accent-rgb: 179, 134, 0;
+  /* Status */
+  --dm-success: #859900;
+  --dm-info: #2aa298;
+  --dm-warning: #f26326;
+  --dm-danger: #dc312e;
+  /* Bordas */
+  --dm-border-1: rgba(255, 255, 255, 0.04);
+  --dm-border-2: rgba(255, 255, 255, 0.06);
+  --dm-border-3: rgba(255, 255, 255, 0.08);
+  --dm-border-4: rgba(255, 255, 255, 0.12);
+  --dm-border: rgba(255, 255, 255, 0.06);
+  --dm-border-hover: rgba(255, 255, 255, 0.12);
+  --dm-border-accent: rgba(179, 134, 0, 0.2);
+  /* Glass / topbar */
+  --dm-glass-bg: rgba(15, 39, 46, 0.25);
+  --dm-glass-bg-heavy: rgba(15, 39, 46, 0.55);
+  --dm-topbar-bg: rgba(0, 20, 26, 0.85);
+  /* Scrollbar */
+  --dm-scroll-thumb: rgba(255, 255, 255, 0.08);
+  --dm-scroll-hover: rgba(255, 255, 255, 0.14);
+  /* Glow + grid */
+  --dm-glow-green: 0 0 20px rgba(179, 134, 0, 0.3), 0 0 60px rgba(179, 134, 0, 0.12);
+  --dm-grid-opacity: 0.02;
+}
+
+[data-theme="catppuccin"] {
+  /* Catppuccin Mocha - ESCURO | primary #caa6f7 */
+  /* Backgrounds */
+  --dm-bg-0: #181825;
+  --dm-bg-1: #1e1e2e;
+  --dm-bg-2: #282839;
+  --dm-bg-3: #323243;
+  --dm-bg-4: #3e3e4e;
+  --dm-bg-5: #4b4b5a;
+  --dm-bg-primary: #181825;
+  --dm-bg-elevated: #323243;
+  --dm-bg-surface: #282839;
+  --dm-bg-surface-alt: #323243;
+  --dm-bg-input: #1c1c2b;
+  --dm-bg-card: rgba(40, 40, 57, 0.35);
+  --dm-bg-card-solid: rgba(50, 50, 67, 0.65);
+  --dm-bg-card-hover: rgba(62, 62, 78, 0.75);
+  /* Texto */
+  --dm-text-primary: #ccd5f5;
+  --dm-text-secondary: #bcc4e6;
+  --dm-text-dim: #a8b1d3;
+  --dm-text-muted: #8a93b8;
+  --dm-text-ghost: #575c76;
+  /* Acento + marca (derivam do primary do tema) */
+  --dm-green: #caa6f7;
+  --dm-green-dim: rgba(202, 166, 247, 0.15);
+  --dm-green-glow: rgba(202, 166, 247, 0.25);
+  --dm-green-soft: rgba(202, 166, 247, 0.08);
+  --dm-green-rgb: 202, 166, 247;
+  --dm-green-300: #ddc5fa;
+  --dm-accent: #caa6f7;
+  --dm-accent-dim: rgba(202, 166, 247, 0.15);
+  --dm-accent-glow: rgba(202, 166, 247, 0.25);
+  --dm-accent-rgb: 202, 166, 247;
+  /* Status */
+  --dm-success: #a6e3a1;
+  --dm-info: #89dceb;
+  --dm-warning: #fab387;
+  --dm-danger: #f46685;
+  /* Bordas */
+  --dm-border-1: rgba(255, 255, 255, 0.04);
+  --dm-border-2: rgba(255, 255, 255, 0.06);
+  --dm-border-3: rgba(255, 255, 255, 0.08);
+  --dm-border-4: rgba(255, 255, 255, 0.12);
+  --dm-border: rgba(255, 255, 255, 0.06);
+  --dm-border-hover: rgba(255, 255, 255, 0.12);
+  --dm-border-accent: rgba(202, 166, 247, 0.2);
+  /* Glass / topbar */
+  --dm-glass-bg: rgba(40, 40, 57, 0.25);
+  --dm-glass-bg-heavy: rgba(40, 40, 57, 0.55);
+  --dm-topbar-bg: rgba(24, 24, 37, 0.85);
+  /* Scrollbar */
+  --dm-scroll-thumb: rgba(255, 255, 255, 0.08);
+  --dm-scroll-hover: rgba(255, 255, 255, 0.14);
+  /* Glow + grid */
+  --dm-glow-green: 0 0 20px rgba(202, 166, 247, 0.3), 0 0 60px rgba(202, 166, 247, 0.12);
+  --dm-grid-opacity: 0.02;
+}
+
+[data-theme="dracula"] {
+  /* Dracula - ESCURO | primary #52fa7c */
+  /* Backgrounds */
+  --dm-bg-0: #23252f;
+  --dm-bg-1: #2a2b37;
+  --dm-bg-2: #363845;
+  --dm-bg-3: #40424f;
+  --dm-bg-4: #4b4d5a;
+  --dm-bg-5: #575964;
+  --dm-bg-primary: #23252f;
+  --dm-bg-elevated: #40424f;
+  --dm-bg-surface: #363845;
+  --dm-bg-surface-alt: #40424f;
+  --dm-bg-input: #282935;
+  --dm-bg-card: rgba(54, 56, 69, 0.35);
+  --dm-bg-card-solid: rgba(64, 66, 79, 0.65);
+  --dm-bg-card-hover: rgba(75, 77, 90, 0.75);
+  /* Texto */
+  --dm-text-primary: #f8f8f2;
+  --dm-text-secondary: #e0e2e2;
+  --dm-text-dim: #c4c8ce;
+  --dm-text-muted: #9aa0b0;
+  --dm-text-ghost: #646976;
+  /* Acento + marca (derivam do primary do tema) */
+  --dm-green: #52fa7c;
+  --dm-green-dim: rgba(82, 250, 124, 0.15);
+  --dm-green-glow: rgba(82, 250, 124, 0.25);
+  --dm-green-soft: rgba(82, 250, 124, 0.08);
+  --dm-green-rgb: 82, 250, 124;
+  --dm-green-300: #8ffcaa;
+  --dm-accent: #52fa7c;
+  --dm-accent-dim: rgba(82, 250, 124, 0.15);
+  --dm-accent-glow: rgba(82, 250, 124, 0.25);
+  --dm-accent-rgb: 82, 250, 124;
+  /* Status */
+  --dm-success: #52fa7c;
+  --dm-info: #8be8fd;
+  --dm-warning: #f1fa89;
+  --dm-danger: #ff5757;
+  /* Bordas */
+  --dm-border-1: rgba(255, 255, 255, 0.04);
+  --dm-border-2: rgba(255, 255, 255, 0.06);
+  --dm-border-3: rgba(255, 255, 255, 0.08);
+  --dm-border-4: rgba(255, 255, 255, 0.12);
+  --dm-border: rgba(255, 255, 255, 0.06);
+  --dm-border-hover: rgba(255, 255, 255, 0.12);
+  --dm-border-accent: rgba(82, 250, 124, 0.2);
+  /* Glass / topbar */
+  --dm-glass-bg: rgba(54, 56, 69, 0.25);
+  --dm-glass-bg-heavy: rgba(54, 56, 69, 0.55);
+  --dm-topbar-bg: rgba(35, 37, 47, 0.85);
+  /* Scrollbar */
+  --dm-scroll-thumb: rgba(255, 255, 255, 0.08);
+  --dm-scroll-hover: rgba(255, 255, 255, 0.14);
+  /* Glow + grid */
+  --dm-glow-green: 0 0 20px rgba(82, 250, 124, 0.3), 0 0 60px rgba(82, 250, 124, 0.12);
+  --dm-grid-opacity: 0.02;
+}
+
+[data-theme="nord"] {
+  /* Nord - ESCURO | primary #87bfcf */
+  /* Backgrounds */
+  --dm-bg-0: #22272f;
+  --dm-bg-1: #292d38;
+  --dm-bg-2: #353a46;
+  --dm-bg-3: #3f4550;
+  --dm-bg-4: #4b505a;
+  --dm-bg-5: #565b65;
+  --dm-bg-primary: #22272f;
+  --dm-bg-elevated: #3f4550;
+  --dm-bg-surface: #353a46;
+  --dm-bg-surface-alt: #3f4550;
+  --dm-bg-input: #272b35;
+  --dm-bg-card: rgba(53, 58, 70, 0.35);
+  --dm-bg-card-solid: rgba(63, 69, 80, 0.65);
+  --dm-bg-card-hover: rgba(75, 80, 90, 0.75);
+  /* Texto */
+  --dm-text-primary: #d8dee9;
+  --dm-text-secondary: #c8cfdd;
+  --dm-text-dim: #b4bdce;
+  --dm-text-muted: #96a2b8;
+  --dm-text-ghost: #626b7a;
+  /* Acento + marca (derivam do primary do tema) */
+  --dm-green: #87bfcf;
+  --dm-green-dim: rgba(135, 191, 207, 0.15);
+  --dm-green-glow: rgba(135, 191, 207, 0.25);
+  --dm-green-soft: rgba(135, 191, 207, 0.08);
+  --dm-green-rgb: 135, 191, 207;
+  --dm-green-300: #b1d5e0;
+  --dm-accent: #87bfcf;
+  --dm-accent-dim: rgba(135, 191, 207, 0.15);
+  --dm-accent-glow: rgba(135, 191, 207, 0.25);
+  --dm-accent-rgb: 135, 191, 207;
+  /* Status */
+  --dm-success: #a4bf8d;
+  --dm-info: #8fbcbb;
+  --dm-warning: #ebca89;
+  --dm-danger: #be6069;
+  /* Bordas */
+  --dm-border-1: rgba(255, 255, 255, 0.04);
+  --dm-border-2: rgba(255, 255, 255, 0.06);
+  --dm-border-3: rgba(255, 255, 255, 0.08);
+  --dm-border-4: rgba(255, 255, 255, 0.12);
+  --dm-border: rgba(255, 255, 255, 0.06);
+  --dm-border-hover: rgba(255, 255, 255, 0.12);
+  --dm-border-accent: rgba(135, 191, 207, 0.2);
+  /* Glass / topbar */
+  --dm-glass-bg: rgba(53, 58, 70, 0.25);
+  --dm-glass-bg-heavy: rgba(53, 58, 70, 0.55);
+  --dm-topbar-bg: rgba(34, 39, 47, 0.85);
+  /* Scrollbar */
+  --dm-scroll-thumb: rgba(255, 255, 255, 0.08);
+  --dm-scroll-hover: rgba(255, 255, 255, 0.14);
+  /* Glow + grid */
+  --dm-glow-green: 0 0 20px rgba(135, 191, 207, 0.3), 0 0 60px rgba(135, 191, 207, 0.12);
+  --dm-grid-opacity: 0.02;
+}
+
+[data-theme="vercel"] {
+  /* Vercel - ESCURO | primary #ffffff */
+  /* Backgrounds */
+  --dm-bg-0: #000000;
+  --dm-bg-1: #121212;
+  --dm-bg-2: #1a1a1a;
+  --dm-bg-3: #262626;
+  --dm-bg-4: #333333;
+  --dm-bg-5: #404040;
+  --dm-bg-primary: #000000;
+  --dm-bg-elevated: #262626;
+  --dm-bg-surface: #1a1a1a;
+  --dm-bg-surface-alt: #262626;
+  --dm-bg-input: #0d0d0d;
+  --dm-bg-card: rgba(26, 26, 26, 0.35);
+  --dm-bg-card-solid: rgba(38, 38, 38, 0.65);
+  --dm-bg-card-hover: rgba(51, 51, 51, 0.75);
+  /* Texto */
+  --dm-text-primary: #ededed;
+  --dm-text-secondary: #d8d8d8;
+  --dm-text-dim: #bfbfbf;
+  --dm-text-muted: #999999;
+  --dm-text-ghost: #545454;
+  /* Acento + marca (derivam do primary do tema) */
+  --dm-green: #ffffff;
+  --dm-green-dim: rgba(255, 255, 255, 0.15);
+  --dm-green-glow: rgba(255, 255, 255, 0.25);
+  --dm-green-soft: rgba(255, 255, 255, 0.08);
+  --dm-green-rgb: 255, 255, 255;
+  --dm-green-300: #ffffff;
+  --dm-accent: #ffffff;
+  --dm-accent-dim: rgba(255, 255, 255, 0.15);
+  --dm-accent-glow: rgba(255, 255, 255, 0.25);
+  --dm-accent-rgb: 255, 255, 255;
+  /* Status */
+  --dm-success: #3392ff;
+  --dm-info: #3392ff;
+  --dm-warning: #dd901d;
+  --dm-danger: #e60000;
+  /* Bordas */
+  --dm-border-1: rgba(255, 255, 255, 0.04);
+  --dm-border-2: rgba(255, 255, 255, 0.06);
+  --dm-border-3: rgba(255, 255, 255, 0.08);
+  --dm-border-4: rgba(255, 255, 255, 0.12);
+  --dm-border: rgba(255, 255, 255, 0.06);
+  --dm-border-hover: rgba(255, 255, 255, 0.12);
+  --dm-border-accent: rgba(255, 255, 255, 0.2);
+  /* Glass / topbar */
+  --dm-glass-bg: rgba(26, 26, 26, 0.25);
+  --dm-glass-bg-heavy: rgba(26, 26, 26, 0.55);
+  --dm-topbar-bg: rgba(0, 0, 0, 0.85);
+  /* Scrollbar */
+  --dm-scroll-thumb: rgba(255, 255, 255, 0.08);
+  --dm-scroll-hover: rgba(255, 255, 255, 0.14);
+  /* Glow + grid */
+  --dm-glow-green: 0 0 20px rgba(255, 255, 255, 0.3), 0 0 60px rgba(255, 255, 255, 0.12);
+  --dm-grid-opacity: 0.02;
+}
+
+[data-theme="retro-terminal"] {
+  /* Retro Terminal - ESCURO | primary #00ff41 */
+  /* Backgrounds */
+  --dm-bg-0: #050505;
+  --dm-bg-1: #0d0d0d;
+  --dm-bg-2: #161816;
+  --dm-bg-3: #1e241e;
+  --dm-bg-4: #2c312c;
+  --dm-bg-5: #393e39;
+  --dm-bg-primary: #050505;
+  --dm-bg-elevated: #1e241e;
+  --dm-bg-surface: #161816;
+  --dm-bg-surface-alt: #1e241e;
+  --dm-bg-input: #0b0b0b;
+  --dm-bg-card: rgba(22, 24, 22, 0.35);
+  --dm-bg-card-solid: rgba(30, 36, 30, 0.65);
+  --dm-bg-card-hover: rgba(44, 49, 44, 0.75);
+  /* Texto */
+  --dm-text-primary: #00ff00;
+  --dm-text-secondary: #16e714;
+  --dm-text-dim: #32cb2d;
+  --dm-text-muted: #5aa052;
+  --dm-text-ghost: #345a2f;
+  /* Acento + marca (derivam do primary do tema) */
+  --dm-green: #00ff41;
+  --dm-green-dim: rgba(0, 255, 65, 0.15);
+  --dm-green-glow: rgba(0, 255, 65, 0.25);
+  --dm-green-soft: rgba(0, 255, 65, 0.08);
+  --dm-green-rgb: 0, 255, 65;
+  --dm-green-300: #59ff84;
+  --dm-accent: #00ff41;
+  --dm-accent-dim: rgba(0, 255, 65, 0.15);
+  --dm-accent-glow: rgba(0, 255, 65, 0.25);
+  --dm-accent-rgb: 0, 255, 65;
+  /* Status */
+  --dm-success: #4dff4d;
+  --dm-info: #00ff41;
+  --dm-warning: #e6ac00;
+  --dm-danger: #ff3b3b;
+  /* Bordas */
+  --dm-border-1: rgba(255, 255, 255, 0.04);
+  --dm-border-2: rgba(255, 255, 255, 0.06);
+  --dm-border-3: rgba(255, 255, 255, 0.08);
+  --dm-border-4: rgba(255, 255, 255, 0.12);
+  --dm-border: rgba(255, 255, 255, 0.06);
+  --dm-border-hover: rgba(255, 255, 255, 0.12);
+  --dm-border-accent: rgba(0, 255, 65, 0.2);
+  /* Glass / topbar */
+  --dm-glass-bg: rgba(22, 24, 22, 0.25);
+  --dm-glass-bg-heavy: rgba(22, 24, 22, 0.55);
+  --dm-topbar-bg: rgba(5, 5, 5, 0.85);
+  /* Scrollbar */
+  --dm-scroll-thumb: rgba(255, 255, 255, 0.08);
+  --dm-scroll-hover: rgba(255, 255, 255, 0.14);
+  /* Glow + grid */
+  --dm-glow-green: 0 0 20px rgba(0, 255, 65, 0.3), 0 0 60px rgba(0, 255, 65, 0.12);
+  --dm-grid-opacity: 0.02;
+}
+
+[data-theme="moon"] {
+  /* Moon - lunar quente - ESCURO | primary #fb923c */
+  /* Backgrounds */
+  --dm-bg-0: #0d0e13;
+  --dm-bg-1: #13151c;
+  --dm-bg-2: #1a1d27;
+  --dm-bg-3: #242734;
+  --dm-bg-4: #313440;
+  --dm-bg-5: #3e414c;
+  --dm-bg-primary: #0d0e13;
+  --dm-bg-elevated: #242734;
+  --dm-bg-surface: #1a1d27;
+  --dm-bg-surface-alt: #242734;
+  --dm-bg-input: #111319;
+  --dm-bg-card: rgba(26, 29, 39, 0.35);
+  --dm-bg-card-solid: rgba(36, 39, 52, 0.65);
+  --dm-bg-card-hover: rgba(49, 52, 64, 0.75);
+  /* Texto */
+  --dm-text-primary: #f6f1ea;
+  --dm-text-secondary: #dfdcda;
+  --dm-text-dim: #c3c2c7;
+  --dm-text-muted: #9a9bab;
+  --dm-text-ghost: #5b5c67;
+  /* Acento + marca (derivam do primary do tema) */
+  --dm-green: #fb923c;
+  --dm-green-dim: rgba(251, 146, 60, 0.15);
+  --dm-green-glow: rgba(251, 146, 60, 0.25);
+  --dm-green-soft: rgba(251, 146, 60, 0.08);
+  --dm-green-rgb: 251, 146, 60;
+  --dm-green-300: #fcb880;
+  --dm-accent: #fb923c;
+  --dm-accent-dim: rgba(251, 146, 60, 0.15);
+  --dm-accent-glow: rgba(251, 146, 60, 0.25);
+  --dm-accent-rgb: 251, 146, 60;
+  /* Status */
+  --dm-success: #4ade80;
+  --dm-info: #7dafff;
+  --dm-warning: #fbbf24;
+  --dm-danger: #f0596b;
+  /* Bordas */
+  --dm-border-1: rgba(255, 255, 255, 0.04);
+  --dm-border-2: rgba(255, 255, 255, 0.06);
+  --dm-border-3: rgba(255, 255, 255, 0.08);
+  --dm-border-4: rgba(255, 255, 255, 0.12);
+  --dm-border: rgba(255, 255, 255, 0.06);
+  --dm-border-hover: rgba(255, 255, 255, 0.12);
+  --dm-border-accent: rgba(251, 146, 60, 0.2);
+  /* Glass / topbar */
+  --dm-glass-bg: rgba(26, 29, 39, 0.25);
+  --dm-glass-bg-heavy: rgba(26, 29, 39, 0.55);
+  --dm-topbar-bg: rgba(13, 14, 19, 0.85);
+  /* Scrollbar */
+  --dm-scroll-thumb: rgba(255, 255, 255, 0.08);
+  --dm-scroll-hover: rgba(255, 255, 255, 0.14);
+  /* Glow + grid */
+  --dm-glow-green: 0 0 20px rgba(251, 146, 60, 0.3), 0 0 60px rgba(251, 146, 60, 0.12);
+  --dm-grid-opacity: 0.02;
+}
+
+[data-theme="light"] {
+  /* Light - CLARO (IS_LIGHT) | primary #0e7490 */
+  /* Backgrounds */
+  --dm-bg-0: #ffffff;
+  --dm-bg-1: #f5f7fb;
+  --dm-bg-2: #edf0f6;
+  --dm-bg-3: #e5e9f2;
+  --dm-bg-4: #d7dbe3;
+  --dm-bg-5: #cacdd5;
+  --dm-bg-primary: #ffffff;
+  --dm-bg-elevated: #edf0f6;
+  --dm-bg-surface: #f5f7fb;
+  --dm-bg-surface-alt: #edf0f6;
+  --dm-bg-input: #ffffff;
+  --dm-bg-card: rgba(15, 16, 20, 0.03);
+  --dm-bg-card-solid: rgba(15, 16, 20, 0.05);
+  --dm-bg-card-hover: rgba(15, 16, 20, 0.07);
+  /* Texto */
+  --dm-text-primary: #0f1014;
+  --dm-text-secondary: #262830;
+  --dm-text-dim: #424652;
+  --dm-text-muted: #6c7284;
+  --dm-text-ghost: #aeb1bb;
+  /* Acento + marca (derivam do primary do tema) */
+  --dm-green: #0e7490;
+  --dm-green-dim: rgba(14, 116, 144, 0.15);
+  --dm-green-glow: rgba(14, 116, 144, 0.25);
+  --dm-green-soft: rgba(14, 116, 144, 0.08);
+  --dm-green-rgb: 14, 116, 144;
+  --dm-green-300: #62a5b7;
+  --dm-accent: #0e7490;
+  --dm-accent-dim: rgba(14, 116, 144, 0.15);
+  --dm-accent-glow: rgba(14, 116, 144, 0.25);
+  --dm-accent-rgb: 14, 116, 144;
+  /* Status */
+  --dm-success: #16a34a;
+  --dm-info: #2f6bff;
+  --dm-warning: #b45309;
+  --dm-danger: #dc2626;
+  /* Bordas */
+  --dm-border-1: rgba(0, 0, 0, 0.05);
+  --dm-border-2: rgba(0, 0, 0, 0.08);
+  --dm-border-3: rgba(0, 0, 0, 0.11);
+  --dm-border-4: rgba(0, 0, 0, 0.16);
+  --dm-border: rgba(0, 0, 0, 0.08);
+  --dm-border-hover: rgba(0, 0, 0, 0.16);
+  --dm-border-accent: rgba(14, 116, 144, 0.2);
+  /* Glass / topbar */
+  --dm-glass-bg: rgba(245, 247, 251, 0.55);
+  --dm-glass-bg-heavy: rgba(245, 247, 251, 0.8);
+  --dm-topbar-bg: rgba(255, 255, 255, 0.85);
+  /* Scrollbar */
+  --dm-scroll-thumb: rgba(0, 0, 0, 0.18);
+  --dm-scroll-hover: rgba(0, 0, 0, 0.28);
+  /* Glow + grid */
+  --dm-glow-green: 0 0 20px rgba(14, 116, 144, 0.3), 0 0 60px rgba(14, 116, 144, 0.12);
+  --dm-grid-opacity: 0.04;
+}
+
+[data-theme="paper"] {
+  /* Paper - CLARO (IS_LIGHT) | primary #81600e */
+  /* Backgrounds */
+  --dm-bg-0: #f7f4ed;
+  --dm-bg-1: #f2ede3;
+  --dm-bg-2: #e8e3d9;
+  --dm-bg-3: #dad4c8;
+  --dm-bg-4: #cdc7bc;
+  --dm-bg-5: #c0bbb0;
+  --dm-bg-primary: #f7f4ed;
+  --dm-bg-elevated: #e8e3d9;
+  --dm-bg-surface: #f2ede3;
+  --dm-bg-surface-alt: #e8e3d9;
+  --dm-bg-input: #f7f4ed;
+  --dm-bg-card: rgba(42, 38, 34, 0.03);
+  --dm-bg-card-solid: rgba(42, 38, 34, 0.05);
+  --dm-bg-card-hover: rgba(42, 38, 34, 0.07);
+  /* Texto */
+  --dm-text-primary: #2a2622;
+  --dm-text-secondary: #3b3530;
+  --dm-text-dim: #4f4840;
+  --dm-text-muted: #6e6358;
+  --dm-text-ghost: #aca49b;
+  /* Acento + marca (derivam do primary do tema) */
+  --dm-green: #81600e;
+  --dm-green-dim: rgba(129, 96, 14, 0.15);
+  --dm-green-glow: rgba(129, 96, 14, 0.25);
+  --dm-green-soft: rgba(129, 96, 14, 0.08);
+  --dm-green-rgb: 129, 96, 14;
+  --dm-green-300: #ad9862;
+  --dm-accent: #81600e;
+  --dm-accent-dim: rgba(129, 96, 14, 0.15);
+  --dm-accent-glow: rgba(129, 96, 14, 0.25);
+  --dm-accent-rgb: 129, 96, 14;
+  /* Status */
+  --dm-success: #279b51;
+  --dm-info: #266bd9;
+  --dm-warning: #cf8b17;
+  --dm-danger: #c52020;
+  /* Bordas */
+  --dm-border-1: rgba(0, 0, 0, 0.05);
+  --dm-border-2: rgba(0, 0, 0, 0.08);
+  --dm-border-3: rgba(0, 0, 0, 0.11);
+  --dm-border-4: rgba(0, 0, 0, 0.16);
+  --dm-border: rgba(0, 0, 0, 0.08);
+  --dm-border-hover: rgba(0, 0, 0, 0.16);
+  --dm-border-accent: rgba(129, 96, 14, 0.2);
+  /* Glass / topbar */
+  --dm-glass-bg: rgba(242, 237, 227, 0.55);
+  --dm-glass-bg-heavy: rgba(242, 237, 227, 0.8);
+  --dm-topbar-bg: rgba(247, 244, 237, 0.85);
+  /* Scrollbar */
+  --dm-scroll-thumb: rgba(0, 0, 0, 0.18);
+  --dm-scroll-hover: rgba(0, 0, 0, 0.28);
+  /* Glow + grid */
+  --dm-glow-green: 0 0 20px rgba(129, 96, 14, 0.3), 0 0 60px rgba(129, 96, 14, 0.12);
+  --dm-grid-opacity: 0.04;
+}
+
+[data-theme="sun"] {
+  /* Sun - dia quente - CLARO (IS_LIGHT) | primary #c44700 (escurecido de #e85600 p/ AA-texto: 4.76:1 sobre bg-primary, 4.56:1 sobre bg-surface) */
+  /* Backgrounds */
+  --dm-bg-0: #fffaf2;
+  --dm-bg-1: #fff4e8;
+  --dm-bg-2: #faecda;
+  --dm-bg-3: #f1e1cd;
+  --dm-bg-4: #e3d4c1;
+  --dm-bg-5: #d4c6b4;
+  --dm-bg-primary: #fffaf2;
+  --dm-bg-elevated: #faecda;
+  --dm-bg-surface: #fff4e8;
+  --dm-bg-surface-alt: #faecda;
+  --dm-bg-input: #fffaf2;
+  --dm-bg-card: rgba(42, 38, 34, 0.03);
+  --dm-bg-card-solid: rgba(42, 38, 34, 0.05);
+  --dm-bg-card-hover: rgba(42, 38, 34, 0.07);
+  /* Texto */
+  --dm-text-primary: #2a2622;
+  --dm-text-secondary: #3e3730;
+  --dm-text-dim: #564b40;
+  --dm-text-muted: #7a6a58;
+  --dm-text-ghost: #b6ab9d;
+  /* Acento + marca (derivam do primary do tema; escurecido p/ AA quando usado como texto/link em components.css) */
+  --dm-green: #c44700;
+  --dm-green-dim: rgba(196, 71, 0, 0.15);
+  --dm-green-glow: rgba(196, 71, 0, 0.25);
+  --dm-green-soft: rgba(196, 71, 0, 0.08);
+  --dm-green-rgb: 196, 71, 0;
+  --dm-green-300: #e09159;
+  --dm-accent: #c44700;
+  --dm-accent-dim: rgba(196, 71, 0, 0.15);
+  --dm-accent-glow: rgba(196, 71, 0, 0.25);
+  --dm-accent-rgb: 196, 71, 0;
+  /* Status */
+  --dm-success: #1f9d52;
+  --dm-info: #2563d9;
+  --dm-warning: #c97a0a;
+  --dm-danger: #c5281f;
+  /* Bordas */
+  --dm-border-1: rgba(0, 0, 0, 0.05);
+  --dm-border-2: rgba(0, 0, 0, 0.08);
+  --dm-border-3: rgba(0, 0, 0, 0.11);
+  --dm-border-4: rgba(0, 0, 0, 0.16);
+  --dm-border: rgba(0, 0, 0, 0.08);
+  --dm-border-hover: rgba(0, 0, 0, 0.16);
+  --dm-border-accent: rgba(196, 71, 0, 0.2);
+  /* Glass / topbar */
+  --dm-glass-bg: rgba(255, 244, 232, 0.55);
+  --dm-glass-bg-heavy: rgba(255, 244, 232, 0.8);
+  --dm-topbar-bg: rgba(255, 250, 242, 0.85);
+  /* Scrollbar */
+  --dm-scroll-thumb: rgba(0, 0, 0, 0.18);
+  --dm-scroll-hover: rgba(0, 0, 0, 0.28);
+  /* Glow + grid */
+  --dm-glow-green: 0 0 20px rgba(196, 71, 0, 0.3), 0 0 60px rgba(196, 71, 0, 0.12);
+  --dm-grid-opacity: 0.04;
+}
+
+/* ============================================================================
+ * FUNDOS DECORADOS OPCIONAIS (portados do design system, adaptados a --dm-*)
+ * ----------------------------------------------------------------------------
+ * Aplicar num container (ex.: <body class="bl-bg-void">). Reagem ao tema ativo
+ * via var(--dm-border) e var(--dm-accent). 100% opcionais.
+ * ============================================================================ */
+
+/* Void -- grid sutil + gradiente radial do acento */
+.bl-bg-void {
+  background-color: var(--dm-bg-primary);
+  background-image:
+    radial-gradient(
+      ellipse 80% 60% at 50% -10%,
+      color-mix(in srgb, var(--dm-accent) 12%, transparent),
+      transparent 60%
+    ),
+    linear-gradient(color-mix(in srgb, var(--dm-border) 60%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--dm-border) 60%, transparent) 1px, transparent 1px);
+  background-size:
+    100% 100%,
+    var(--dm-grid-size, 32px) var(--dm-grid-size, 32px),
+    var(--dm-grid-size, 32px) var(--dm-grid-size, 32px);
+}
+
+/* Synthwave -- horizonte com glow do acento + grid em perspectiva */
+.bl-bg-synthwave {
+  background-color: var(--dm-bg-primary);
+  background-image:
+    linear-gradient(
+      180deg,
+      transparent 0%,
+      color-mix(in srgb, var(--dm-accent) 10%, transparent) 70%,
+      color-mix(in srgb, var(--dm-accent) 22%, transparent) 100%
+    ),
+    linear-gradient(color-mix(in srgb, var(--dm-border) 80%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--dm-border) 80%, transparent) 1px, transparent 1px);
+  background-size:
+    100% 100%,
+    var(--dm-grid-size, 32px) var(--dm-grid-size, 32px),
+    var(--dm-grid-size, 32px) var(--dm-grid-size, 32px);
+}
+
+/* Terminal retro -- scanlines + vinheta curva de tela */
+.bl-bg-terminal {
+  background-color: var(--dm-bg-primary);
+  background-image:
+    radial-gradient(
+      ellipse 100% 100% at 50% 50%,
+      transparent 70%,
+      color-mix(in srgb, var(--dm-border) 40%, transparent) 100%
+    ),
+    repeating-linear-gradient(
+      0deg,
+      color-mix(in srgb, var(--dm-accent) 6%, transparent) 0px,
+      color-mix(in srgb, var(--dm-accent) 6%, transparent) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+}
+
+/* ============================================================================
+ * TEMAS DISPONIVEIS (15) -- id usado em [data-theme="<id>"]
+ *   ESCUROS (12): bos (default), gestao, dark, midnight-blue, synthwave,
+ *                 solarized-dark, catppuccin, dracula, nord, vercel,
+ *                 retro-terminal, moon
+ *   CLAROS  (3):  light, paper, sun
+ *
+ * COMO ADICIONAR UM TEMA NOVO:
+ *   1. Acrescente a paleta-fonte (modelo design system: background/foreground/
+ *      surface-0..3/primary/border/success/warning/destructive/info/...) em
+ *      palettes.md.
+ *   2. Resolva-a pelo mapping-contract.md (backgrounds = rampa S0..S3 + elevate;
+ *      texto = rampa FG->MUTFG; acento = derive tudo do primary; bordas/scroll =
+ *      alpha de BRANCO se escuro / PRETO se claro; glass alpha alto no claro).
+ *   3. Emita um novo bloco [data-theme="<novo-id>"] com os ~47 tokens temaveis
+ *      -- NUNCA redeclare tokens estruturais (radius/fontes/spacing/transitions/
+ *      z-index/layout/paleta semantica fixa) nem --dm-green-100..900 (exceto
+ *      --dm-green-300).
+ *   4. Rode o checklist WCAG (mapping-contract sec.3, pares C1-C12) antes de aceitar.
+ * ============================================================================ */

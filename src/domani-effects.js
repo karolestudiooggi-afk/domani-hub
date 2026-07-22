@@ -1,6 +1,6 @@
 /* ============================================================================
    GERADO por apply-bilhon-ds (make-effects-layer) — runtime dos efeitos, DROP-IN reversível.
-   Cópia verbatim de C:/Users/tech/bilhonos/_shared/bilhon-packages/ds/official/js/effects.js
+   Cópia verbatim de (origem interna)
    Liga: scroll-progress, scroll-to-top, reveal/stagger (IntersectionObserver),
    magnetic buttons, hover 3D tilt. Self-init no DOMContentLoaded.
    Para reverter: remova o import/script. NÃO editar à mão.

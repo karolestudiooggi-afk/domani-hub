@@ -57,7 +57,7 @@ export default function UpdatePassword() {
           ) : (
             <>
               <CardHeader>
-                <CardTitle className="text-h2Sm md:text-h2">Nova <span className="text-gradient-bilhon">Senha</span></CardTitle>
+                <CardTitle className="text-h2Sm md:text-h2">Nova <span className="text-gradient-domani">Senha</span></CardTitle>
                 <CardDescription>Escolha uma nova senha para sua conta</CardDescription>
               </CardHeader>
               <CardContent>

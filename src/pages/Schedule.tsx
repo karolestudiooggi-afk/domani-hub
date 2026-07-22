@@ -116,7 +116,7 @@ export default function Schedule() {
         <div>
           <h1 className="flex items-center gap-2 text-h2Sm md:text-h2">
             <CalendarDays className="h-6 w-6 text-primary" />
-            <span className="text-gradient-bilhon">Agenda</span>
+            <span className="text-gradient-domani">Agenda</span>
           </h1>
           <p className="mt-1 text-muted-foreground">Visualize e gerencie seus posts agendados</p>
         </div>

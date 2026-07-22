@@ -99,7 +99,7 @@ export default function Gallery() {
       <div>
         <h1 className="flex items-center gap-2 text-h2Sm md:text-h2">
           <Image className="h-6 w-6 text-primary" />
-          <span className="text-gradient-bilhon">Galeria de Criações</span>
+          <span className="text-gradient-domani">Galeria de Criações</span>
         </h1>
         <p className="mt-1 text-sm text-muted-foreground">
           Todas as suas criações salvas — imagens, vídeos e carroséis

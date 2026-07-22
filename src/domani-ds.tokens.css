@@ -52,30 +52,30 @@
   --warning: 38 92% 48% !important;
   --danger: 0 72% 51% !important;
 
-  /* ===================== sistema --bl-* (login + efeitos) ===================== */
-  --bl-bg-0:          #ffffff !important;
-  --bl-bg-1:          #FAFAF7 !important;
-  --bl-bg-2:          #F4F2EC !important;
-  --bl-bg-primary:    #FAFAF7 !important;
-  --bl-bg-surface-alt:#F4F2EC !important;
-  --bl-bg-card-hover: #F7F5EF !important;
-  --bl-text-primary:  #1a1a1a !important;
-  --bl-text-secondary:#4a4a4a !important;
-  --bl-text-dim:      #6b6b6b !important;
-  /* acento ouro (dirige glows/gradientes/.text-gradient-bilhon) */
-  --bl-violet:        #E56D23 !important;
-  --bl-purple:        #E56D23 !important;
-  --bl-accent:        #E56D23 !important;
-  --bl-accent-dim:    rgba(229, 109, 35, 0.12) !important;
-  --bl-accent-glow:   rgba(229, 109, 35, 0.18) !important;
-  --bl-accent-rgb:    229, 109, 35 !important;
-  --bl-border-hover:  rgba(229, 109, 35, 0.35) !important;
-  --bl-border-accent: rgba(229, 109, 35, 0.25) !important;
-  --bl-shadow-glow-lg:0 6px 20px rgba(229, 109, 35, 0.10) !important;
-  /* fontes Arkom no namespace --bl-* */
-  --bl-font-sans:    'DM Sans', ui-sans-serif, system-ui, sans-serif !important;
-  --bl-font-display: 'Manrope', ui-sans-serif, system-ui, sans-serif !important;
-  --bl-font-mono:    'DM Mono', ui-monospace, monospace !important;
+  /* ===================== sistema --dm-* (login + efeitos) ===================== */
+  --dm-bg-0:          #ffffff !important;
+  --dm-bg-1:          #FAFAF7 !important;
+  --dm-bg-2:          #F4F2EC !important;
+  --dm-bg-primary:    #FAFAF7 !important;
+  --dm-bg-surface-alt:#F4F2EC !important;
+  --dm-bg-card-hover: #F7F5EF !important;
+  --dm-text-primary:  #1a1a1a !important;
+  --dm-text-secondary:#4a4a4a !important;
+  --dm-text-dim:      #6b6b6b !important;
+  /* acento ouro (dirige glows/gradientes/.text-gradient-domani) */
+  --dm-violet:        #E56D23 !important;
+  --dm-purple:        #E56D23 !important;
+  --dm-accent:        #E56D23 !important;
+  --dm-accent-dim:    rgba(229, 109, 35, 0.12) !important;
+  --dm-accent-glow:   rgba(229, 109, 35, 0.18) !important;
+  --dm-accent-rgb:    229, 109, 35 !important;
+  --dm-border-hover:  rgba(229, 109, 35, 0.35) !important;
+  --dm-border-accent: rgba(229, 109, 35, 0.25) !important;
+  --dm-shadow-glow-lg:0 6px 20px rgba(229, 109, 35, 0.10) !important;
+  /* fontes Arkom no namespace --dm-* */
+  --dm-font-sans:    'DM Sans', ui-sans-serif, system-ui, sans-serif !important;
+  --dm-font-display: 'Manrope', ui-sans-serif, system-ui, sans-serif !important;
+  --dm-font-mono:    'DM Mono', ui-monospace, monospace !important;
 }
 
 /* Base tipográfica: corpo em DM Sans, títulos em Manrope com tracking apertado. */
@@ -156,11 +156,11 @@ html, body, #root {
   background-image: none !important;
 }
 
-/* ── Correção do hover do botão canônico (.btn-bilhon / .btn-primary) ──
-   Bug pré-existente do @bilhon/ds: hover aplica background-clip:text +
+/* ── Correção do hover do botão canônico (.btn-domani / .btn-primary) ──
+   Bug pré-existente do design system: hover aplica background-clip:text +
    text-fill:transparent, recorta o fundo no formato do texto e o botão "some".
    Restaura hover sólido escuro com texto claro. */
-.btn-bilhon:hover,
+.btn-domani:hover,
 .btn-primary:hover,
 .btn-accent:hover {
   background-color: #2b2b2b !important;

@@ -184,8 +184,8 @@ export function AutoStudio({ onEditInCanvas }: { onEditInCanvas: (doc: StudioDoc
   // Marca só entra na geração (texto + enriquecimento do prompt de imagem/vídeo)
   // quando a caixa estiver marcada.
   const effectiveBrand = useBrand ? brand : null;
-  const c1 = effectiveBrand?.colors?.[0] || "var(--bl-accent)";
-  const c2 = effectiveBrand?.colors?.[1] || "var(--bl-accent)";
+  const c1 = effectiveBrand?.colors?.[0] || "var(--dm-accent)";
+  const c2 = effectiveBrand?.colors?.[1] || "var(--dm-accent)";
   const grad = `linear-gradient(135deg, ${c1}, ${c2})`;
 
   // Auto-save na galeria. saveVisualToGallery agora faz upload de data: URLs automaticamente.
@@ -618,7 +618,7 @@ Responda APENAS JSON: { "narracao": "<fala completa em pt-BR>", "cena": "<descri
           <Sparkles className="h-3.5 w-3.5 text-primary" /> Studio
         </p>
         <h1 className="mt-2 text-h2Sm md:text-h2 text-ink">
-          O que vamos <span className="text-gradient-bilhon">publicar</span> hoje?
+          O que vamos <span className="text-gradient-domani">publicar</span> hoje?
         </h1>
         {brands.length > 1 ? (
           <div className="mt-3 flex flex-wrap items-center justify-center gap-1.5">

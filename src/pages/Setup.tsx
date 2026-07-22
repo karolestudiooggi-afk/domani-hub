@@ -292,7 +292,7 @@ export default function Setup() {
             <DomaniLogo size={56} variant="laranja" />
             <div>
               <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">
-                Central de <span className="text-gradient-bilhon">Conexões</span>
+                Central de <span className="text-gradient-domani">Conexões</span>
               </h1>
               <p className="text-sm text-muted-foreground">
                 {isManageMode ? "Atualize suas integrações a qualquer momento" : "Configure a plataforma em um só lugar"}

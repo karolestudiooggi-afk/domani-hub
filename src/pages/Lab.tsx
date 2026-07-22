@@ -280,7 +280,7 @@ Responda em JSON: { "scores": [{ "variation": 1, "score": 8.5, "insight": "..." 
       <div>
         <h1 className="flex items-center gap-2 text-h2Sm md:text-h2">
           <FlaskConical className="h-6 w-6 text-primary" />
-          <span className="text-gradient-bilhon">Post Lab</span>
+          <span className="text-gradient-domani">Post Lab</span>
         </h1>
         <p className="mt-1 text-muted-foreground">
           Laboratório criativo — filtros, IA, e testes A/B para o post perfeito

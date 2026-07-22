@@ -25,8 +25,8 @@ export function DesignCanvas() {
   } = useStudio();
   const { brands } = useBrands();
   const brand = brands.find((b) => b.id === doc.brandId) || null;
-  const c1 = brand?.colors?.[0] || "var(--bl-accent)";
-  const c2 = brand?.colors?.[1] || "var(--bl-accent)";
+  const c1 = brand?.colors?.[0] || "var(--dm-accent)";
+  const c2 = brand?.colors?.[1] || "var(--dm-accent)";
   const accent = brand?.colors?.[2] || "#ffffff";
 
   const [exporting, setExporting] = useState(false);
@@ -282,10 +282,10 @@ export function DesignCanvas() {
       )}
       {/* guias de alinhamento (snap) */}
       {!exportMode && i === currentSlide && guides.x !== null && (
-        <div className="pointer-events-none absolute bottom-0 top-0" style={{ left: guides.x, width: 1, background: "var(--bl-accent)" }} />
+        <div className="pointer-events-none absolute bottom-0 top-0" style={{ left: guides.x, width: 1, background: "var(--dm-accent)" }} />
       )}
       {!exportMode && i === currentSlide && guides.y !== null && (
-        <div className="pointer-events-none absolute left-0 right-0" style={{ top: guides.y, height: 1, background: "var(--bl-accent)" }} />
+        <div className="pointer-events-none absolute left-0 right-0" style={{ top: guides.y, height: 1, background: "var(--dm-accent)" }} />
       )}
     </div>
   );

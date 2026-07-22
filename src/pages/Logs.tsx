@@ -100,7 +100,7 @@ export default function Logs() {
         <div>
           <h1 className="flex items-center gap-2 text-2xl font-bold">
             <ScrollText className="h-6 w-6 text-primary" />
-            O que o <span className="text-gradient-bilhon">sistema fez</span>
+            O que o <span className="text-gradient-domani">sistema fez</span>
           </h1>
           <p className="mt-1 max-w-2xl text-muted-foreground">
             Cada vez que você pede algo, a IA percorre um caminho: lê a identidade da marca,

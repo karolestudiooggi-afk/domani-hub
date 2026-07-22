@@ -114,7 +114,7 @@ export default function Sources() {
       <div>
         <h1 className="flex items-center gap-2 text-h2Sm md:text-h2">
           <BookOpen className="h-6 w-6 text-primary" />
-          <span className="text-gradient-bilhon">Fontes de Conteúdo</span>
+          <span className="text-gradient-domani">Fontes de Conteúdo</span>
         </h1>
         <p className="mt-1 text-muted-foreground">
           Extraia e pesquise conteúdo de diversas fontes para transformar em posts

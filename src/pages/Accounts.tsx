@@ -41,7 +41,7 @@ export default function Accounts() {
         <div>
           <h1 className="flex items-center gap-2 text-h2Sm md:text-h2">
             <Users className="h-7 w-7 text-primary" />
-            Contas <span className="text-gradient-bilhon">Conectadas</span>
+            Contas <span className="text-gradient-domani">Conectadas</span>
           </h1>
           <p className="mt-1 text-muted-foreground">Gerencie suas redes sociais conectadas via integração</p>
         </div>

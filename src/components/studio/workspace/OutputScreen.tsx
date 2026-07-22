@@ -295,7 +295,7 @@ export function OutputScreen({
           </div>
 
           {/* CTA principal */}
-          <Button className="w-full btn-bilhon" size="lg" onClick={publish} disabled={publishing || !selected.length}>
+          <Button className="w-full btn-domani" size="lg" onClick={publish} disabled={publishing || !selected.length}>
             {publishing ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Enviando…</>
               : done ? <><CheckCircle2 className="mr-2 h-4 w-4" /> {when === "schedule" ? "Agendado ✓ — enviar de novo" : "Publicado ✓ — enviar de novo"}</>
               : !selected.length ? <><Send className="mr-2 h-4 w-4" /> Selecione uma conta acima</>

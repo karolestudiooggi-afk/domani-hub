@@ -303,7 +303,7 @@ export default function Insights() {
       <div>
         <h1 className="flex items-center gap-2 text-h2Sm md:text-h2">
           <Lightbulb className="h-6 w-6 text-yellow-500" />
-          <span className="text-gradient-bilhon">Insights IA</span>
+          <span className="text-gradient-domani">Insights IA</span>
         </h1>
         <p className="mt-1 text-muted-foreground">
           Insights calculados a partir dos seus dados reais — {allPosts.length} posts analisados

@@ -83,12 +83,12 @@ function platformName(platform: string): string {
   return PLATFORMS[platform as keyof typeof PLATFORMS]?.name ?? platform;
 }
 
-// Resolve o token de accent bos p/ cor concreta — var(--bl-*) não resolve em atributo SVG (AP-055)
+// Resolve o token de accent bos p/ cor concreta — var(--dm-*) não resolve em atributo SVG (AP-055)
 let _bosAccentCache: string | null = null;
 function bosAccent(): string {
   if (_bosAccentCache) return _bosAccentCache;
   if (typeof window !== "undefined") {
-    const v = getComputedStyle(document.documentElement).getPropertyValue("--bl-accent").trim();
+    const v = getComputedStyle(document.documentElement).getPropertyValue("--dm-accent").trim();
     if (v) { _bosAccentCache = v; return v; }
   }
   return "#e85600";
@@ -559,7 +559,7 @@ export default function Analytics() {
         <div>
           <h1 className="flex items-center gap-2 text-h2Sm md:text-h2">
             <BarChart3 className="h-6 w-6 text-primary" />
-            Analytics & <span className="text-gradient-bilhon">Inteligência</span>
+            Analytics & <span className="text-gradient-domani">Inteligência</span>
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
             Dados reais de performance + insights estratégicos com IA
@@ -1128,7 +1128,7 @@ export default function Analytics() {
                     </defs>
                   </svg>
                   <div className="absolute inset-0 flex flex-col items-center justify-center">
-                    <span className="text-3xl font-bold text-gradient-bilhon">
+                    <span className="text-3xl font-bold text-gradient-domani">
                       {socialScore}
                     </span>
                     <span className="text-[10px] text-muted-foreground">/ 100</span>

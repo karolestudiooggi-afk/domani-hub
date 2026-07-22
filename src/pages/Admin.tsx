@@ -72,7 +72,7 @@ export default function Admin() {
     <div className="max-w-2xl mx-auto space-y-6">
       <div className="flex items-center gap-3">
         <ShieldAlert className="h-6 w-6 text-primary" />
-        <h1 className="text-h2Sm md:text-h2"><span className="text-gradient-bilhon">Administração</span></h1>
+        <h1 className="text-h2Sm md:text-h2"><span className="text-gradient-domani">Administração</span></h1>
       </div>
 
       <div className="card-premium p-6">

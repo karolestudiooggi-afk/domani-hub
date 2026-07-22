@@ -32,7 +32,7 @@ export default function Content() {
       <div>
         <h1 className="flex items-center gap-2 text-2xl font-bold">
           <FolderUp className="h-6 w-6 text-primary" />
-          Conteúdo dos <span className="text-gradient-bilhon">clientes</span>
+          Conteúdo dos <span className="text-gradient-domani">clientes</span>
         </h1>
         <p className="mt-1 max-w-2xl text-muted-foreground">
           Escolha o cliente e envie o material dele: fotos de produto, textos que

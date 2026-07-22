@@ -83,7 +83,7 @@ export function ManageKeysView({
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-h2Sm md:text-h2">
-              Configurações — <span className="text-gradient-bilhon">Chaves de API</span>
+              Configurações — <span className="text-gradient-domani">Chaves de API</span>
             </h1>
             <p className="text-sm text-muted-foreground mt-1">
               Atualize ou remova suas chaves a qualquer momento.

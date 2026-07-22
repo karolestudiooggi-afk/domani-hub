@@ -8,7 +8,7 @@ const NotFound = () => {
       <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-primary/70 text-white shadow-2xl shadow-primary/30 mb-6">
         <Zap className="h-8 w-8" />
       </div>
-      <h1 className="text-h2Sm md:text-h2 text-gradient-bilhon">
+      <h1 className="text-h2Sm md:text-h2 text-gradient-domani">
         404
       </h1>
       <p className="mt-3 text-lg text-muted-foreground">Página não encontrada</p>

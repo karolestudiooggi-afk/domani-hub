@@ -1,9 +1,9 @@
 /* ============================================================================
    GERADO por apply-bilhon-ds (make-effects-layer) — camada de EFEITOS, DROP-IN reversível.
-   Cópia verbatim de C:/Users/tech/bilhonos/_shared/bilhon-packages/ds/official/css/effects.css
+   Cópia verbatim de (origem interna)
    keyframes bl-* + .bl-glass / .bl-bg-grid / .bl-glow-orb / .bl-stagger /
    .bl-text-shimmer / .bl-text-tech-glow / .bl-scroll-progress / .bl-tilt + reduced-motion.
-   Depende dos tokens --bl-* (envolva o app em .bos-scope / escopo que defina os --bl-*).
+   Depende dos tokens --dm-* (envolva o app em .bos-scope / escopo que defina os --dm-*).
    Para reverter: remova o import desta folha. NÃO editar à mão.
    ============================================================================ */
 
@@ -48,8 +48,8 @@
 }
 
 @keyframes bl-glow-pulse {
-  0%, 100% { box-shadow: 0 0 8px rgba(var(--bl-accent-rgb), 0.3); }
-  50%      { box-shadow: 0 0 20px rgba(var(--bl-accent-rgb), 0.6), 0 0 40px rgba(var(--bl-accent-rgb), 0.2); }
+  0%, 100% { box-shadow: 0 0 8px rgba(var(--dm-accent-rgb), 0.3); }
+  50%      { box-shadow: 0 0 20px rgba(var(--dm-accent-rgb), 0.6), 0 0 40px rgba(var(--dm-accent-rgb), 0.2); }
 }
 
 @keyframes bl-shimmer {
@@ -73,13 +73,13 @@
 }
 
 @keyframes bl-border-rotate {
-  0%   { --bl-border-angle: 0deg; }
-  100% { --bl-border-angle: 360deg; }
+  0%   { --dm-border-angle: 0deg; }
+  100% { --dm-border-angle: 360deg; }
 }
 
 @keyframes bl-tech-glow {
-  0%, 100% { text-shadow: 0 0 6px rgba(var(--bl-accent-rgb), 0.4), 0 0 12px rgba(var(--bl-accent-rgb), 0.2); }
-  50%      { text-shadow: 0 0 12px rgba(var(--bl-accent-rgb), 0.7), 0 0 24px rgba(var(--bl-accent-rgb), 0.35), 0 0 48px rgba(var(--bl-accent-rgb), 0.15); }
+  0%, 100% { text-shadow: 0 0 6px rgba(var(--dm-accent-rgb), 0.4), 0 0 12px rgba(var(--dm-accent-rgb), 0.2); }
+  50%      { text-shadow: 0 0 12px rgba(var(--dm-accent-rgb), 0.7), 0 0 24px rgba(var(--dm-accent-rgb), 0.35), 0 0 48px rgba(var(--dm-accent-rgb), 0.15); }
 }
 
 @keyframes bl-orb-drift {
@@ -98,11 +98,11 @@
 
 /* ── Animation Utilities ── */
 
-.bl-animate-fade-in        { animation: bl-fade-in var(--bl-duration-base) var(--bl-ease) both; }
-.bl-animate-fade-in-up     { animation: bl-fade-in-up var(--bl-duration-slow) var(--bl-ease) both; }
-.bl-animate-fade-in-down   { animation: bl-fade-in-down var(--bl-duration-slow) var(--bl-ease) both; }
-.bl-animate-scale-in       { animation: bl-scale-in var(--bl-duration-slow) var(--bl-ease) both; }
-.bl-animate-slide-in-right { animation: bl-slide-in-right var(--bl-duration-slow) var(--bl-ease) both; }
+.bl-animate-fade-in        { animation: bl-fade-in var(--dm-duration-base) var(--dm-ease) both; }
+.bl-animate-fade-in-up     { animation: bl-fade-in-up var(--dm-duration-slow) var(--dm-ease) both; }
+.bl-animate-fade-in-down   { animation: bl-fade-in-down var(--dm-duration-slow) var(--dm-ease) both; }
+.bl-animate-scale-in       { animation: bl-scale-in var(--dm-duration-slow) var(--dm-ease) both; }
+.bl-animate-slide-in-right { animation: bl-slide-in-right var(--dm-duration-slow) var(--dm-ease) both; }
 .bl-animate-pulse          { animation: bl-pulse 2s ease-in-out infinite; }
 .bl-animate-glow-pulse     { animation: bl-glow-pulse 2s ease-in-out infinite; }
 .bl-animate-shimmer        { animation: bl-shimmer 2s linear infinite; }
@@ -117,7 +117,7 @@
 
 .bl-stagger > * {
   opacity: 0;
-  animation: bl-fade-in-up var(--bl-duration-slow) var(--bl-ease) both;
+  animation: bl-fade-in-up var(--dm-duration-slow) var(--dm-ease) both;
 }
 
 .bl-stagger > *:nth-child(1)  { animation-delay: 0ms; }
@@ -138,10 +138,10 @@
 .bl-text-shimmer {
   background: linear-gradient(
     90deg,
-    var(--bl-text-dim) 0%,
-    var(--bl-text-primary) 40%,
-    rgba(var(--bl-accent-rgb), 0.8) 60%,
-    var(--bl-text-dim) 100%
+    var(--dm-text-dim) 0%,
+    var(--dm-text-primary) 40%,
+    rgba(var(--dm-accent-rgb), 0.8) 60%,
+    var(--dm-text-dim) 100%
   );
   background-size: 200% auto;
   -webkit-background-clip: text;
@@ -151,14 +151,14 @@
 }
 
 .bl-text-tech-glow {
-  color: rgba(var(--bl-accent-rgb), 0.95);
+  color: rgba(var(--dm-accent-rgb), 0.95);
   animation: bl-tech-glow 2.5s ease-in-out infinite;
 }
 
 .bl-text-cursor::after {
   content: "|";
   display: inline-block;
-  color: rgba(var(--bl-accent-rgb), 0.8);
+  color: rgba(var(--dm-accent-rgb), 0.8);
   font-weight: 300;
   animation: bl-blink 1s step-end infinite;
   margin-left: 1px;
@@ -167,25 +167,25 @@
 .bl-text-wavy-underline {
   text-decoration: underline;
   text-decoration-style: wavy;
-  text-decoration-color: rgba(var(--bl-accent-rgb), 0.4);
+  text-decoration-color: rgba(var(--dm-accent-rgb), 0.4);
   text-underline-offset: 4px;
   text-decoration-thickness: 1.5px;
-  transition: text-decoration-color var(--bl-duration-base) var(--bl-ease);
+  transition: text-decoration-color var(--dm-duration-base) var(--dm-ease);
 }
 
 .bl-text-wavy-underline:hover {
-  text-decoration-color: rgba(var(--bl-accent-rgb), 0.8);
+  text-decoration-color: rgba(var(--dm-accent-rgb), 0.8);
 }
 
 /* ── Glass Effects ── */
 
 .bl-glass {
   position: relative;
-  background: var(--bl-glass-bg);
-  backdrop-filter: blur(var(--bl-glass-blur)) saturate(var(--bl-glass-saturate));
-  -webkit-backdrop-filter: blur(var(--bl-glass-blur)) saturate(var(--bl-glass-saturate));
-  border: 1px solid var(--bl-border-2);
-  border-radius: var(--bl-radius-lg);
+  background: var(--dm-glass-bg);
+  backdrop-filter: blur(var(--dm-glass-blur)) saturate(var(--dm-glass-saturate));
+  -webkit-backdrop-filter: blur(var(--dm-glass-blur)) saturate(var(--dm-glass-saturate));
+  border: 1px solid var(--dm-border-2);
+  border-radius: var(--dm-radius-lg);
   overflow: hidden;
 }
 
@@ -226,9 +226,9 @@
 
 .bl-bg-grid {
   background-image:
-    linear-gradient(rgba(255, 255, 255, var(--bl-grid-opacity)) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, var(--bl-grid-opacity)) 1px, transparent 1px);
-  background-size: var(--bl-grid-size) var(--bl-grid-size);
+    linear-gradient(rgba(255, 255, 255, var(--dm-grid-opacity)) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, var(--dm-grid-opacity)) 1px, transparent 1px);
+  background-size: var(--dm-grid-size) var(--dm-grid-size);
 }
 
 .bl-glow-orb--green {
@@ -236,7 +236,7 @@
   width: 400px;
   height: 400px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(var(--bl-accent-rgb), 0.12) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(var(--dm-accent-rgb), 0.12) 0%, transparent 70%);
   filter: blur(80px);
   pointer-events: none;
   animation: bl-orb-drift 20s ease-in-out infinite;
@@ -260,12 +260,12 @@
   top: 0;
   left: 0;
   height: 2px;
-  background: linear-gradient(90deg, rgba(var(--bl-accent-rgb), 0.8), rgba(var(--bl-accent-rgb), 0.4));
+  background: linear-gradient(90deg, rgba(var(--dm-accent-rgb), 0.8), rgba(var(--dm-accent-rgb), 0.4));
   z-index: 10001;
   transform-origin: left;
   transition: transform 50ms linear;
   pointer-events: none;
-  box-shadow: 0 0 8px rgba(var(--bl-accent-rgb), 0.4);
+  box-shadow: 0 0 8px rgba(var(--dm-accent-rgb), 0.4);
 }
 
 /* ── Scroll to Top ── */
@@ -279,21 +279,21 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--bl-glass-bg-heavy);
+  background: var(--dm-glass-bg-heavy);
   backdrop-filter: blur(20px) saturate(150%);
   -webkit-backdrop-filter: blur(20px) saturate(150%);
-  border: 1px solid var(--bl-border-2);
-  border-radius: var(--bl-radius-md);
-  color: var(--bl-text-secondary);
+  border: 1px solid var(--dm-border-2);
+  border-radius: var(--dm-radius-md);
+  color: var(--dm-text-secondary);
   cursor: pointer;
   opacity: 0;
   visibility: hidden;
   transform: translateY(12px);
-  transition: opacity var(--bl-duration-base) var(--bl-ease),
-              visibility var(--bl-duration-base) var(--bl-ease),
-              transform var(--bl-duration-base) var(--bl-ease),
-              background var(--bl-duration-fast) var(--bl-ease),
-              color var(--bl-duration-fast) var(--bl-ease);
+  transition: opacity var(--dm-duration-base) var(--dm-ease),
+              visibility var(--dm-duration-base) var(--dm-ease),
+              transform var(--dm-duration-base) var(--dm-ease),
+              background var(--dm-duration-fast) var(--dm-ease),
+              color var(--dm-duration-fast) var(--dm-ease);
   z-index: 9998;
 }
 
@@ -304,21 +304,21 @@
 }
 
 .bl-scroll-top:hover {
-  background: rgba(var(--bl-accent-rgb), 0.15);
-  color: var(--bl-text-primary);
-  border-color: rgba(var(--bl-accent-rgb), 0.3);
+  background: rgba(var(--dm-accent-rgb), 0.15);
+  color: var(--dm-text-primary);
+  border-color: rgba(var(--dm-accent-rgb), 0.3);
 }
 
 /* ── Hover 3D Tilt ── */
 
 .bl-tilt {
   transform-style: preserve-3d;
-  transition: transform var(--bl-duration-slow) var(--bl-ease);
+  transition: transform var(--dm-duration-slow) var(--dm-ease);
   will-change: transform;
 }
 
 .bl-tilt:hover {
-  transform: perspective(800px) rotateY(var(--bl-tilt-x, 2deg)) rotateX(var(--bl-tilt-y, -2deg));
+  transform: perspective(800px) rotateY(var(--dm-tilt-x, 2deg)) rotateX(var(--dm-tilt-y, -2deg));
 }
 
 /* ── Reduced Motion ── */
@@ -341,7 +341,7 @@
   .bl-text-shimmer {
     animation: none;
     background: none;
-    -webkit-text-fill-color: var(--bl-text-primary);
+    -webkit-text-fill-color: var(--dm-text-primary);
   }
 
   .bl-text-tech-glow {

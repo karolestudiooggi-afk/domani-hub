@@ -347,7 +347,7 @@ export default function Brands() {
         <div>
           <h1 className="flex items-center gap-2 text-h2Sm">
             <Building2 className="h-6 w-6 text-primary" />
-            Perfis de <span className="text-gradient-bilhon">Empresa</span>
+            Perfis de <span className="text-gradient-domani">Empresa</span>
           </h1>
           <p className="mt-1 text-muted-foreground">
             Configure perfis para a IA gerar conteúdo com a identidade da sua marca
