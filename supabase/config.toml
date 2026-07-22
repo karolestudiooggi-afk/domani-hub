@@ -1,0 +1,59 @@
+# =====================================================================
+# Domani Social Hub — configuração do Supabase
+#
+# Troque `project_id` pelo ref do SEU projeto (Dashboard → Settings → General).
+# =====================================================================
+project_id = "SEU-PROJECT-REF"
+
+# ---------------------------------------------------------------------
+# Edge Functions
+#
+# `verify_jwt = true` faz o gateway do Supabase rejeitar a requisição SEM
+# token, antes do código rodar. É a primeira barreira. A segunda é o
+# `requireUser()` dentro de cada função.
+#
+# Antes, NENHUMA função declarava isso — o padrão ficava aberto e qualquer
+# pessoa na internet disparava geração paga na chave do dono.
+# ---------------------------------------------------------------------
+
+[functions.hub-ai-assist]
+verify_jwt = true
+
+[functions.hub-generate-content]
+verify_jwt = true
+
+[functions.hub-brand-suggest]
+verify_jwt = true
+
+[functions.hub-analytics-insights]
+verify_jwt = true
+
+[functions.hub-source-extract]
+verify_jwt = true
+
+[functions.hub-openai-image]
+verify_jwt = true
+
+[functions.hub-higgsfield-proxy]
+verify_jwt = true
+
+[functions.hub-postforme-proxy]
+verify_jwt = true
+
+[functions.hub-stock-search]
+verify_jwt = true
+
+[functions.hub-firecrawl-search]
+verify_jwt = true
+
+[functions.hub-social-analytics]
+verify_jwt = true
+
+[functions.hub-autopilot-run]
+verify_jwt = true
+
+# O cron NÃO usa JWT de usuário: quem chama é o agendador (pg_cron ou um
+# serviço externo). Ele se protege sozinho com o header `x-cron-secret`,
+# validado dentro da função contra o secret CRON_SECRET.
+[functions.hub-autopilot-cron]
+verify_jwt = false

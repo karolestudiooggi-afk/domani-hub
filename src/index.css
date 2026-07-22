@@ -1,0 +1,112 @@
+/* =====================================================================
+   Paleta oficial Domani
+     #FFFFFF  branco
+     #000000  preto
+     #E56D23  laranja da marca   → --primary  (20 78% 51%)
+     #1D1D1F  chumbo             → --foreground (240 3% 12%)
+   Os tokens abaixo já refletem essas cores. Não hardcode hex nos
+   componentes — use as variáveis.
+   ===================================================================== */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* Paleta Domani:
+     Branco #FFFFFF · Preto #000000 · Laranja #E56D23 (20 78% 51%) · Chumbo #1D1D1F (240 3% 12%) */
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 3% 12%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 240 3% 12%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 3% 12%;
+
+    --primary: 20 78% 51%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 240 5% 96%;
+    --secondary-foreground: 240 3% 12%;
+
+    --muted: 240 5% 96%;
+    --muted-foreground: 240 4% 40%;
+
+    --accent: 20 78% 96%;
+    --accent-foreground: 20 78% 30%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 240 6% 90%;
+    --input: 240 6% 90%;
+    --ring: 20 78% 51%;
+
+    --radius: 1rem;
+
+    --sidebar-background: 0 0% 99%;
+    --sidebar-foreground: 240 3% 20%;
+    --sidebar-primary: 20 78% 51%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 20 78% 96%;
+    --sidebar-accent-foreground: 20 78% 30%;
+    --sidebar-border: 240 6% 92%;
+    --sidebar-ring: 20 78% 51%;
+  }
+
+  .dark {
+    --background: 240 3% 8%;
+    --foreground: 0 0% 98%;
+
+    --card: 240 3% 12%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 240 3% 12%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 20 78% 51%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 240 3% 16%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 240 3% 16%;
+    --muted-foreground: 240 5% 65%;
+
+    --accent: 240 3% 16%;
+    --accent-foreground: 0 0% 98%;
+
+    --destructive: 0 63% 40%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 240 3% 18%;
+    --input: 240 3% 18%;
+    --ring: 20 78% 51%;
+
+    --sidebar-background: 240 3% 10%;
+    --sidebar-foreground: 240 5% 90%;
+    --sidebar-primary: 20 78% 51%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 20 40% 16%;
+    --sidebar-accent-foreground: 20 78% 80%;
+    --sidebar-border: 240 3% 18%;
+    --sidebar-ring: 20 78% 51%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Sora', 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6, .eyebrow {
+    font-family: 'Space Grotesk', 'Sora', -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+}
