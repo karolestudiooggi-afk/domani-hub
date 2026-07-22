@@ -182,9 +182,14 @@ async function persistUrls(urls: string[]): Promise<string[]> {
         if (!error) {
           out.push(supabase.storage.from("media").getPublicUrl(path).data.publicUrl);
         } else {
-          console.error("[gallery] upload falhou:", error.message);
+          console.error("[gallery] upload falhou:", error);
+          throw new Error(`Não foi possível enviar a imagem: ${error.message}`);
         }
-      } catch { /* skip this one */ }
+      } catch (e) {
+        // Antes este erro era engolido em silêncio — a imagem sumia sem aviso.
+        console.error("[gallery] falha ao processar a imagem:", e);
+        throw e;
+      }
     }
     // blob: URLs are discarded (não persistentes)
   }
