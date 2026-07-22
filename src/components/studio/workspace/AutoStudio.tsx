@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { Loader2, Sparkles, Settings2 } from "lucide-react";
+import { Loader2, Sparkles, Settings2 , ImagePlus, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
@@ -120,6 +120,36 @@ export function AutoStudio({ onEditInCanvas }: { onEditInCanvas: (doc: StudioDoc
   const brand = (brands.find((b) => b.id === brandId) || defaultBrand || null) as BrandProfile | null;
 
   const [prompt, setPrompt] = useState("");
+  // Foto de referência: a IA parte dela em vez de criar do zero.
+  const [refImage, setRefImage] = useState<string | null>(null);
+  const [refName, setRefName] = useState("");
+  const [dragging, setDragging] = useState(false);
+
+  const aceitarArquivo = (file?: File | null) => {
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      toast.error("Envie um arquivo de imagem (jpg, png…).");
+      return;
+    }
+    if (file.size > 20 * 1024 * 1024) {
+      toast.error("Imagem muito grande. Use uma de até 20 MB.");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      setRefImage(String(reader.result));
+      setRefName(file.name);
+      toast.success("Foto adicionada — a IA vai usar como base.");
+    };
+    reader.onerror = () => toast.error("Não consegui ler o arquivo.");
+    reader.readAsDataURL(file);
+  };
+
+  const onPickReference = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    aceitarArquivo(file);
+  };
   const [formatChoice, setFormatChoice] = useState<FormatChoice>("auto");
   const [slideCount, setSlideCount] = useState(6);
   const [aspectChoice, setAspectChoice] = useState<AspectChoice>("4:5");
@@ -206,7 +236,10 @@ export function AutoStudio({ onEditInCanvas }: { onEditInCanvas: (doc: StudioDoc
       total > 1 ? `Inclua um indicador discreto "${idx + 1}/${total}".` : "",
       effectiveBrand ? "Use a paleta da marca." : "",
     ].filter(Boolean).join("\n\n");
-    const { images } = await generateOpenAiImage({ prompt, size, quality: "medium", n: 1 });
+    const { images } = await generateOpenAiImage({
+      prompt, size, quality: "medium", n: 1,
+      ...(refImage ? { referenceImage: refImage } : {}),
+    });
     const raw = images?.[0];
     if (!raw) return undefined;
     try { return await fitToAspect(raw, target.ratio); } catch { return raw; }
@@ -623,6 +656,40 @@ Responda APENAS JSON: { "narracao": "<fala completa em pt-BR>", "cena": "<descri
           disabled={generating}
           autoFocus
         />
+
+        {/* Foto de referência: arraste ou clique. A IA parte dela. */}
+        <div
+          onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
+          onDragLeave={() => setDragging(false)}
+          onDrop={(e) => {
+            e.preventDefault();
+            setDragging(false);
+            aceitarArquivo(e.dataTransfer.files?.[0]);
+          }}
+          className={`rounded-2xl border border-dashed p-3 transition-colors ${
+            dragging ? "border-primary bg-primary/5" : "border-border"
+          }`}
+        >
+          {refImage ? (
+            <div className="flex items-center gap-3">
+              <img src={refImage} alt="Referência" className="h-16 w-16 rounded-lg object-cover" />
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-sm font-medium">{refName || "Foto de referência"}</p>
+                <p className="text-xs text-muted-foreground">A IA vai partir desta foto para criar.</p>
+              </div>
+              <Button variant="ghost" size="sm" onClick={() => { setRefImage(null); setRefName(""); }} disabled={generating}>
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+          ) : (
+            <label className="flex cursor-pointer items-center justify-center gap-2 py-2 text-sm text-muted-foreground hover:text-foreground">
+              <input type="file" accept="image/*" className="hidden" disabled={generating} onChange={onPickReference} />
+              <ImagePlus className="h-4 w-4" />
+              {dragging ? "Solte a imagem aqui" : "Arraste uma foto aqui ou clique para escolher"}
+              <span className="text-xs">(opcional)</span>
+            </label>
+          )}
+        </div>
         <div className="flex flex-wrap gap-1.5">
           {EXAMPLES.map((ex) => (
             <button key={ex} onClick={() => setPrompt(ex)} disabled={generating} className="rounded-full border border-border px-3 py-1 text-xs text-muted-foreground hover:bg-accent">
