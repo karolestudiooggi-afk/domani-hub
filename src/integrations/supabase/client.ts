@@ -56,14 +56,17 @@ function createSupabaseFetch(supabaseKey: string): typeof fetch {
   };
 }
 
-// Schema do banco. O Hub usa `domani_hub` — separado do Domani Agentes,
-// que fica em `public`. Definido em VITE_DB_SCHEMA; sem a variável, `public`.
-// ⚠️ O schema precisa estar em Settings → API → Exposed schemas, senão a
-// API responde 406 e o app não enxerga nenhuma tabela.
-const DB_SCHEMA = (import.meta.env.VITE_DB_SCHEMA as string) || 'public';
+/**
+ * Prefixo das tabelas. O Hub usa `hub_` — as tabelas dele vivem no schema
+ * `public` (que a API sempre aceita, sem o 406 dos schemas secundários),
+ * separadas das do Domani Agentes pelo prefixo.
+ *
+ *   Hub      → VITE_TABLE_PREFIX="hub_"  → public.hub_brand_profiles
+ *   Agentes  → sem a variável            → public.brand_profiles
+ */
+const TABLE_PREFIX = (import.meta.env.VITE_TABLE_PREFIX as string) || '';
 
-export const supabase = createClient<Database>(url, key, {
-  db: { schema: DB_SCHEMA },
+const rawClient = createClient<Database>(url, key, {
   global: { fetch: createSupabaseFetch(key) },
   auth: {
     storage: typeof window !== 'undefined' ? window.localStorage : undefined,
@@ -71,3 +74,25 @@ export const supabase = createClient<Database>(url, key, {
     autoRefreshToken: true,
   },
 });
+
+/**
+ * Aplica o prefixo em `.from()` e `.rpc()` de forma transparente: o resto do
+ * código continua escrevendo `.from("brand_profiles")` sem saber de nada.
+ */
+export const supabase = TABLE_PREFIX
+  ? (new Proxy(rawClient, {
+      get(target, prop, receiver) {
+        if (prop === 'from') {
+          return (table: string) => target.from(`${TABLE_PREFIX}${table}` as never);
+        }
+        if (prop === 'rpc') {
+          return (fn: string, args?: unknown, opts?: unknown) =>
+            (target.rpc as unknown as (f: string, a?: unknown, o?: unknown) => unknown)(
+              `${TABLE_PREFIX}${fn}`, args, opts,
+            );
+        }
+        const value = Reflect.get(target, prop, receiver);
+        return typeof value === 'function' ? value.bind(target) : value;
+      },
+    }) as typeof rawClient)
+  : rawClient;
