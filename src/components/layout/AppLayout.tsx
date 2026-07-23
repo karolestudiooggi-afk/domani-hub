@@ -33,7 +33,16 @@ export function AppLayout() {
     <div className="min-h-screen bg-background">
       <AppSidebar />
       <main className="min-h-[calc(100vh-4rem)]">
-        <div className={`mx-auto w-full p-4 sm:p-6 lg:p-8 ${telaLarga ? "max-w-none" : "max-w-7xl"}`}>
+        <div
+          className={
+            telaLarga
+              // Ferramenta: ocupa exatamente a altura livre abaixo da barra
+              // de navegação (h-14 no mobile, h-16 no desktop). Sem padding,
+              // para os painéis internos controlarem a própria rolagem.
+              ? "w-full h-[calc(100vh-3.5rem)] lg:h-[calc(100vh-4rem)] overflow-hidden"
+              : "mx-auto w-full max-w-7xl p-4 sm:p-6 lg:p-8"
+          }
+        >
           {/* Suspense do CONTEÚDO fica aqui dentro (e não em volta de <Routes>) para
               que o carregamento lazy de cada página NÃO desmonte os menus/layout —
               era isso que dava a sensação de "refresh completo" a cada navegação. */}
