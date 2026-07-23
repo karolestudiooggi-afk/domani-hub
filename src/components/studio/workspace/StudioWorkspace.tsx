@@ -149,7 +149,7 @@ function WorkspaceInner({ onBack }: { onBack?: () => void }) {
 
       {/* Middle */}
       <div className="flex min-h-0 flex-1">
-        <aside className="hidden w-56 shrink-0 overflow-y-auto border-r border-border p-3 lg:block">
+        <aside className="hidden w-64 shrink-0 overflow-y-auto border-r border-border p-3 lg:block xl:w-72">
           <LeftRailContent brandName={brand?.name} brandHandle={brand?.handle} />
         </aside>
 

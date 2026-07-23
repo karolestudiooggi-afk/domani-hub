@@ -23,7 +23,14 @@ function buildInitial(nav: NavState | null): StudioDoc | undefined {
     caption: nav.sourceContent || nav.prompt || "",
     // Carrossel: cada imagem vira um slide, para editar todas no canvas.
     slides: nav.mediaUrls?.length
-      ? nav.mediaUrls.map((url) => ({ bg: base.slides[0].bg, bgImage: url, els: [] }))
+      // Vindo da galeria: mostra a imagem inteira, sem cortar. O usuário
+      // troca para "preencher" no canvas se preferir.
+      ? nav.mediaUrls.map((url) => ({
+          bg: base.slides[0].bg,
+          bgImage: url,
+          bgFit: "contain" as const,
+          els: [],
+        }))
       : base.slides,
     schedule: nav.scheduleAt ? { when: "schedule", at: nav.scheduleAt } : { when: "now" },
   };

@@ -49,6 +49,12 @@ export interface Slide {
   bgX?: number;        // px, relativo ao canvas
   bgY?: number;
   bgScale?: number;    // 1 = cobre o canvas; >1 aproxima
+  /**
+   * Como a imagem ocupa o quadro:
+   *  cover   = preenche tudo, pode cortar as bordas (padrão)
+   *  contain = mostra a imagem inteira, sobra espaço nas laterais
+   */
+  bgFit?: "cover" | "contain";
   els: El[];
 }
 

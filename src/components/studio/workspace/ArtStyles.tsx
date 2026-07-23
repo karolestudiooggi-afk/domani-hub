@@ -63,9 +63,9 @@ export function ArtStyles() {
         <Palette className="h-3.5 w-3.5" /> Estilos de arte (IA)
       </p>
       <Input value={topic} onChange={(e) => setTopic(e.target.value)} placeholder="Tema da arte (ou usa a legenda atual)" className="h-9" />
-      <div className="grid grid-cols-2 gap-1.5">
+      <div className="grid grid-cols-1 gap-1.5">
         {STYLES.map((s) => (
-          <Button key={s.name} variant="outline" size="sm" className="h-auto min-h-9 justify-start whitespace-normal text-left leading-tight py-2 text-[11px]" onClick={() => generate(s)} disabled={!!busy}>
+          <Button key={s.name} variant="outline" size="sm" className="h-9 justify-start whitespace-nowrap text-left text-xs" onClick={() => generate(s)} disabled={!!busy}>
             {busy === s.name ? <Loader2 className="mr-1.5 h-3 w-3 shrink-0 animate-spin" /> : <Wand2 className="mr-1.5 h-3 w-3 shrink-0 text-primary" />}
             {s.name}
           </Button>

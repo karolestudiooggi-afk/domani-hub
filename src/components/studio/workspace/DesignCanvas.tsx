@@ -184,11 +184,16 @@ export function DesignCanvas() {
     }
   };
 
-  /** Volta a imagem para o enquadramento original. */
-  const resetBg = () => {
+  /**
+   * Alterna entre preencher o quadro (pode cortar) e mostrar a imagem
+   * inteira (sobra espaço). Também zera posição e zoom.
+   */
+  const alternarEncaixe = () => {
     pushHistory();
     setSlides(doc.slides.map((sl, i) =>
-      i === currentSlide ? { ...sl, bgX: 0, bgY: 0, bgScale: 1 } : sl,
+      i === currentSlide
+        ? { ...sl, bgX: 0, bgY: 0, bgScale: 1, bgFit: sl.bgFit === "contain" ? "cover" : "contain" }
+        : sl,
     ));
   };
 
@@ -384,7 +389,7 @@ export function DesignCanvas() {
           draggable={false}
           onMouseDown={(ev) => startBgDrag(ev, i)}
           onTouchStart={(ev) => startBgDrag(ev, i)}
-          className="absolute inset-0 h-full w-full select-none object-cover"
+          className={`absolute inset-0 h-full w-full select-none ${s.bgFit === "contain" ? "object-contain" : "object-cover"}`}
           style={{
             // Reenquadramento: arraste para mover, use o zoom para aproximar.
             transform: `translate(${s.bgX ?? 0}px, ${s.bgY ?? 0}px) scale(${s.bgScale ?? 1})`,
@@ -461,8 +466,15 @@ export function DesignCanvas() {
             <Button variant="outline" size="sm" className="h-7 w-7 p-0 text-xs" title="Aproximar" onClick={() => zoomBg(0.1)}>
               <ZoomIn className="h-3.5 w-3.5" />
             </Button>
-            <Button variant="outline" size="sm" className="h-7 text-xs" title="Voltar ao enquadramento original" onClick={resetBg}>
-              <Maximize className="mr-1 h-3.5 w-3.5" />Ajustar
+            <Button
+              variant="outline" size="sm" className="h-7 text-xs"
+              title={doc.slides[currentSlide]?.bgFit === "contain"
+                ? "Preencher o quadro (pode cortar as bordas)"
+                : "Mostrar a imagem inteira, sem cortar"}
+              onClick={alternarEncaixe}
+            >
+              <Maximize className="mr-1 h-3.5 w-3.5" />
+              {doc.slides[currentSlide]?.bgFit === "contain" ? "Preencher" : "Sem cortar"}
             </Button>
             {/* Novidade: destacado em violeta para não se perder entre os
                 demais botões da barra, com selo "novo". */}
