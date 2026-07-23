@@ -464,17 +464,27 @@ export function DesignCanvas() {
             <Button variant="outline" size="sm" className="h-7 text-xs" title="Voltar ao enquadramento original" onClick={resetBg}>
               <Maximize className="mr-1 h-3.5 w-3.5" />Ajustar
             </Button>
-            <Button
-              variant="outline" size="sm" className="h-7 text-xs"
-              title="Separa os objetos da arte em camadas móveis"
-              disabled={separando}
-              onClick={descolarCamadas}
-            >
-              {separando
-                ? <Loader2 className="mr-1 h-3.5 w-3.5 animate-spin" />
-                : <Layers className="mr-1 h-3.5 w-3.5" />}
-              {separando ? "Separando…" : "Descolar"}
-            </Button>
+            {/* Novidade: destacado em violeta para não se perder entre os
+                demais botões da barra, com selo "novo". */}
+            <div className="relative">
+              <Button
+                size="sm"
+                className="h-7 border-0 bg-violet-600 text-xs text-white hover:bg-violet-700"
+                title="Separa os objetos da arte em camadas móveis — dá para mover a pizza sem levar o fundo"
+                disabled={separando}
+                onClick={descolarCamadas}
+              >
+                {separando
+                  ? <Loader2 className="mr-1 h-3.5 w-3.5 animate-spin" />
+                  : <Layers className="mr-1 h-3.5 w-3.5" />}
+                {separando ? "Separando…" : "Descolar camadas"}
+              </Button>
+              {!separando && (
+                <span className="pointer-events-none absolute -right-1.5 -top-2 rounded-full bg-violet-500 px-1.5 py-px text-[9px] font-bold uppercase leading-tight tracking-wide text-white shadow-sm">
+                  novo
+                </span>
+              )}
+            </div>
           </>
         )}
       </div>
