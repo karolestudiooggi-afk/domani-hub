@@ -468,8 +468,9 @@ export function DesignCanvas() {
                 demais botões da barra, com selo "novo". */}
             <div className="relative">
               <Button
+                variant="outline"
                 size="sm"
-                className="h-7 border-0 bg-violet-600 text-xs text-white hover:bg-violet-700"
+                className="h-7 border-violet-500 text-xs text-violet-700 hover:bg-violet-50 hover:text-violet-800"
                 title="Separa os objetos da arte em camadas móveis — dá para mover a pizza sem levar o fundo"
                 disabled={separando}
                 onClick={descolarCamadas}
