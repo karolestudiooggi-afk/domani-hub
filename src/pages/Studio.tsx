@@ -21,7 +21,10 @@ function buildInitial(nav: NavState | null): StudioDoc | undefined {
   return {
     ...base,
     caption: nav.sourceContent || nav.prompt || "",
-    slides: nav.mediaUrls?.length ? [{ bg: base.slides[0].bg, bgImage: nav.mediaUrls[0], els: [] }] : base.slides,
+    // Carrossel: cada imagem vira um slide, para editar todas no canvas.
+    slides: nav.mediaUrls?.length
+      ? nav.mediaUrls.map((url) => ({ bg: base.slides[0].bg, bgImage: url, els: [] }))
+      : base.slides,
     schedule: nav.scheduleAt ? { when: "schedule", at: nav.scheduleAt } : { when: "now" },
   };
 }

@@ -10,6 +10,7 @@ import {
   ImageOff,
   Loader2,
   Play,
+  Pencil,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
@@ -73,6 +74,26 @@ export default function Gallery() {
 
   function handleUseInPost(creation: Creation) {
     navigate("/studio", { state: { mediaUrls: creation.urls, fromVisual: true } });
+  }
+
+  /**
+   * Abre a criação no canvas do Studio para editar: as imagens viram slides
+   * e a legenda vai junto. O Studio já entra no modo de edição quando recebe
+   * mídia por navegação.
+   */
+  function handleEdit(creation: Creation) {
+    const urls = creation.urls?.length ? creation.urls : (creation.thumbnailUrl ? [creation.thumbnailUrl] : []);
+    if (!urls.length) {
+      toast({ title: "Esta criação não tem imagem para editar", variant: "destructive" });
+      return;
+    }
+    navigate("/studio", {
+      state: {
+        mediaUrls: urls,
+        sourceContent: creation.prompt || "",
+        sourceTitle: creation.templateName || "",
+      },
+    });
   }
 
   function handleDownload(creation: Creation) {
@@ -147,6 +168,7 @@ export default function Gallery() {
               creation={creation}
               onView={handleView}
               onUseInPost={handleUseInPost}
+              onEdit={handleEdit}
               onDownload={handleDownload}
               onDelete={handleDeleteCreation}
             />
@@ -175,6 +197,7 @@ interface CreationCardProps {
   onView: (c: Creation) => void;
   onUseInPost: (c: Creation) => void;
   onDownload: (c: Creation) => void;
+  onEdit: (c: Creation) => void;
   onDelete: (c: Creation) => void;
 }
 
@@ -183,6 +206,7 @@ function CreationCard({
   onView,
   onUseInPost,
   onDownload,
+  onEdit,
   onDelete,
 }: CreationCardProps) {
   const thumb = creation.thumbnailUrl ?? creation.urls[0] ?? "";
@@ -272,6 +296,16 @@ function CreationCard({
           >
             <Eye className="h-4 w-4" />
             <span className="text-xs">Ver</span>
+          </Button>
+          <Button
+            size="sm"
+            variant="secondary"
+            className="h-8 flex-1 gap-1.5 px-2"
+            title="Abrir no canvas para editar"
+            onClick={() => onEdit(creation)}
+          >
+            <Pencil className="h-4 w-4" />
+            <span className="text-xs">Editar</span>
           </Button>
           <Button
             size="icon"
