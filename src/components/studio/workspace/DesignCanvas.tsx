@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import {
-  Type, Image as ImageIcon, Square, Plus, Copy, Trash2, ChevronLeft, ChevronRight, Film,
-} from "lucide-react";
+  Type, Image as ImageIcon, Square, Plus, Copy, Trash2, ChevronLeft, ChevronRight, Film, ZoomIn, ZoomOut, Maximize } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useBrands } from "@/hooks/use-brands";
 import { useStudio, blankSlide } from "./StudioProvider";
@@ -59,6 +58,70 @@ export function DesignCanvas() {
 
   const isCarousel = doc.format === "carousel";
   const isVideo = doc.format === "video";
+
+  /**
+   * Arrastar a IMAGEM DE FUNDO para reenquadrar.
+   * Diferente do drag de elementos: aqui movemos a própria arte dentro do
+   * quadro, sem mexer nos textos que estão por cima.
+   */
+  const bgDrag = useRef<{ sx: number; sy: number; ox: number; oy: number; idx: number } | null>(null);
+
+  const startBgDrag = (
+    ev: React.MouseEvent | React.TouchEvent,
+    idx: number,
+  ) => {
+    if (exportMode) return;
+    ev.stopPropagation();
+    const pt = "touches" in ev ? ev.touches[0] : ev;
+    const sl = doc.slides[idx];
+    bgDrag.current = {
+      sx: pt.clientX, sy: pt.clientY,
+      ox: sl.bgX ?? 0, oy: sl.bgY ?? 0,
+      idx,
+    };
+    pushHistory();
+  };
+
+  useEffect(() => {
+    const move = (ev: MouseEvent | TouchEvent) => {
+      const d = bgDrag.current;
+      if (!d) return;
+      const pt = "touches" in ev ? ev.touches[0] : (ev as MouseEvent);
+      setSlides(doc.slides.map((sl, i) =>
+        i === d.idx
+          ? { ...sl, bgX: d.ox + (pt.clientX - d.sx), bgY: d.oy + (pt.clientY - d.sy) }
+          : sl,
+      ));
+    };
+    const up = () => { bgDrag.current = null; };
+    window.addEventListener("mousemove", move);
+    window.addEventListener("touchmove", move, { passive: false });
+    window.addEventListener("mouseup", up);
+    window.addEventListener("touchend", up);
+    return () => {
+      window.removeEventListener("mousemove", move);
+      window.removeEventListener("touchmove", move);
+      window.removeEventListener("mouseup", up);
+      window.removeEventListener("touchend", up);
+    };
+  }, [doc.slides, setSlides]);
+
+  /** Zoom da imagem de fundo (mantém entre 1x e 3x). */
+  const zoomBg = (delta: number) => {
+    setSlides(doc.slides.map((sl, i) =>
+      i === currentSlide
+        ? { ...sl, bgScale: Math.min(3, Math.max(1, (sl.bgScale ?? 1) + delta)) }
+        : sl,
+    ));
+  };
+
+  /** Volta a imagem para o enquadramento original. */
+  const resetBg = () => {
+    pushHistory();
+    setSlides(doc.slides.map((sl, i) =>
+      i === currentSlide ? { ...sl, bgX: 0, bgY: 0, bgScale: 1 } : sl,
+    ));
+  };
 
   // ── drag move (mouse + toque; escala + snap/guias + grupo) ──
   useEffect(() => {
@@ -244,7 +307,22 @@ export function DesignCanvas() {
         display: exportMode ? "block" : i === currentSlide ? "block" : "none",
       }}
     >
-      {s.bgImage && <img src={s.bgImage} crossOrigin="anonymous" alt="" className="absolute inset-0 h-full w-full object-cover" />}
+      {s.bgImage && (
+        <img
+          src={s.bgImage}
+          crossOrigin="anonymous"
+          alt=""
+          draggable={false}
+          onMouseDown={(ev) => startBgDrag(ev, i)}
+          onTouchStart={(ev) => startBgDrag(ev, i)}
+          className="absolute inset-0 h-full w-full select-none object-cover"
+          style={{
+            // Reenquadramento: arraste para mover, use o zoom para aproximar.
+            transform: `translate(${s.bgX ?? 0}px, ${s.bgY ?? 0}px) scale(${s.bgScale ?? 1})`,
+            cursor: exportMode ? undefined : "grab",
+          }}
+        />
+      )}
       {s.els.map((e) => (
         <div
           key={e.id}
@@ -302,6 +380,23 @@ export function DesignCanvas() {
         <Button variant="outline" size="sm" className="h-7 text-xs" onClick={() => addElement("text")}><Type className="mr-1 h-3.5 w-3.5" />Texto</Button>
         <Button variant="outline" size="sm" className="h-7 text-xs" onClick={() => addElement("image")}><ImageIcon className="mr-1 h-3.5 w-3.5" />Imagem</Button>
         <Button variant="outline" size="sm" className="h-7 text-xs" onClick={() => addElement("shape")}><Square className="mr-1 h-3.5 w-3.5" />Forma</Button>
+
+        {/* Reenquadrar a arte: arraste a imagem no canvas, ou use o zoom. */}
+        {doc.slides[currentSlide]?.bgImage && (
+          <>
+            <span className="mx-1 text-border">|</span>
+            <span className="text-[11px] text-muted-foreground">Imagem:</span>
+            <Button variant="outline" size="sm" className="h-7 w-7 p-0 text-xs" title="Afastar" onClick={() => zoomBg(-0.1)}>
+              <ZoomOut className="h-3.5 w-3.5" />
+            </Button>
+            <Button variant="outline" size="sm" className="h-7 w-7 p-0 text-xs" title="Aproximar" onClick={() => zoomBg(0.1)}>
+              <ZoomIn className="h-3.5 w-3.5" />
+            </Button>
+            <Button variant="outline" size="sm" className="h-7 text-xs" title="Voltar ao enquadramento original" onClick={resetBg}>
+              <Maximize className="mr-1 h-3.5 w-3.5" />Ajustar
+            </Button>
+          </>
+        )}
       </div>
 
       {/* canvas — escala p/ caber na largura disponível (mobile) */}

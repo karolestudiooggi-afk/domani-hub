@@ -45,6 +45,10 @@ export const SNAP = 6;
 export interface Slide {
   bg: string;          // cor sólida ou gradiente CSS
   bgImage?: string;    // url/data url de fundo
+  /** Deslocamento e zoom da imagem de fundo (arrastar para reenquadrar). */
+  bgX?: number;        // px, relativo ao canvas
+  bgY?: number;
+  bgScale?: number;    // 1 = cobre o canvas; >1 aproxima
   els: El[];
 }
 

@@ -18,7 +18,7 @@ import { logActivity, passosDeGeracao } from "@/lib/activity-log";
 import { carregarContextoDaMarca } from "@/lib/brand-materials";
 import { OutputScreen } from "./OutputScreen";
 import { emptyDoc } from "./StudioProvider";
-import type { StudioDoc, StudioFormat, Slide } from "./types";
+import type { StudioDoc, StudioFormat, Slide, El } from "./types";
 
 const EXAMPLES = [
   "Um carrossel de dicas para esta semana",
@@ -218,6 +218,33 @@ export function AutoStudio({ onEditInCanvas }: { onEditInCanvas: (doc: StudioDoc
     }
   };
 
+  /**
+   * Transforma título e apoio em elementos de texto do canvas.
+   * Ficam por cima da arte, editáveis: clicar seleciona, duplo clique edita.
+   */
+  const textoDoSlide = (heading?: string, body?: string): El[] => {
+    const els: El[] = [];
+    if (heading?.trim()) {
+      els.push({
+        id: `t-${Math.random().toString(36).slice(2, 9)}`,
+        type: "text", x: 28, y: 34, w: 304, h: 96,
+        text: heading.trim(),
+        fontSize: 30, color: "#ffffff", weight: 800,
+        align: "center", lineHeight: 1.12, shadow: true,
+      });
+    }
+    if (body?.trim()) {
+      els.push({
+        id: `b-${Math.random().toString(36).slice(2, 9)}`,
+        type: "text", x: 34, y: 140, w: 292, h: 60,
+        text: body.trim(),
+        fontSize: 14, color: "#f2ede6", weight: 400,
+        align: "center", lineHeight: 1.35, shadow: true,
+      });
+    }
+    return els;
+  };
+
   const slideArt = async (
     styleLine: string,
     heading: string,
@@ -226,18 +253,29 @@ export function AutoStudio({ onEditInCanvas }: { onEditInCanvas: (doc: StudioDoc
     total: number,
     size: "1024x1024" | "1024x1536" | "1536x1024",
     aspect: AspectChoice,
+    /** O que o usuário escreveu, na íntegra. Manda no CONTEÚDO da imagem. */
+    pedido?: string,
   ): Promise<string | undefined> => {
     const target = ASPECT_CHOICES.find((a) => a.value === aspect)!;
-    const prompt = [
+    const imgPrompt = [
+      // O pedido vem PRIMEIRO: é ele que decide o que a imagem mostra.
+      // A marca entra depois, definindo o tratamento visual — não o assunto.
+      pedido?.trim()
+        ? `O QUE A IMAGEM DEVE MOSTRAR (siga fielmente):\n${pedido.trim()}`
+        : "",
       brandImageDirective(effectiveBrand),
       styleLine,
       `Proporção (aspect ratio): ${aspect}. Mantenha o conteúdo principal (texto, rostos, logo) bem centralizado e longe das bordas — a imagem será cortada para ${aspect}.`,
-      heading ? `Renderize o texto de forma legível, bonita e bem composta — TÍTULO: "${heading}".${body ? ` APOIO: "${body}".` : ""}` : "",
+      // O texto NÃO é desenhado pela IA: entra depois como elemento editável
+      // no canvas. Aqui só pedimos espaço livre para ele caber bem.
+      heading
+        ? "NÃO escreva texto, letras, palavras nem logotipos na imagem. Deixe a parte superior com respiro (área mais limpa ou escurecida) para que um título seja sobreposto depois."
+        : "",
       total > 1 ? `Inclua um indicador discreto "${idx + 1}/${total}".` : "",
       effectiveBrand ? "Use a paleta da marca." : "",
     ].filter(Boolean).join("\n\n");
     const { images } = await generateOpenAiImage({
-      prompt, size, quality: "medium", n: 1,
+      prompt: imgPrompt, size, quality: "medium", n: 1,
       ...(refImage ? { referenceImage: refImage } : {}),
     });
     const raw = images?.[0];
@@ -439,7 +477,7 @@ Responda APENAS JSON: { "narracao": "<fala completa em pt-BR>", "cena": "<descri
 
       setProgress("Escrevendo o conteúdo…");
       const res = await generateContent({
-        prompt: `${brief.topic}. Objetivo: ${brief.objective}.${brief.format === "carousel" ? ` Gere um carrossel de ${brief.count} slides.` : ""}`,
+        prompt: `PEDIDO ORIGINAL (siga fielmente): ${prompt.trim()}\n\nTema: ${brief.topic}. Objetivo: ${brief.objective}.${brief.format === "carousel" ? ` Gere um carrossel de ${brief.count} slides.` : ""}`,
         platforms: brief.platforms,
         tone: effectiveBrand?.tone,
         language: "português brasileiro",
@@ -477,7 +515,7 @@ Responda APENAS JSON: { "narracao": "<fala completa em pt-BR>", "cena": "<descri
         try {
           const { json } = await aiAssist({
             system: `Crie um carrossel de Instagram com EXATAMENTE ${brief.count} slides sobre o tema${effectiveBrand ? ", na voz da marca" : ""}. O slide 1 é a capa (gancho forte) e o último é um CTA. Cada slide: { "heading": frase curta e impactante, "body": 1-2 linhas de apoio }. Use os fatos do contexto quando houver; nada genérico. ${brandTextHint(effectiveBrand)} Responda APENAS um array JSON com ${brief.count} objetos.`,
-            prompt: `${brief.topic} (${brief.objective})${ctxHint}`, expectJson: true, temperature: 0.8,
+            prompt: `PEDIDO ORIGINAL (siga fielmente): ${prompt.trim()}\n\nTema: ${brief.topic} (${brief.objective})${ctxHint}`, expectJson: true, temperature: 0.8,
           });
           specs = Array.isArray(json) ? json.filter((s) => s && s.heading).map((s) => ({ heading: String(s.heading), body: String(s.body || "") })) : [];
         } catch { /* usa fallback abaixo */ }
@@ -491,19 +529,23 @@ Responda APENAS JSON: { "narracao": "<fala completa em pt-BR>", "cena": "<descri
         let done = 0;
         const imgs = await Promise.all(
           specs.map(async (s, i) => {
-            const img = await slideArt(styleLine, s.heading, s.body, i, specs.length, size, aspect);
+            const img = await slideArt(styleLine, s.heading, s.body, i, specs.length, size, aspect, prompt.trim());
             done += 1;
             setProgress(`Artes prontas: ${done}/${specs.length}…`);
             return img;
           })
         );
-        slides = imgs.map((img) => ({ bg: grad, bgImage: img, els: [] }));
+        slides = imgs.map((img, i) => ({
+          bg: grad,
+          bgImage: img,
+          els: textoDoSlide(specs[i]?.heading, specs[i]?.body),
+        }));
       } else {
         setProgress("Gerando a arte…");
         // headline curto pra estampar na imagem
         const { text: headline } = await aiAssist({
           system: `Escreva uma frase curta e impactante (máx 8 palavras) em pt-BR para estampar numa arte sobre o tema${effectiveBrand ? ", na voz da marca" : ""}. Responda só a frase.`,
-          prompt: `${brief.topic} (${brief.objective})${ctxHint}`, temperature: 0.8,
+          prompt: `PEDIDO ORIGINAL (siga fielmente): ${prompt.trim()}\n\nTema: ${brief.topic} (${brief.objective})${ctxHint}`, temperature: 0.8,
         });
         const styleByFormat: Record<string, string> = {
           card: `Card no estilo de um post do X/Twitter sobre "${brief.topic}": cartão claro com avatar redondo, nome e @handle da marca, e o texto em destaque, sobre fundo na paleta.`,
@@ -511,8 +553,8 @@ Responda APENAS JSON: { "narracao": "<fala completa em pt-BR>", "cena": "<descri
           post: `Arte de post para redes sociais sobre "${brief.topic}" (${brief.objective}). Design profissional e moderno.`,
         };
         const styleLine = styleByFormat[brief.format] || styleByFormat.post;
-        const img = await slideArt(styleLine, (headline || brief.topic).trim(), "", 0, 1, size, aspect);
-        slides = [{ bg: grad, bgImage: img, els: [] }];
+        const img = await slideArt(styleLine, (headline || brief.topic).trim(), "", 0, 1, size, aspect, prompt.trim());
+        slides = [{ bg: grad, bgImage: img, els: textoDoSlide(headline || brief.topic, "") }];
       }
 
       const finalDoc: StudioDoc = {

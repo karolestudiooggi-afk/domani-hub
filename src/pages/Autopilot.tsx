@@ -36,10 +36,14 @@ const COLUMNS: {
   icon: typeof Lightbulb;
   accent: string;
   statuses: AutopilotPostStatus[];
+  /** Regra extra: usada quando o status sozinho não distingue a coluna. */
+  match?: (p: { status: string; media_urls?: string[] | null }) => boolean;
 }[] = [
   { key: "ideas",     title: "Ideias",    subtitle: "Rascunhos gerados pela IA", icon: Lightbulb,     accent: "from-amber-400/60 to-amber-500/60",   statuses: ["draft"] },
-  { key: "generated", title: "Geradas",   subtitle: "Visual em produção",         icon: Sparkles,      accent: "from-orange-400/60 to-amber-500/60", statuses: ["generating_visual", "visual_ready"] },
-  { key: "approved",  title: "Aprovadas", subtitle: "Prontas para agendar",       icon: ThumbsUp,      accent: "from-emerald-400/60 to-emerald-500/60", statuses: ["approved"] },
+  { key: "generated", title: "Geradas",   subtitle: "Com visual pronto",          icon: Sparkles,      accent: "from-orange-400/60 to-amber-500/60", statuses: ["generating_visual", "visual_ready"],
+    match: (p) => ["generating_visual", "visual_ready"].includes(p.status) || (p.status === "approved" && !!p.media_urls?.length) },
+  { key: "approved",  title: "Aprovadas", subtitle: "Texto pronto, sem visual",   icon: ThumbsUp,      accent: "from-emerald-400/60 to-emerald-500/60", statuses: ["approved"],
+    match: (p) => p.status === "approved" && !p.media_urls?.length },
   { key: "scheduled", title: "Agendadas", subtitle: "Fila de publicação",         icon: CalendarClock, accent: "from-sky-400/60 to-indigo-500/60",     statuses: ["scheduled", "published"] },
 ];
 
@@ -77,7 +81,9 @@ export default function Autopilot() {
       ideas: [], generated: [], approved: [], scheduled: [],
     };
     for (const p of posts) {
-      const col = COLUMNS.find((c) => c.statuses.includes(p.status as AutopilotPostStatus));
+      const col = COLUMNS.find((c) =>
+        c.match ? c.match(p) : c.statuses.includes(p.status as AutopilotPostStatus),
+      );
       if (col) map[col.key].push(p);
     }
     return map;
