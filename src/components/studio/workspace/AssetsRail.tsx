@@ -45,7 +45,7 @@ export function AssetsRail() {
     setUploading(true);
     try {
       const ext = file.name.split(".").pop() || "png";
-      const path = `studio/${user.id}/upload_${uuid()}.${ext}`;
+      const path = `${user.id}/studio/upload_${uuid()}.${ext}`;
       const { error } = await supabase.storage.from("media").upload(path, file);
       if (error) throw error;
       applyImage(supabase.storage.from("media").getPublicUrl(path).data.publicUrl);

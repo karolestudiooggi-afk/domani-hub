@@ -1,7 +1,10 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import {
-  Type, Image as ImageIcon, Square, Plus, Copy, Trash2, ChevronLeft, ChevronRight, Film, ZoomIn, ZoomOut, Maximize } from "lucide-react";
+  Type, Image as ImageIcon, Square, Plus, Copy, Trash2, ChevronLeft, ChevronRight, Film, ZoomIn, ZoomOut, Maximize , Layers, Loader2} from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import { separarCamadas } from "@/lib/api";
+import { recortarCamadas, urlPublica } from "@/lib/camadas";
 import { useBrands } from "@/hooks/use-brands";
 import { useStudio, blankSlide } from "./StudioProvider";
 import { CANVAS_W, CANVAS_H, EXPORT_W, EXPORT_H, SNAP, uid, type El, type Slide } from "./types";
@@ -87,9 +90,16 @@ export function DesignCanvas() {
       const d = bgDrag.current;
       if (!d) return;
       const pt = "touches" in ev ? ev.touches[0] : (ev as MouseEvent);
+      // O canvas é exibido reduzido para caber na tela. Sem dividir pela
+      // escala, a imagem andava mais devagar que o mouse.
+      const k = scale || 1;
       setSlides(doc.slides.map((sl, i) =>
         i === d.idx
-          ? { ...sl, bgX: d.ox + (pt.clientX - d.sx), bgY: d.oy + (pt.clientY - d.sy) }
+          ? {
+              ...sl,
+              bgX: d.ox + (pt.clientX - d.sx) / k,
+              bgY: d.oy + (pt.clientY - d.sy) / k,
+            }
           : sl,
       ));
     };
@@ -104,7 +114,7 @@ export function DesignCanvas() {
       window.removeEventListener("mouseup", up);
       window.removeEventListener("touchend", up);
     };
-  }, [doc.slides, setSlides]);
+  }, [doc.slides, setSlides, scale]);
 
   /** Zoom da imagem de fundo (mantém entre 1x e 3x). */
   const zoomBg = (delta: number) => {
@@ -113,6 +123,65 @@ export function DesignCanvas() {
         ? { ...sl, bgScale: Math.min(3, Math.max(1, (sl.bgScale ?? 1) + delta)) }
         : sl,
     ));
+  };
+
+  /**
+   * DESCOLAR CAMADAS
+   * Manda a arte para o serviço de segmentação, recorta os objetos e joga
+   * cada um como elemento de imagem — aí dá para mover a pizza sem levar
+   * o fundo junto.
+   */
+  const [separando, setSeparando] = useState(false);
+
+  const descolarCamadas = async () => {
+    const sl = doc.slides[currentSlide];
+    if (!sl?.bgImage) return;
+
+    setSeparando(true);
+    try {
+      const publica = await urlPublica(sl.bgImage);
+      const { mascaras } = await separarCamadas({ imageUrl: publica });
+      const camadas = await recortarCamadas(publica, mascaras);
+
+      if (!camadas.length) {
+        toast.error("Não encontrei objetos separáveis nesta imagem.");
+        return;
+      }
+
+      pushHistory();
+
+      // As camadas vêm em pixels da imagem original; convertemos para as
+      // coordenadas do canvas para caírem no lugar certo.
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+      await new Promise<void>((ok, fail) => {
+        img.onload = () => ok();
+        img.onerror = () => fail(new Error("Falha ao medir a imagem."));
+        img.src = publica;
+      });
+      const kx = CANVAS_W / img.naturalWidth;
+      const ky = CANVAS_H / img.naturalHeight;
+
+      const novos: El[] = camadas.map((c) => ({
+        id: uid(),
+        type: "image" as const,
+        src: c.src,
+        x: Math.round(c.x * kx),
+        y: Math.round(c.y * ky),
+        w: Math.max(12, Math.round(c.w * kx)),
+        h: Math.max(12, Math.round(c.h * ky)),
+        radius: 0,
+      }));
+
+      setSlides(doc.slides.map((s2, i) =>
+        i === currentSlide ? { ...s2, els: [...novos, ...s2.els] } : s2,
+      ));
+      toast.success(`${camadas.length} camada(s) separada(s). Agora dá para mover cada uma.`);
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Não consegui separar as camadas.");
+    } finally {
+      setSeparando(false);
+    }
   };
 
   /** Volta a imagem para o enquadramento original. */
@@ -394,6 +463,17 @@ export function DesignCanvas() {
             </Button>
             <Button variant="outline" size="sm" className="h-7 text-xs" title="Voltar ao enquadramento original" onClick={resetBg}>
               <Maximize className="mr-1 h-3.5 w-3.5" />Ajustar
+            </Button>
+            <Button
+              variant="outline" size="sm" className="h-7 text-xs"
+              title="Separa os objetos da arte em camadas móveis"
+              disabled={separando}
+              onClick={descolarCamadas}
+            >
+              {separando
+                ? <Loader2 className="mr-1 h-3.5 w-3.5 animate-spin" />
+                : <Layers className="mr-1 h-3.5 w-3.5" />}
+              {separando ? "Separando…" : "Descolar"}
             </Button>
           </>
         )}

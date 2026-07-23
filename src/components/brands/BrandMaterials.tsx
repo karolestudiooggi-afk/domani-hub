@@ -94,7 +94,7 @@ export function BrandMaterials({ brandId, brandName }: { brandId?: string | null
 
       if (file) {
         const ext = file.name.split(".").pop() || "bin";
-        const path = `marca/${orgId}/${uuid()}.${ext}`;
+        const path = `${user?.id ?? orgId}/marca/${uuid()}.${ext}`;
         const { error: upErr } = await supabase.storage.from("media").upload(path, file);
         if (upErr) throw upErr;
         const { data: pub } = supabase.storage.from("media").getPublicUrl(path);

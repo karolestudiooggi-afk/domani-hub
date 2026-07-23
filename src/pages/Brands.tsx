@@ -269,10 +269,11 @@ export default function Brands() {
     if (!file || !user) return;
     setUploading(true);
     const ext = file.name.split(".").pop();
-    const path = `brands/${user.id}/${uuid()}.${ext}`;
+    const path = `${user.id}/brands/${uuid()}.${ext}`;
     const { error } = await supabase.storage.from("media").upload(path, file);
     if (error) {
-      toast.error("Erro no upload");
+      console.error("[Marcas] upload falhou:", error);
+      toast.error("Não consegui enviar o arquivo", { description: error.message });
       setUploading(false);
       return;
     }
@@ -634,9 +635,9 @@ export default function Brands() {
                         if (!file || !user) return;
                         setUploading(true);
                         const ext = file.name.split(".").pop();
-                        const path = `brands/${user.id}/pfp_${uuid()}.${ext}`;
+                        const path = `${user.id}/brands/pfp_${uuid()}.${ext}`;
                         const { error } = await supabase.storage.from("media").upload(path, file);
-                        if (error) { toast.error("Erro no upload"); setUploading(false); return; }
+                        if (error) { console.error("[Marcas] upload falhou:", error); toast.error("Não consegui enviar o arquivo", { description: error.message }); setUploading(false); return; }
                         const { data: urlData } = supabase.storage.from("media").getPublicUrl(path);
                         setForm((f) => ({ ...f, profile_photo_url: urlData.publicUrl }));
                         setUploading(false);

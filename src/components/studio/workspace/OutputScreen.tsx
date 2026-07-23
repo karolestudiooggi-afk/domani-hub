@@ -169,7 +169,7 @@ export function OutputScreen({
       for (const url of media) {
         if (url.startsWith("data:")) {
           const blob = dataUrlToBlob(url);
-          const path = `studio/${user.id}/gal_${uuid()}.png`;
+          const path = `${user.id}/studio/gal_${uuid()}.png`;
           const { error } = await supabase.storage.from("media").upload(path, blob, { contentType: "image/png" });
           if (!error) urls.push(supabase.storage.from("media").getPublicUrl(path).data.publicUrl);
         } else if (isHttp(url)) urls.push(url);
