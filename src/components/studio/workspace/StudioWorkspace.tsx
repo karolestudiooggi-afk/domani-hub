@@ -94,9 +94,9 @@ function WorkspaceInner({ onBack }: { onBack?: () => void }) {
   const brand = brands.find((b) => b.id === doc.brandId) || null;
 
   return (
-    <div className="flex h-full flex-col">
+    <div className="flex h-[calc(100vh-3.5rem)] flex-col md:h-screen">
       {/* Top bar */}
-      <header className="sticky top-0 z-30 flex h-14 shrink-0 items-center gap-2 border-b border-border bg-background px-3 sm:px-4">
+      <header className="flex h-14 shrink-0 items-center gap-2 border-b border-border px-3 sm:px-4">
         {onBack && (
           <Button variant="ghost" size="icon" className="h-9 w-9" onClick={onBack} title="Trocar modo"><ArrowLeft className="h-4 w-4" /></Button>
         )}
@@ -149,11 +149,11 @@ function WorkspaceInner({ onBack }: { onBack?: () => void }) {
 
       {/* Middle */}
       <div className="flex min-h-0 flex-1">
-        <aside className="hidden w-64 shrink-0 overflow-y-auto border-r border-border p-3 lg:block xl:w-72">
+        <aside className="hidden w-56 shrink-0 overflow-y-auto border-r border-border p-3 lg:block">
           <LeftRailContent brandName={brand?.name} brandHandle={brand?.handle} />
         </aside>
 
-        <main className="min-w-0 flex-1 overflow-y-auto bg-muted/30">
+        <main className="min-w-0 flex-1 overflow-hidden bg-muted/30">
           <DesignCanvas />
         </main>
 
