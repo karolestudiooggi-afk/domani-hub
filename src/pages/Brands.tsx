@@ -4,8 +4,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import {
   Building2, Plus, Star, Pencil, Trash2, ChevronDown, Palette,
   Sparkles, Globe, Upload, Loader2, Eye, Instagram, Linkedin,
-  Twitter, Facebook, Youtube
-} from "lucide-react";
+  Twitter, Facebook, Youtube, X } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -46,6 +45,8 @@ interface BrandProfile {
   website?: string;
   social_links?: Record<string, string>;
   social_account_ids: string[];
+  reference_images?: string[];
+  reference_images: string[];
   values?: string;
 }
 
@@ -63,6 +64,18 @@ const TONE_OPTIONS = [
 const TONE_LABEL_MAP: Record<string, string> = Object.fromEntries(
   TONE_OPTIONS.map((t) => [t.value, t.label])
 );
+
+/**
+ * Converte o que a pessoa escreveu numa lista de palavras.
+ * Aceita vírgula, quebra de linha ou ponto-e-vírgula — o que for mais
+ * natural para quem está digitando.
+ */
+function parseLista(texto: string): string[] {
+  return texto
+    .split(/[,;\n]/)
+    .map((t) => t.trim())
+    .filter(Boolean);
+}
 
 const emptyForm = {
   name: "",
@@ -82,6 +95,7 @@ const emptyForm = {
   website: "",
   social_links: { instagram: "", linkedin: "", twitter: "", facebook: "", youtube: "" } as Record<string, string>,
   social_account_ids: [] as string[],
+  reference_images: [] as string[],
   values: "",
 };
 
@@ -97,6 +111,47 @@ export default function Brands() {
   const [saving, setSaving] = useState(false);
   const [suggesting, setSuggesting] = useState(false);
   const [uploading, setUploading] = useState(false);
+
+  // Texto cru dos campos de lista. Necessário para a pessoa conseguir digitar
+  // vírgula e Enter: antes o valor era recalculado a cada tecla e o separador
+  // sumia no mesmo instante em que era digitado.
+  const [kwText, setKwText] = useState("");
+  const [avoidText, setAvoidText] = useState("");
+  const [examplesText, setExamplesText] = useState("");
+
+  /** Envia imagens de referência da marca. */
+  const handleReferenceUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    e.target.value = "";
+    if (!files.length || !user) return;
+
+    setUploading(true);
+    try {
+      const novas: string[] = [];
+      for (const file of files) {
+        if (!file.type.startsWith("image/")) continue;
+        if (file.size > 15 * 1024 * 1024) {
+          toast.error(`"${file.name}" passa de 15 MB.`);
+          continue;
+        }
+        const ext = file.name.split(".").pop() || "png";
+        const path = `${user.id}/brands/ref_${uuid()}.${ext}`;
+        const { error } = await supabase.storage.from("media").upload(path, file);
+        if (error) {
+          console.error("[Marcas] upload de referência falhou:", error);
+          toast.error("Não consegui enviar", { description: error.message });
+          continue;
+        }
+        novas.push(supabase.storage.from("media").getPublicUrl(path).data.publicUrl);
+      }
+      if (novas.length) {
+        setForm((f) => ({ ...f, reference_images: [...(f.reference_images || []), ...novas] }));
+        toast.success(`${novas.length} imagem(ns) adicionada(s).`);
+      }
+    } finally {
+      setUploading(false);
+    }
+  };
   // Contas conectadas no Post for Me — para vincular a este cliente.
   const pfmAccountsQuery = usePfmAccounts();
   const pfmAccounts = pfmAccountsQuery.data || [];
@@ -152,6 +207,7 @@ export default function Brands() {
   const openCreate = () => {
     setEditingId(null);
     setForm({ ...emptyForm });
+    setKwText(""); setAvoidText(""); setExamplesText("");
     setDialogTab("basic");
     setDialogOpen(true);
   };
@@ -175,14 +231,24 @@ export default function Brands() {
       profile_photo_url: profile.profile_photo_url || "",
       website: profile.website || "",
       social_links: { instagram: "", linkedin: "", twitter: "", facebook: "", youtube: "", ...profile.social_links },
+      social_account_ids: profile.social_account_ids || [],
+      reference_images: profile.reference_images || [],
       values: profile.values || "",
     });
+    // Espelha nos campos de texto para a pessoa poder editar livremente.
+    setKwText((profile.keywords || []).join(", "));
+    setAvoidText((profile.avoid_words || []).join(", "));
+    setExamplesText((profile.example_posts || []).join("\n"));
     setDialogTab("basic");
     setDialogOpen(true);
   };
 
   const handleSave = async () => {
     if (!form.name.trim() || !user) return;
+    // O onBlur pode não ter disparado se a pessoa clicou direto em Salvar.
+    const keywords = parseLista(kwText);
+    const avoid_words = parseLista(avoidText);
+    const example_posts = examplesText.split("\n").map((l) => l.trim()).filter(Boolean);
     setSaving(true);
 
     const payload = {
@@ -191,9 +257,9 @@ export default function Brands() {
       tone: form.tone || "profissional",
       target_audience: form.target_audience,
       industry: form.industry,
-      keywords: form.keywords,
-      avoid_words: form.avoid_words,
-      example_posts: form.example_posts,
+      keywords,
+      avoid_words,
+      example_posts,
       system_prompt: form.system_prompt,
       logo_url: form.logo_url,
       colors: form.colors,
@@ -203,6 +269,7 @@ export default function Brands() {
       website: form.website,
       social_links: form.social_links,
       social_account_ids: form.social_account_ids,
+      reference_images: form.reference_images,
       values: form.values,
       user_id: user.id,
     };
@@ -779,32 +846,97 @@ export default function Brands() {
             <TabsContent value="content" className="space-y-4 mt-4">
               <div className="space-y-2">
                 <Label>Palavras-chave da marca</Label>
-                <Input placeholder="Separadas por vírgula" value={form.keywords.join(", ")}
-                  onChange={(e) => setForm((f) => ({ ...f, keywords: e.target.value.split(",").map(s => s.trim()).filter(Boolean) }))} />
-                {form.keywords.length > 0 && (
+                {/* Guardamos o texto cru enquanto a pessoa digita. Antes, a
+                    vírgula era apagada no mesmo instante em que era digitada. */}
+                <Input
+                  placeholder="Ex.: pizza artesanal, forno a lenha, vinho"
+                  value={kwText}
+                  onChange={(e) => setKwText(e.target.value)}
+                  onBlur={() => setForm((f) => ({ ...f, keywords: parseLista(kwText) }))}
+                />
+                <p className="text-xs text-muted-foreground">
+                  Separe por vírgula. Também vale uma por linha.
+                </p>
+                {parseLista(kwText).length > 0 && (
                   <div className="flex flex-wrap gap-1">
-                    {form.keywords.map((k, i) => <Badge key={i} variant="secondary" className="text-xs">{k}</Badge>)}
+                    {parseLista(kwText).map((k, i) => <Badge key={i} variant="secondary" className="text-xs">{k}</Badge>)}
                   </div>
                 )}
               </div>
 
               <div className="space-y-2">
                 <Label>Palavras a evitar</Label>
-                <Input placeholder="Separadas por vírgula" value={form.avoid_words.join(", ")}
-                  onChange={(e) => setForm((f) => ({ ...f, avoid_words: e.target.value.split(",").map(s => s.trim()).filter(Boolean) }))} />
-                {form.avoid_words.length > 0 && (
+                <Input
+                  placeholder="Ex.: desconto, promoção, imperdível"
+                  value={avoidText}
+                  onChange={(e) => setAvoidText(e.target.value)}
+                  onBlur={() => setForm((f) => ({ ...f, avoid_words: parseLista(avoidText) }))}
+                />
+                <p className="text-xs text-muted-foreground">
+                  A IA nunca usa estas palavras no conteúdo.
+                </p>
+                {parseLista(avoidText).length > 0 && (
                   <div className="flex flex-wrap gap-1">
-                    {form.avoid_words.map((w, i) => <Badge key={i} variant="destructive" className="text-xs">{w}</Badge>)}
+                    {parseLista(avoidText).map((w, i) => <Badge key={i} variant="destructive" className="text-xs">{w}</Badge>)}
                   </div>
                 )}
               </div>
 
               <div className="space-y-2">
                 <Label>Exemplos de posts</Label>
-                <Textarea placeholder="Cole 2-3 posts que representam sua marca, um por linha"
-                  value={form.example_posts.join("\n")}
-                  onChange={(e) => setForm((f) => ({ ...f, example_posts: e.target.value.split("\n").filter(Boolean) }))}
-                  rows={4} />
+                <Textarea
+                  placeholder={"Cole aqui posts ou links que representam a marca.\nUm por linha — pode dar Enter à vontade."}
+                  value={examplesText}
+                  onChange={(e) => setExamplesText(e.target.value)}
+                  onBlur={() => setForm((f) => ({
+                    ...f,
+                    example_posts: examplesText.split("\n").map((l) => l.trim()).filter(Boolean),
+                  }))}
+                  rows={6}
+                />
+                <p className="text-xs text-muted-foreground">
+                  Serve para a IA aprender o jeito de escrever da marca.
+                </p>
+              </div>
+
+              {/* Referências visuais: a pessoa quer mostrar fotos, não só texto. */}
+              <div className="space-y-2">
+                <Label>Imagens de referência</Label>
+                <p className="text-xs text-muted-foreground">
+                  Fotos que representam o visual da marca. A IA usa como referência
+                  de estilo ao criar as artes.
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {(form.reference_images || []).map((url, i) => (
+                    <div key={i} className="group relative">
+                      <img src={url} alt="" className="h-20 w-20 rounded-md object-cover" />
+                      <button
+                        type="button"
+                        onClick={() => setForm((f) => ({
+                          ...f,
+                          reference_images: (f.reference_images || []).filter((_, j) => j !== i),
+                        }))}
+                        className="absolute -right-1.5 -top-1.5 rounded-full bg-destructive p-0.5 text-destructive-foreground opacity-0 transition group-hover:opacity-100"
+                        aria-label="Remover imagem"
+                      >
+                        <X className="h-3 w-3" />
+                      </button>
+                    </div>
+                  ))}
+                  <label className="flex h-20 w-20 cursor-pointer flex-col items-center justify-center gap-1 rounded-md border border-dashed text-muted-foreground hover:bg-accent">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      className="hidden"
+                      disabled={uploading}
+                      onChange={handleReferenceUpload}
+                    />
+                    {uploading
+                      ? <Loader2 className="h-4 w-4 animate-spin" />
+                      : <><Upload className="h-4 w-4" /><span className="text-[10px]">Adicionar</span></>}
+                  </label>
+                </div>
               </div>
             </TabsContent>
 

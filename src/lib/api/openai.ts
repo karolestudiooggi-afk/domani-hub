@@ -13,10 +13,10 @@ export interface OpenAiImageParams {
   quality?: "low" | "medium" | "high" | "auto";
   background?: "transparent" | "opaque" | "auto";
   /**
-   * Foto de referência enviada pelo usuário (data URL). Quando informada, a
-   * IA parte dessa imagem em vez de criar do zero.
+   * Fotos de referência enviadas pelo usuário (data URLs). Quando há alguma,
+   * a IA parte delas em vez de criar do zero. Aceita várias.
    */
-  referenceImage?: string;
+  referenceImages?: string[];
 }
 
 export interface OpenAiImageResult {
