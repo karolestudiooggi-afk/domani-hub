@@ -60,3 +60,6 @@ verify_jwt = false
 
 [functions.generate-creative]
 verify_jwt = true
+
+[functions.hub-poster]
+verify_jwt = true

@@ -9,7 +9,7 @@ import { toast } from "sonner";
 import { useBrands } from "@/hooks/use-brands";
 import {
   generateContent, generateOpenAiImage, aiAssist, extractSource,
-  callHiggsfield, hfStatus, gerarCriativoEmCamadas, type HfGenerationResult, type GenerateContentResult,
+  callHiggsfield, hfStatus, gerarArtePosterSlide, type HfGenerationResult, type GenerateContentResult,
 } from "@/lib/api";
 import { brandImageDirective, brandTextProfile, brandTextHint, brandVideoDirective, brandVoiceDirective, type BrandProfile } from "@/lib/brand";
 import { HF_VIDEO_MODELS } from "@/lib/higgsfield-models";
@@ -421,17 +421,18 @@ Responda APENAS JSON: { "narracao": "<fala completa em pt-BR>", "cena": "<descri
     } finally { setGenerating(false); setProgress(""); }
   };
 
-  // Gera o criativo JÁ em camadas editáveis (fundo + textos + formas separados)
-  // e cai direto no canvas. Fica aqui no Criador, junto do "Criar".
-  const gerarEmCamadas = async () => {
+  // "IA faz tudo" (nível ChatGPT): gpt-4o dirige + Ideogram gera a arte inteira,
+  // com o texto já dentro da imagem. Cai direto no canvas como fundo. Não editável.
+  const gerarArteIA = async () => {
     if (!prompt.trim()) { toast.error("Descreva o que você quer criar."); return; }
-    setGenerating(true); setProgress("Montando as camadas…"); setDoc(null);
+    setGenerating(true); setProgress("Criando a arte com IA (pode levar ~15s)…"); setDoc(null);
     try {
-      const slide = await gerarCriativoEmCamadas(prompt.trim());
+      const marca = brand ? { name: brand.name, colors: brand.colors, tone: brand.tone } : undefined;
+      const slide = await gerarArtePosterSlide(prompt.trim(), marca);
       const base = emptyDoc("post", brandId);
       onEditInCanvas({ ...base, slides: [slide], caption: prompt.trim() });
     } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Não consegui gerar em camadas.");
+      toast.error(e instanceof Error ? e.message : "Não consegui gerar a arte.");
     } finally {
       setGenerating(false); setProgress("");
     }
@@ -964,11 +965,11 @@ Responda APENAS JSON: { "narracao": "<fala completa em pt-BR>", "cena": "<descri
             variant="outline"
             className="w-full rounded-full border-emerald-500 text-emerald-700 hover:bg-emerald-50 hover:text-emerald-800"
             size="lg"
-            onClick={gerarEmCamadas}
+            onClick={gerarArteIA}
             disabled={generating || !prompt.trim()}
-            title="Gera o anúncio já separado em camadas editáveis (fundo, textos e formas) — texto editável, sem imagem chapada"
+            title="A IA cria a arte inteira, com o texto já dentro da imagem (Ideogram). Nível ChatGPT — não fica editável depois."
           >
-            <Sparkles className="mr-2 h-4 w-4" /> Gerar em camadas (editável)
+            <Sparkles className="mr-2 h-4 w-4" /> Gerar arte com IA (texto na imagem)
           </Button>
         )}
         {brand?.name
