@@ -9,7 +9,7 @@ import { toast } from "sonner";
 import { useBrands } from "@/hooks/use-brands";
 import {
   generateContent, generateOpenAiImage, aiAssist, extractSource,
-  callHiggsfield, hfStatus, type HfGenerationResult, type GenerateContentResult,
+  callHiggsfield, hfStatus, gerarCriativoEmCamadas, type HfGenerationResult, type GenerateContentResult,
 } from "@/lib/api";
 import { brandImageDirective, brandTextProfile, brandTextHint, brandVideoDirective, brandVoiceDirective, type BrandProfile } from "@/lib/brand";
 import { HF_VIDEO_MODELS } from "@/lib/higgsfield-models";
@@ -419,6 +419,22 @@ Responda APENAS JSON: { "narracao": "<fala completa em pt-BR>", "cena": "<descri
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Erro ao refazer o roteiro");
     } finally { setGenerating(false); setProgress(""); }
+  };
+
+  // Gera o criativo JÁ em camadas editáveis (fundo + textos + formas separados)
+  // e cai direto no canvas. Fica aqui no Criador, junto do "Criar".
+  const gerarEmCamadas = async () => {
+    if (!prompt.trim()) { toast.error("Descreva o que você quer criar."); return; }
+    setGenerating(true); setProgress("Montando as camadas…"); setDoc(null);
+    try {
+      const slide = await gerarCriativoEmCamadas(prompt.trim());
+      const base = emptyDoc("post", brandId);
+      onEditInCanvas({ ...base, slides: [slide], caption: prompt.trim() });
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Não consegui gerar em camadas.");
+    } finally {
+      setGenerating(false); setProgress("");
+    }
   };
 
   const handleGenerate = async () => {
@@ -941,6 +957,18 @@ Responda APENAS JSON: { "narracao": "<fala completa em pt-BR>", "cena": "<descri
         ) : (
           <Button className="w-full rounded-full" size="lg" onClick={handleGenerate} disabled={generating || !prompt.trim()}>
             {generating ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> {progress || "Gerando…"}</> : <><Sparkles className="mr-2 h-4 w-4" /> Criar</>}
+          </Button>
+        )}
+        {formatChoice !== "video" && !advanced && (
+          <Button
+            variant="outline"
+            className="w-full rounded-full border-emerald-500 text-emerald-700 hover:bg-emerald-50 hover:text-emerald-800"
+            size="lg"
+            onClick={gerarEmCamadas}
+            disabled={generating || !prompt.trim()}
+            title="Gera o anúncio já separado em camadas editáveis (fundo, textos e formas) — texto editável, sem imagem chapada"
+          >
+            <Sparkles className="mr-2 h-4 w-4" /> Gerar em camadas (editável)
           </Button>
         )}
         {brand?.name

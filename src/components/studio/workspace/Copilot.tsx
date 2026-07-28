@@ -10,7 +10,7 @@ import { toast } from "sonner";
 import { useBrands } from "@/hooks/use-brands";
 import {
   generateContent, generateOpenAiImage, searchStockImages, aiAssist,
-  callHiggsfield, hfStatus, hfCancel, gerarCriativoEmCamadas, type HfGenerationResult,
+  callHiggsfield, hfStatus, hfCancel, type HfGenerationResult,
 } from "@/lib/api";
 import { brandImageDirective, brandTextProfile, brandTextHint, brandVideoDirective, brandVoiceDirective } from "@/lib/brand";
 import { HF_VIDEO_MODELS, getHfModel } from "@/lib/higgsfield-models";
@@ -40,29 +40,6 @@ export function Copilot() {
   const [generating, setGenerating] = useState(false);
   const [progress, setProgress] = useState("");
   const [refining, setRefining] = useState<string | null>(null);
-
-  // Gera o criativo JÁ em camadas editáveis, usando o campo "O que você quer
-  // criar?". Cai direto no canvas — sem popup do navegador.
-  const handleGerarCamadas = async () => {
-    if (!intent.trim()) { toast.error("Descreva o que você quer criar."); return; }
-    const brief = [
-      intent.trim(),
-      objetivo ? `Objetivo: ${objetivo}.` : "",
-      chosen.length ? `Direções: ${chosen.join("; ")}.` : "",
-    ].filter(Boolean).join(" ");
-    setGenerating(true);
-    setProgress("Montando as camadas…");
-    try {
-      const slide = await gerarCriativoEmCamadas(brief);
-      replaceDoc({ ...doc, slides: [slide], caption: intent.trim() });
-      toast.success("Criativo gerado em camadas. Clique em cada uma para editar.");
-    } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Não consegui gerar em camadas.");
-    } finally {
-      setGenerating(false);
-      setProgress("");
-    }
-  };
 
   // ── controles de vídeo ──
   const textVideoModels = HF_VIDEO_MODELS.filter((m) => m.kind === "text-to-video");
@@ -413,17 +390,6 @@ export function Copilot() {
         <Button className="w-full" onClick={handleGenerate} disabled={generating || !intent.trim()}>
           {generating ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> {progress || "Gerando…"}</> : <><Sparkles className="mr-2 h-4 w-4" /> Gerar {doc.format}</>}
         </Button>
-        {doc.format !== "video" && (
-          <Button
-            variant="outline"
-            className="w-full border-emerald-500 text-emerald-700 hover:bg-emerald-50 hover:text-emerald-800"
-            onClick={handleGerarCamadas}
-            disabled={generating || !intent.trim()}
-            title="Gera o anúncio já separado em camadas editáveis (fundo, textos e formas) — texto editável, sem imagem chapada"
-          >
-            <Sparkles className="mr-2 h-4 w-4" /> Gerar em camadas (editável)
-          </Button>
-        )}
         {generating && doc.format === "video" && (
           <Button variant="outline" className="w-full" onClick={handleCancelVideo}>
             <X className="mr-2 h-4 w-4" /> Cancelar geração
