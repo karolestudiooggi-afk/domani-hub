@@ -49,16 +49,19 @@ export function DesignCanvas() {
     if (!el) return;
     const compute = () => {
       const avail = el.clientWidth;
-      // Cresce para preencher a largura disponível (até 1.9x) e encolhe no
-      // mobile. Antes só encolhia, por isso a arte ficava pequena no desktop.
-      const s = avail > 0 ? Math.max(0.25, Math.min(1.9, avail / CANVAS_W)) : 1;
+      // Tamanho MÉDIO: cresce um pouco no desktop, mas SEMPRE cabe na altura da
+      // tela (sem rolar). Antes eu deixei crescer até 1.9x e ficava gigante.
+      const porLargura = avail > 0 ? avail / CANVAS_W : 1;
+      const porAltura = (window.innerHeight * 0.72) / CANVAS_H;
+      const s = Math.max(0.25, Math.min(1.2, porLargura, porAltura));
       scaleRef.current = s;
       setScale(s);
     };
     compute();
     const ro = new ResizeObserver(compute);
     ro.observe(el);
-    return () => ro.disconnect();
+    window.addEventListener("resize", compute);
+    return () => { ro.disconnect(); window.removeEventListener("resize", compute); };
   }, []);
 
   const isCarousel = doc.format === "carousel";
