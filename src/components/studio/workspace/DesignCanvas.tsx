@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import {
-  Type, Image as ImageIcon, Square, Plus, Copy, Trash2, ChevronLeft, ChevronRight, Film, ZoomIn, ZoomOut, Maximize , Layers, Loader2, Sparkles} from "lucide-react";
+  Type, Image as ImageIcon, Square, Plus, Copy, Trash2, ChevronLeft, ChevronRight, Film, ZoomIn, ZoomOut, Maximize , Layers, Loader2} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { separarCamadas, gerarCriativoEmCamadas } from "@/lib/api";
+import { separarCamadas } from "@/lib/api";
 import { recortarCamadas, urlPublica } from "@/lib/camadas";
 import { useBrands } from "@/hooks/use-brands";
 import { useStudio, blankSlide } from "./StudioProvider";
@@ -137,30 +137,6 @@ export function DesignCanvas() {
   // Ids das peças que acabaram de sair do descolamento — ganham um quadradinho
   // destacado por alguns segundos, estilo Canva.
   const [recemSeparados, setRecemSeparados] = useState<string[]>([]);
-
-  // Gera o criativo JÁ em camadas editáveis (fundo + textos + formas separados),
-  // em vez de gerar uma imagem chapada e tentar descolar depois. Assim não há
-  // "rosto fantasma" e o texto nasce editável.
-  const [gerandoCamadas, setGerandoCamadas] = useState(false);
-  const gerarEmCamadas = async () => {
-    const brief = window.prompt(
-      "Descreva o anúncio (ex: 'promoção de pizza sexta, 30% off, tom animado'):",
-      "",
-    );
-    if (!brief?.trim()) return;
-    setGerandoCamadas(true);
-    try {
-      const novoSlide = await gerarCriativoEmCamadas(brief.trim());
-      pushHistory();
-      setSlides(doc.slides.map((s, i) => (i === currentSlide ? novoSlide : s)));
-      select(null);
-      toast.success("Criativo gerado em camadas. Clique em cada uma para editar.");
-    } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Não consegui gerar em camadas.");
-    } finally {
-      setGerandoCamadas(false);
-    }
-  };
 
   const descolarCamadas = async () => {
     const sl = doc.slides[currentSlide];
@@ -504,18 +480,6 @@ export function DesignCanvas() {
         <Button variant="outline" size="sm" className="h-7 text-xs" onClick={() => addElement("text")}><Type className="mr-1 h-3.5 w-3.5" />Texto</Button>
         <Button variant="outline" size="sm" className="h-7 text-xs" onClick={() => addElement("image")}><ImageIcon className="mr-1 h-3.5 w-3.5" />Imagem</Button>
         <Button variant="outline" size="sm" className="h-7 text-xs" onClick={() => addElement("shape")}><Square className="mr-1 h-3.5 w-3.5" />Forma</Button>
-        <Button
-          variant="outline" size="sm"
-          className="h-7 border-emerald-500 text-xs text-emerald-700 hover:bg-emerald-50 hover:text-emerald-800"
-          title="Gera o anúncio já separado em camadas editáveis (fundo, textos e formas) — sem imagem chapada, sem rosto fantasma"
-          disabled={gerandoCamadas}
-          onClick={gerarEmCamadas}
-        >
-          {gerandoCamadas
-            ? <Loader2 className="mr-1 h-3.5 w-3.5 animate-spin" />
-            : <Sparkles className="mr-1 h-3.5 w-3.5" />}
-          {gerandoCamadas ? "Gerando…" : "Gerar em camadas"}
-        </Button>
 
         {/* Reenquadrar a arte: arraste a imagem no canvas, ou use o zoom. */}
         {doc.slides[currentSlide]?.bgImage && (
