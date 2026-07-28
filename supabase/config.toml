@@ -63,3 +63,6 @@ verify_jwt = true
 
 [functions.hub-poster]
 verify_jwt = true
+
+[functions.hub-apagar-objeto]
+verify_jwt = true

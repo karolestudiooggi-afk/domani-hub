@@ -164,3 +164,30 @@ export async function gerarArtePosterSlide(brief: string, brand?: PosterBrand): 
   const { imageUrl } = await gerarArtePoster(brief, brand);
   return { bg: "#111111", bgImage: imageUrl, els: [] };
 }
+
+// ─────────────────────────────────────────────────────────────────────────
+// SOLTAR DO FUNDO: apaga uma peça descolada do fundo e reconstrói o buraco
+// (finegrain-eraser da fal, via hub-apagar-objeto). Completa o "descolar".
+// ─────────────────────────────────────────────────────────────────────────
+
+/** Apaga um objeto do fundo usando a máscara; devolve a nova URL do fundo. */
+export async function apagarObjeto(imageUrl: string, maskUrl: string): Promise<string> {
+  let res: Response;
+  try {
+    res = await fetch(`${getSupabaseUrl()}/functions/v1/hub-apagar-objeto`, {
+      method: "POST",
+      headers: await baseHeaders(),
+      body: JSON.stringify({ imageUrl, maskUrl }),
+    });
+  } catch {
+    throw new Error("Não consegui falar com o servidor (hub-apagar-objeto).");
+  }
+  if (!res.ok) {
+    let msg = `HTTP ${res.status}`;
+    try { const e = await res.json(); msg = e.error || msg; } catch { /* */ }
+    throw new Error(msg);
+  }
+  const data = await res.json();
+  if (!data?.imageUrl) throw new Error("O eraser não devolveu imagem.");
+  return data.imageUrl as string;
+}

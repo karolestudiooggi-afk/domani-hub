@@ -22,6 +22,8 @@ export type Camada = {
   y: number;
   w: number;
   h: number;
+  /** URL da máscara usada — necessária para depois apagar a peça do fundo. */
+  maskUrl: string;
 };
 
 /** Carrega direto de uma URL/objectURL/data URL. */
@@ -143,6 +145,7 @@ export async function recortarCamadas(
       camadas.push({
         src: out.toDataURL("image/png"),
         x: alfa.x, y: alfa.y, w: alfa.w, h: alfa.h,
+        maskUrl: url,
       });
       ok++;
     } catch {

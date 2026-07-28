@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import {
-  Type, Image as ImageIcon, Square, Plus, Copy, Trash2, ChevronLeft, ChevronRight, Film, ZoomIn, ZoomOut, Maximize , Layers, Loader2} from "lucide-react";
+  Type, Image as ImageIcon, Square, Plus, Copy, Trash2, ChevronLeft, ChevronRight, Film, ZoomIn, ZoomOut, Maximize , Layers, Loader2, Eraser} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { separarCamadas } from "@/lib/api";
+import { separarCamadas, apagarObjeto } from "@/lib/api";
 import { recortarCamadas, urlPublica } from "@/lib/camadas";
 import { useBrands } from "@/hooks/use-brands";
 import { useStudio, blankSlide } from "./StudioProvider";
@@ -137,6 +137,32 @@ export function DesignCanvas() {
   // Ids das peças que acabaram de sair do descolamento — ganham um quadradinho
   // destacado por alguns segundos, estilo Canva.
   const [recemSeparados, setRecemSeparados] = useState<string[]>([]);
+  // Máscara de cada peça descolada (id do elemento -> URL da máscara), pra poder
+  // apagá-la do fundo depois (o passo que faltava, estilo Canva).
+  const [masksById, setMasksById] = useState<Record<string, string>>({});
+  const [soltando, setSoltando] = useState(false);
+
+  /**
+   * "Soltar do fundo": apaga a peça selecionada da imagem de fundo e reconstrói
+   * o buraco (eraser da fal). Depois disso a peça sai de verdade, sem cópia.
+   */
+  const soltarDoFundo = async () => {
+    const sl = doc.slides[currentSlide];
+    const maskUrl = selectedElId ? masksById[selectedElId] : undefined;
+    if (!sl?.bgImage || !maskUrl) return;
+    setSoltando(true);
+    try {
+      const bgPublica = await urlPublica(sl.bgImage);
+      const novaBg = await apagarObjeto(bgPublica, maskUrl);
+      pushHistory();
+      patchSlide(currentSlide, { bgImage: novaBg });
+      toast.success("Peça solta do fundo — o buraco foi preenchido.");
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Não consegui soltar do fundo.");
+    } finally {
+      setSoltando(false);
+    }
+  };
 
   const descolarCamadas = async () => {
     const sl = doc.slides[currentSlide];
@@ -167,16 +193,22 @@ export function DesignCanvas() {
       const kx = CANVAS_W / img.naturalWidth;
       const ky = CANVAS_H / img.naturalHeight;
 
-      const novos: El[] = camadas.map((c) => ({
-        id: uid(),
-        type: "image" as const,
-        src: c.src,
-        x: Math.round(c.x * kx),
-        y: Math.round(c.y * ky),
-        w: Math.max(12, Math.round(c.w * kx)),
-        h: Math.max(12, Math.round(c.h * ky)),
-        radius: 0,
-      }));
+      const masks: Record<string, string> = {};
+      const novos: El[] = camadas.map((c) => {
+        const id = uid();
+        masks[id] = c.maskUrl;
+        return {
+          id,
+          type: "image" as const,
+          src: c.src,
+          x: Math.round(c.x * kx),
+          y: Math.round(c.y * ky),
+          w: Math.max(12, Math.round(c.w * kx)),
+          h: Math.max(12, Math.round(c.h * ky)),
+          radius: 0,
+        };
+      });
+      setMasksById((m) => ({ ...m, ...masks }));
 
       setSlides(doc.slides.map((s2, i) =>
         i === currentSlide ? { ...s2, els: [...novos, ...s2.els] } : s2,
@@ -524,6 +556,23 @@ export function DesignCanvas() {
                 </span>
               )}
             </div>
+            {/* Só aparece quando uma peça descolada está selecionada: apaga ela do
+                fundo e preenche o buraco (eraser da fal). Aí ela sai de verdade. */}
+            {selectedElId && masksById[selectedElId] && (
+              <Button
+                variant="outline"
+                size="sm"
+                className="h-7 border-rose-500 text-xs text-rose-700 hover:bg-rose-50 hover:text-rose-800"
+                title="Apaga esta peça do fundo e reconstrói o buraco — aí ela sai de verdade, sem cópia"
+                disabled={soltando}
+                onClick={soltarDoFundo}
+              >
+                {soltando
+                  ? <Loader2 className="mr-1 h-3.5 w-3.5 animate-spin" />
+                  : <Eraser className="mr-1 h-3.5 w-3.5" />}
+                {soltando ? "Soltando…" : "Soltar do fundo"}
+              </Button>
+            )}
           </>
         )}
       </div>
