@@ -57,3 +57,6 @@ verify_jwt = true
 # validado dentro da função contra o secret CRON_SECRET.
 [functions.hub-autopilot-cron]
 verify_jwt = false
+
+[functions.generate-creative]
+verify_jwt = true

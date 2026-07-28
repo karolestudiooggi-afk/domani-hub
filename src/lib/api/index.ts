@@ -15,3 +15,4 @@ export * from "./higgsfield";
 export * from "./openai";
 export * from "./ai-assist";
 export * from "./sources";
+export * from "./creative";
