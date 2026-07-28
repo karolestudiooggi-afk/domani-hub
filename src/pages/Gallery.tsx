@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import {
   Image,
   Film,
@@ -11,6 +11,7 @@ import {
   Loader2,
   Play,
   Pencil,
+  Upload,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
@@ -18,7 +19,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { MediaPreviewDialog } from "@/components/MediaPreviewDialog";
-import { getCreations, deleteCreation, type Creation } from "@/lib/gallery";
+import { getCreations, deleteCreation, saveUploadToGallery, type Creation } from "@/lib/gallery";
 
 // ─── Filter types ───────────────────────────────────────────────
 
@@ -42,6 +43,52 @@ export default function Gallery() {
   const [previewCreation, setPreviewCreation] = useState<Creation | null>(null);
   const [creations, setCreations] = useState<Creation[]>([]);
   const [loading, setLoading] = useState(true);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  /** Lê um arquivo do PC como data URL (base64). */
+  const lerArquivo = (file: File) =>
+    new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(String(reader.result));
+      reader.onerror = () => reject(new Error(`Não consegui ler "${file.name}".`));
+      reader.readAsDataURL(file);
+    });
+
+  /**
+   * Sobe uma ou mais imagens/vídeos do computador para a galeria. Depois é só
+   * usar "Usar no post" para publicar nas redes. Útil quando o designer criou a
+   * arte em outro lugar e você só quer subir e postar.
+   */
+  const handleUploadFiles = useCallback(async (files: FileList | null) => {
+    const lista = Array.from(files || []).filter(
+      (f) => f.type.startsWith("image/") || f.type.startsWith("video/"),
+    );
+    if (!lista.length) {
+      toast({ title: "Escolha imagens ou vídeos", variant: "destructive" });
+      return;
+    }
+    if (lista.length > 10) {
+      toast({ title: "Envie no máximo 10 por vez", variant: "destructive" });
+      return;
+    }
+    setUploading(true);
+    try {
+      const dataUrls = await Promise.all(lista.map(lerArquivo));
+      const criacao = await saveUploadToGallery(dataUrls);
+      if (!criacao) throw new Error("upload falhou");
+      await loadCreations();
+      toast({ title: lista.length > 1 ? `${lista.length} arquivos enviados` : "Arquivo enviado" });
+    } catch (e) {
+      toast({
+        title: e instanceof Error && e.message !== "upload falhou" ? e.message : "Não consegui enviar. Tente de novo.",
+        variant: "destructive",
+      });
+    } finally {
+      setUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  }, [toast, loadCreations]);
 
   const loadCreations = useCallback(async () => {
     setLoading(true);
@@ -117,14 +164,36 @@ export default function Gallery() {
   return (
     <div className="space-y-8">
       {/* Header */}
-      <div>
-        <h1 className="flex items-center gap-2 text-h2Sm md:text-h2">
-          <Image className="h-6 w-6 text-primary" />
-          <span className="text-gradient-domani">Galeria de Criações</span>
-        </h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Todas as suas criações salvas — imagens, vídeos e carroséis
-        </p>
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h1 className="flex items-center gap-2 text-h2Sm md:text-h2">
+            <Image className="h-6 w-6 text-primary" />
+            <span className="text-gradient-domani">Galeria de Criações</span>
+          </h1>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Todas as suas criações salvas — imagens, vídeos e carroséis
+          </p>
+        </div>
+        <div>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*,video/*"
+            multiple
+            className="hidden"
+            onChange={(e) => handleUploadFiles(e.target.files)}
+          />
+          <Button
+            onClick={() => fileInputRef.current?.click()}
+            disabled={uploading}
+            title="Suba uma arte pronta do computador — depois é só 'Usar no post' para publicar nas redes"
+          >
+            {uploading
+              ? <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              : <Upload className="mr-2 h-4 w-4" />}
+            {uploading ? "Enviando…" : "Enviar do computador"}
+          </Button>
+        </div>
       </div>
 
       {/* Filter bar */}
