@@ -282,9 +282,14 @@ export function ConnectAccountDialog({ open, onOpenChange }: ConnectAccountDialo
   }, [loadAccounts, toast]);
 
   // ── Computed ──────────────────────────────────────────────────
-  const connectedMap = new Map(
-    accounts.map((a) => [(a.platform === "x" ? "twitter" : a.platform) as Platform, a])
-  );
+  // TODAS as contas de cada rede (permite várias contas por plataforma).
+  const accountsByPlatform = new Map<Platform, api.PfmAccount[]>();
+  for (const a of accounts) {
+    const p = (a.platform === "x" ? "twitter" : a.platform) as Platform;
+    const arr = accountsByPlatform.get(p) || [];
+    arr.push(a);
+    accountsByPlatform.set(p, arr);
+  }
 
   const updateProfileUrl = (platform: string, url: string) => {
     const updated = { ...profileUrls, [platform]: url };
@@ -356,8 +361,9 @@ export function ConnectAccountDialog({ open, onOpenChange }: ConnectAccountDialo
         <div className="space-y-2">
           {ALL_PLATFORMS.map((platform) => {
             const cfg        = PLATFORMS[platform];
-            const account    = connectedMap.get(platform);
-            const isConnected = !!account;
+            const conns      = accountsByPlatform.get(platform) || [];
+            const account    = conns[0];
+            const isConnected = conns.length > 0;
             const isConnecting = connecting === platform;
             const isBluesky  = platform === "bluesky";
             const isDisconnecting = disconnecting === account?.id;
@@ -398,6 +404,17 @@ export function ConnectAccountDialog({ open, onOpenChange }: ConnectAccountDialo
                     {isConnected ? (
                       <>
                         <CheckCircle2 className="h-5 w-5 text-green-500" />
+                        {!isBluesky && (
+                          <Button
+                            size="sm"
+                            className="h-7 px-2 text-[11px] bg-gradient-to-r from-primary/90 via-primary/60 to-primary/30 text-white shadow-sm"
+                            disabled={!!connecting || isDisconnecting}
+                            onClick={() => handleConnect(platform)}
+                            title="Conectar outra conta desta rede"
+                          >
+                            {isConnecting ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <>+ conta</>}
+                          </Button>
+                        )}
                         <Button
                           size="sm"
                           variant="ghost"
@@ -435,6 +452,25 @@ export function ConnectAccountDialog({ open, onOpenChange }: ConnectAccountDialo
                     )}
                   </div>
                 </div>
+
+                {/* Contas extras da mesma rede */}
+                {conns.slice(1).map((extra) => (
+                  <div key={extra.id} className="ml-[52px] flex items-center gap-2 rounded-lg border border-green-500/30 bg-green-500/5 px-3 py-1.5">
+                    <CheckCircle2 className="h-4 w-4 shrink-0 text-green-500" />
+                    <span className="flex-1 truncate text-xs text-green-700">
+                      {extra.username ? `@${extra.username}` : extra.name || "conectado"}
+                    </span>
+                    <Button
+                      size="icon" variant="ghost"
+                      className="h-6 w-6 text-muted-foreground hover:text-destructive"
+                      disabled={!!connecting || disconnecting === extra.id}
+                      onClick={() => handleDisconnect(extra)}
+                      title="Desconectar"
+                    >
+                      {disconnecting === extra.id ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Unlink className="h-3.5 w-3.5" />}
+                    </Button>
+                  </div>
+                ))}
 
                 {/* ── Bluesky: form especial ───────────────────── */}
                 {isBluesky && !isConnected && (
@@ -496,7 +532,7 @@ export function ConnectAccountDialog({ open, onOpenChange }: ConnectAccountDialo
         <div className="flex items-center justify-between border-t pt-3">
           <div className="flex items-center gap-2">
             <span className="text-xs text-muted-foreground">
-              {connectedMap.size} de {ALL_PLATFORMS.length} redes conectadas
+              {accountsByPlatform.size} de {ALL_PLATFORMS.length} redes conectadas
             </span>
             {loading && <Loader2 className="h-3 w-3 animate-spin text-muted-foreground" />}
           </div>
