@@ -122,8 +122,7 @@ export function AutoStudio({ onEditInCanvas }: { onEditInCanvas: (doc: StudioDoc
   const [prompt, setPrompt] = useState("");
   // Foto de referência enviada pelo cliente (data URL). Quando existe, a IA
   // parte dela em vez de criar do zero.
-  const [refImage, setRefImage] = useState<string | null>(null);
-  const [refName, setRefName] = useState("");
+  const [refImages, setRefImages] = useState<{ src: string; name: string }[]>([]);
   const [dragging, setDragging] = useState(false);
 
   /** Aceita uma ou várias imagens de uma vez (clique ou arraste). */
