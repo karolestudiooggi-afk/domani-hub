@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import {
   Sparkles, Undo2, Redo2, Send, Building2, PenSquare, LayoutGrid, Film, Image as ImageIcon,
-  PanelLeft, Quote, ArrowLeft, Star,
+  PanelLeft, Quote, ArrowLeft, Star, Save, Loader2,
 } from "lucide-react";
+import { toast } from "sonner";
+import { saveVisualToGallery } from "@/lib/gallery";
 import { Button } from "@/components/ui/button";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
@@ -84,8 +86,24 @@ function RightRailContent() {
 
 function WorkspaceInner({ onBack }: { onBack?: () => void }) {
   const { brands, defaultBrand } = useBrands();
-  const { doc, set, undo, redo, canUndo, canRedo } = useStudio();
+  const { doc, set, undo, redo, canUndo, canRedo, exportSlides } = useStudio();
   const [publishOpen, setPublishOpen] = useState(false);
+  const [salvando, setSalvando] = useState(false);
+
+  const handleSalvar = async () => {
+    setSalvando(true);
+    try {
+      const urls = await exportSlides();
+      if (!urls.length) { toast.error("Nada para salvar ainda."); return; }
+      const criacao = await saveVisualToGallery({ urls, prompt: doc.caption });
+      if (!criacao) throw new Error("falhou");
+      toast.success("Alterações salvas na galeria.");
+    } catch {
+      toast.error("Não consegui salvar. Tente de novo.");
+    } finally {
+      setSalvando(false);
+    }
+  };
 
   useEffect(() => {
     if (!doc.brandId && defaultBrand) set({ brandId: defaultBrand.id }, false);
@@ -141,6 +159,10 @@ function WorkspaceInner({ onBack }: { onBack?: () => void }) {
               <div className="mt-4"><RightRailContent /></div>
             </SheetContent>
           </Sheet>
+          <Button variant="outline" className="ml-1" onClick={handleSalvar} disabled={salvando} title="Salvar as alterações na galeria">
+            {salvando ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
+            <span className="hidden sm:inline">Salvar</span>
+          </Button>
           <Button className="ml-1 bg-gradient-to-r from-primary/90 via-primary/60 to-primary/30" onClick={() => setPublishOpen(true)}>
             <Send className="mr-2 h-4 w-4" /> <span className="hidden sm:inline">Postar / Agendar</span>
           </Button>

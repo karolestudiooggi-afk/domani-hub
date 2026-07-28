@@ -129,7 +129,7 @@ export async function gerarCriativoEmCamadas(prompt: string): Promise<Slide> {
 // com o texto JÁ dentro da imagem. Não é editável — é a opção "IA faz tudo".
 // ─────────────────────────────────────────────────────────────────────────
 
-export interface PosterBrand { name?: string; colors?: string[]; tone?: string }
+export interface PosterBrand { name?: string; colors?: string[]; tone?: string; typography?: string }
 
 export interface PosterResult { imageUrl: string; prompt: string }
 

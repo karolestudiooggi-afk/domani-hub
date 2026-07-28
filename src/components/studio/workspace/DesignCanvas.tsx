@@ -22,7 +22,7 @@ export { dataUrlToBlob };
 export function DesignCanvas() {
   const {
     doc, slide, currentSlide, selectedElId, selectedElIds, selectedEl,
-    setSlides, patchSlide, patchEls, duplicateEl,
+    setSlides, patchSlide, patchEls, duplicateEl, delEl,
     addEl, pushHistory, select, setCurrentSlide, registerExporter, undo, redo,
   } = useStudio();
   const { brands } = useBrands();
@@ -175,7 +175,7 @@ export function DesignCanvas() {
     try {
       const publica = await urlPublica(sl.bgImage);
       const { mascaras } = await separarCamadas({ imageUrl: publica });
-      const camadas = await recortarCamadas(publica, mascaras);
+      const { camadas, fundo } = await recortarCamadas(publica, mascaras);
 
       if (!camadas.length) {
         toast.error("Não encontrei objetos separáveis nesta imagem.");
@@ -196,25 +196,19 @@ export function DesignCanvas() {
       const kx = CANVAS_W / img.naturalWidth;
       const ky = CANVAS_H / img.naturalHeight;
 
-      const masks: Record<string, string> = {};
-      const novos: El[] = camadas.map((c) => {
-        const id = uid();
-        masks[id] = c.maskUrl;
-        return {
-          id,
-          type: "image" as const,
-          src: c.src,
-          x: Math.round(c.x * kx),
-          y: Math.round(c.y * ky),
-          w: Math.max(12, Math.round(c.w * kx)),
-          h: Math.max(12, Math.round(c.h * ky)),
-          radius: 0,
-        };
-      });
-      setMasksById((m) => ({ ...m, ...masks }));
+      const novos: El[] = camadas.map((c) => ({
+        id: uid(),
+        type: "image" as const,
+        src: c.src,
+        x: Math.round(c.x * kx),
+        y: Math.round(c.y * ky),
+        w: Math.max(12, Math.round(c.w * kx)),
+        h: Math.max(12, Math.round(c.h * ky)),
+        radius: 0,
+      }));
 
       setSlides(doc.slides.map((s2, i) =>
-        i === currentSlide ? { ...s2, els: [...novos, ...s2.els] } : s2,
+        i === currentSlide ? { ...s2, bgImage: fundo, els: [...novos, ...s2.els] } : s2,
       ));
       // Quadradinho destacado em cada peça nova por ~8s.
       setRecemSeparados(novos.map((n) => n.id));
@@ -463,6 +457,19 @@ export function DesignCanvas() {
             ? <img src={e.src} crossOrigin="anonymous" alt="" style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: e.radius, boxShadow: e.shadow ? "0 6px 20px rgba(0,0,0,0.35)" : undefined }} />
             : <div className="flex h-full w-full items-center justify-center rounded bg-black/20 text-[10px] text-white/70">imagem</div>)}
           {e.type === "shape" && <div style={{ width: "100%", height: "100%", background: e.bg, borderRadius: e.radius, opacity: e.opacity, border: e.strokeWidth ? `${e.strokeWidth}px solid ${e.strokeColor || "#000000"}` : undefined, boxShadow: e.shadow ? "0 6px 20px rgba(0,0,0,0.35)" : undefined }} />}
+          {/* Lixeirinha: aparece na peça selecionada, igual Canva. Exclui na hora. */}
+          {!exportMode && selectedElIds.includes(e.id) && (
+            <button
+              type="button"
+              title="Excluir esta peça"
+              aria-label="Excluir"
+              onMouseDown={(ev) => { ev.stopPropagation(); }}
+              onClick={(ev) => { ev.stopPropagation(); pushHistory(); delEl(e.id); }}
+              className="absolute -right-3 -top-3 z-30 flex h-6 w-6 items-center justify-center rounded-full bg-destructive text-destructive-foreground shadow-md hover:brightness-110"
+            >
+              <Trash2 className="h-3.5 w-3.5" />
+            </button>
+          )}
         </div>
       ))}
       {/* marca: logo + handle — só em slides "chapados" (sem arte de fundo) e fora do card,
@@ -537,45 +544,6 @@ export function DesignCanvas() {
               <Maximize className="mr-1 h-3.5 w-3.5" />
               {doc.slides[currentSlide]?.bgFit === "contain" ? "Preencher" : "Sem cortar"}
             </Button>
-            {/* Novidade: destacado em violeta para não se perder entre os
-                demais botões da barra, com selo "novo". */}
-            <div className="relative">
-              <Button
-                variant="outline"
-                size="sm"
-                className="h-7 border-violet-500 text-xs text-violet-700 hover:bg-violet-50 hover:text-violet-800"
-                title="Separa os objetos da arte em camadas móveis — dá para mover a pizza sem levar o fundo"
-                disabled={separando}
-                onClick={descolarCamadas}
-              >
-                {separando
-                  ? <Loader2 className="mr-1 h-3.5 w-3.5 animate-spin" />
-                  : <Layers className="mr-1 h-3.5 w-3.5" />}
-                {separando ? "Separando…" : "Descolar camadas"}
-              </Button>
-              {!separando && (
-                <span className="pointer-events-none absolute -right-1.5 -top-2 rounded-full bg-violet-500 px-1.5 py-px text-[9px] font-bold uppercase leading-tight tracking-wide text-white shadow-sm">
-                  novo
-                </span>
-              )}
-            </div>
-            {/* Só aparece quando uma peça descolada está selecionada: apaga ela do
-                fundo e preenche o buraco (eraser da fal). Aí ela sai de verdade. */}
-            {selectedElId && masksById[selectedElId] && (
-              <Button
-                variant="outline"
-                size="sm"
-                className="h-7 border-rose-500 text-xs text-rose-700 hover:bg-rose-50 hover:text-rose-800"
-                title="Apaga esta peça do fundo e reconstrói o buraco — aí ela sai de verdade, sem cópia"
-                disabled={soltando}
-                onClick={soltarDoFundo}
-              >
-                {soltando
-                  ? <Loader2 className="mr-1 h-3.5 w-3.5 animate-spin" />
-                  : <Eraser className="mr-1 h-3.5 w-3.5" />}
-                {soltando ? "Soltando…" : "Soltar do fundo"}
-              </Button>
-            )}
           </>
         )}
       </div>

@@ -427,7 +427,7 @@ Responda APENAS JSON: { "narracao": "<fala completa em pt-BR>", "cena": "<descri
     if (!prompt.trim()) { toast.error("Descreva o que você quer criar."); return; }
     setGenerating(true); setProgress("Criando a arte com IA (pode levar ~15s)…"); setDoc(null);
     try {
-      const marca = brand ? { name: brand.name, colors: brand.colors, tone: brand.tone } : undefined;
+      const marca = brand ? { name: brand.name, colors: brand.colors, tone: brand.tone, typography: brand.typography } : undefined;
       const slide = await gerarArtePosterSlide(prompt.trim(), marca);
       const base = emptyDoc("post", brandId);
       onEditInCanvas({ ...base, slides: [slide], caption: prompt.trim() });

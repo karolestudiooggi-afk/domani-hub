@@ -26,6 +26,7 @@ export interface BrandProfile {
   handle?: string;
   profile_photo_url?: string;
   website?: string;
+  typography?: string;
   social_links?: Record<string, string>;
   values?: string;
 }
@@ -49,6 +50,7 @@ export function normalizeBrand(row: Record<string, unknown>): BrandProfile {
     handle: (row.handle as string) ?? "",
     profile_photo_url: (row.profile_photo_url as string) ?? "",
     website: (row.website as string) ?? "",
+    typography: (row.typography as string) ?? "",
     social_links: (row.social_links as Record<string, string>) ?? {},
     values: (row.values as string) ?? "",
   };

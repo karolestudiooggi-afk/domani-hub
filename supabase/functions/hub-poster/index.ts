@@ -12,11 +12,11 @@ const cors = {
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 
-interface Brand { name?: string; colors?: string[]; tone?: string }
+interface Brand { name?: string; colors?: string[]; tone?: string; typography?: string }
 
 async function diretorDeArte(brief: string, brand: Brand | undefined, key: string): Promise<string> {
   const ctx = brand
-    ? `Marca: ${brand.name || "—"}. Paleta de cores: ${(brand.colors || []).join(", ") || "livre"}. Tom: ${brand.tone || "—"}.`
+    ? `Marca: ${brand.name || "—"}. Paleta de cores OBRIGATÓRIA (use exatamente estas): ${(brand.colors || []).join(", ") || "livre"}. Tipografia da marca (imite este estilo de fonte): ${brand.typography || "livre"}. Tom: ${brand.tone || "—"}.`
     : "";
   const r = await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
@@ -27,7 +27,7 @@ async function diretorDeArte(brief: string, brand: Brand | undefined, key: strin
         {
           role: "system",
           content:
-            "Você é diretor de arte sênior de anúncios para redes sociais. A partir de um briefing, escreva UM único prompt de geração de imagem, em INGLÊS, para um post de Instagram profissional e impactante (scroll-stopping). A arte DEVE conter o texto principal (headline e, se fizer sentido, um CTA curto) renderizado de forma bonita e legível — mantenha esse texto EXATAMENTE no idioma do briefing (português), escrito entre aspas no prompt. Descreva composição, sujeito, iluminação, paleta de cores, estilo tipográfico (moderno, alto contraste) e clima. Nada de marca d'água ou texto embolado. Máximo 120 palavras. Responda APENAS com o prompt, sem preâmbulo.",
+            "Você é diretor de arte sênior de anúncios para redes sociais. A partir de um briefing, escreva UM único prompt de geração de imagem, em INGLÊS, para um post de Instagram profissional e impactante (scroll-stopping). A arte DEVE conter o texto principal (headline e, se fizer sentido, um CTA curto) renderizado de forma bonita e legível — mantenha esse texto EXATAMENTE no idioma do briefing (português), escrito entre aspas no prompt. REGRA CRÍTICA: quando a marca informar paleta de cores e tipografia, você é OBRIGADO a respeitá-las — use exatamente as cores da marca como paleta dominante e descreva a tipografia no estilo das fontes da marca. Descreva composição, sujeito, iluminação, a paleta de cores da marca, o estilo tipográfico e o clima. Nada de marca d'água ou texto embolado. Máximo 130 palavras. Responda APENAS com o prompt, sem preâmbulo.",
         },
         { role: "user", content: `Briefing: ${brief}\n${ctx}` },
       ],

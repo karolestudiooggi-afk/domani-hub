@@ -3,7 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import {
   Building2, Plus, Star, Pencil, Trash2, ChevronDown, Palette,
-  Sparkles, Globe, Upload, Loader2, Eye, Instagram, Linkedin,
+  Sparkles, Globe, Upload, Loader2, Eye, Instagram, Linkedin, Type,
   Twitter, Facebook, Youtube, X } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -43,6 +43,7 @@ interface BrandProfile {
   handle?: string;
   profile_photo_url?: string;
   website?: string;
+  typography?: string;
   social_links?: Record<string, string>;
   social_account_ids: string[];
   reference_images?: string[];
@@ -93,6 +94,7 @@ const emptyForm = {
   handle: "",
   profile_photo_url: "",
   website: "",
+  typography: "",
   social_links: { instagram: "", linkedin: "", twitter: "", facebook: "", youtube: "" } as Record<string, string>,
   social_account_ids: [] as string[],
   reference_images: [] as string[],
@@ -192,6 +194,7 @@ export default function Brands() {
           handle: d.handle || "",
           profile_photo_url: d.profile_photo_url || "",
           website: d.website || "",
+          typography: d.typography || "",
           social_links: d.social_links || {},
           values: d.values || "",
         }))
@@ -230,6 +233,7 @@ export default function Brands() {
       handle: profile.handle || "",
       profile_photo_url: profile.profile_photo_url || "",
       website: profile.website || "",
+      typography: profile.typography || "",
       social_links: { instagram: "", linkedin: "", twitter: "", facebook: "", youtube: "", ...profile.social_links },
       social_account_ids: profile.social_account_ids || [],
       reference_images: profile.reference_images || [],
@@ -267,6 +271,7 @@ export default function Brands() {
       handle: form.handle,
       profile_photo_url: form.profile_photo_url,
       website: form.website,
+      typography: form.typography,
       social_links: form.social_links,
       social_account_ids: form.social_account_ids,
       reference_images: form.reference_images,
@@ -787,6 +792,18 @@ export default function Brands() {
                     </Button>
                   )}
                 </div>
+              </div>
+
+              {/* Tipografia */}
+              <div className="space-y-2">
+                <Label className="flex items-center gap-1.5">
+                  <Type className="h-4 w-4" /> Tipografia
+                </Label>
+                <Input placeholder="Ex: Playfair Display (títulos) + Inter (texto)" value={form.typography || ""}
+                  onChange={(e) => setForm((f) => ({ ...f, typography: e.target.value }))} />
+                <p className="text-xs text-muted-foreground">
+                  As fontes da marca. A IA usa isso (junto das cores) para manter a identidade nas artes.
+                </p>
               </div>
 
               {/* Website */}
