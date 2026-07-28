@@ -46,6 +46,13 @@ export default function Gallery() {
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
+  const loadCreations = useCallback(async () => {
+    setLoading(true);
+    const data = await getCreations();
+    setCreations(data);
+    setLoading(false);
+  }, []);
+
   /** Lê um arquivo do PC como data URL (base64). */
   const lerArquivo = (file: File) =>
     new Promise<string>((resolve, reject) => {
@@ -89,13 +96,6 @@ export default function Gallery() {
       if (fileInputRef.current) fileInputRef.current.value = "";
     }
   }, [toast, loadCreations]);
-
-  const loadCreations = useCallback(async () => {
-    setLoading(true);
-    const data = await getCreations();
-    setCreations(data);
-    setLoading(false);
-  }, []);
 
   useEffect(() => {
     loadCreations();
