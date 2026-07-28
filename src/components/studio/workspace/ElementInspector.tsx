@@ -15,15 +15,19 @@ export function ElementInspector() {
     return (
       <div className="space-y-2 card-premium p-3">
         <Label className="text-xs">Fundo do slide</Label>
-        <div className="flex items-center gap-2">
-          <input
-            type="color"
-            defaultValue="#e85600"
-            onChange={(e) => patchSlide(currentSlide, { bg: e.target.value, bgImage: undefined })}
-            className="h-9 w-12 cursor-pointer rounded border border-border bg-transparent p-0.5"
-          />
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="flex items-center gap-1.5">
+            <input
+              type="color"
+              value={slide?.bg || "#ffffff"}
+              onChange={(e) => patchSlide(currentSlide, { bg: e.target.value, bgImage: undefined })}
+              className="h-9 w-12 cursor-pointer rounded border border-border bg-transparent p-0.5"
+              title="Pintar o fundo com uma cor"
+            />
+            <span className="text-[11px] text-muted-foreground">Pintar cor</span>
+          </div>
           {slide?.bgImage && (
-            <Button variant="outline" size="sm" onClick={() => patchSlide(currentSlide, { bgImage: undefined })}>Limpar fundo</Button>
+            <Button variant="outline" size="sm" onClick={() => patchSlide(currentSlide, { bgImage: undefined })}>Limpar imagem</Button>
           )}
         </div>
         <p className="text-[11px] text-muted-foreground">Clique num elemento para editar (Shift+clique p/ vários). Arraste para mover; setas para ajustar; Ctrl+C/V copia, Del apaga.</p>
