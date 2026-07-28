@@ -281,121 +281,6 @@ export function Copilot() {
   // ── render ──
   return (
     <div className="space-y-4">
-      {/* Guia de prompt */}
-      <div className="card-premium space-y-2 p-3">
-        <Label className="flex items-center justify-between text-xs">
-          <span className="flex items-center gap-1.5 font-medium"><Sparkles className="h-3.5 w-3.5 text-primary" /> O que você quer criar?</span>
-          <Button variant="ghost" size="sm" className="h-6 text-primary text-[11px]" onClick={handleEnhance} disabled={enhancing || !intent.trim()}>
-            {enhancing ? <Loader2 className="mr-1 h-3 w-3 animate-spin" /> : <Wand2 className="mr-1 h-3 w-3" />} Melhorar
-          </Button>
-        </Label>
-        <Textarea value={intent} onChange={(e) => setIntent(e.target.value)} rows={3} placeholder={`Ex: ${doc.format === "video" ? "vídeo curto de um café sendo servido em câmera lenta" : "5 erros que matam o engajamento no Instagram"}`} />
-
-        <div className="flex flex-wrap gap-1">
-          {OBJETIVOS.map((o) => (
-            <button key={o} onClick={() => setObjetivo((p) => (p === o ? "" : o))}>
-              <Badge variant={objetivo === o ? "default" : "secondary"} className={objetivo === o ? "bg-primary hover:bg-primary/90 cursor-pointer text-[10px]" : "cursor-pointer hover:bg-accent text-[10px]"}>{o}</Badge>
-            </button>
-          ))}
-        </div>
-
-        {doc.format === "post" && (
-          <div className="space-y-1">
-            <Label className="text-[11px] text-foreground">Plataformas (texto por rede)</Label>
-            <div className="flex flex-wrap gap-1">
-              {POST_PLATFORMS.map((p) => {
-                const on = doc.platforms.includes(p);
-                return (
-                  <button key={p} onClick={() => setPlatforms(on ? doc.platforms.filter((x) => x !== p) : [...doc.platforms, p])}>
-                    <Badge variant={on ? "default" : "secondary"} className={on ? "bg-primary hover:bg-primary/90 cursor-pointer gap-1 text-[10px]" : "cursor-pointer hover:bg-accent gap-1 text-[10px]"}>
-                      {PLATFORMS[p].icon} {PLATFORMS[p].name}
-                    </Badge>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        )}
-
-        <div className="flex items-center justify-between">
-          <Label className="text-[11px] text-foreground">Direções</Label>
-          <Button variant="ghost" size="sm" className="h-6 text-primary text-[11px]" onClick={handleSuggest} disabled={suggesting}>
-            {suggesting ? <Loader2 className="mr-1 h-3 w-3 animate-spin" /> : <Lightbulb className="mr-1 h-3 w-3" />} Sugerir
-          </Button>
-        </div>
-        {suggestions.length > 0 && (
-          <div className="flex flex-wrap gap-1">
-            {suggestions.map((s) => (
-              <button key={s} onClick={() => setChosen((p) => (p.includes(s) ? p.filter((x) => x !== s) : [...p, s]))}>
-                <Badge variant={chosen.includes(s) ? "default" : "secondary"} className={chosen.includes(s) ? "bg-primary hover:bg-primary/90 cursor-pointer text-[10px]" : "cursor-pointer hover:bg-accent text-[10px]"}>{s}</Badge>
-              </button>
-            ))}
-          </div>
-        )}
-
-        {/* Controles de vídeo */}
-        {doc.format === "video" && (
-          <div className="space-y-2.5 rounded-lg border border-border bg-background/50 p-3">
-            <Label className="flex items-center gap-1.5 text-[11px] font-medium"><Film className="h-3.5 w-3.5 text-primary" /> Configuração do vídeo</Label>
-
-            <div className="space-y-1">
-              <Label className="text-[11px] text-foreground">Modelo</Label>
-              <Select value={videoModelId} onValueChange={setVideoModelId} disabled={generating}>
-                <SelectTrigger className="h-8 text-xs"><SelectValue /></SelectTrigger>
-                <SelectContent>
-                  {textVideoModels.map((m) => <SelectItem key={m.id} value={m.id} className="text-xs">{m.label}</SelectItem>)}
-                </SelectContent>
-              </Select>
-              {videoModel.description && <p className="text-[10px] leading-tight text-muted-foreground">{videoModel.description}</p>}
-            </div>
-
-            <div className="flex gap-2">
-              <div className="flex-1 space-y-1">
-                <Label className="text-[11px] text-foreground">Duração</Label>
-                <Select value={String(videoDuration)} onValueChange={(v) => setVideoDuration(Number(v))} disabled={generating}>
-                  <SelectTrigger className="h-8 text-xs"><SelectValue /></SelectTrigger>
-                  <SelectContent>
-                    {videoModel.durations.map((d) => <SelectItem key={d} value={String(d)} className="text-xs">{d}s</SelectItem>)}
-                  </SelectContent>
-                </Select>
-              </div>
-              {videoModel.resolutions?.length ? (
-                <div className="flex-1 space-y-1">
-                  <Label className="text-[11px] text-foreground">Resolução</Label>
-                  <Select value={videoResolution} onValueChange={setVideoResolution} disabled={generating}>
-                    <SelectTrigger className="h-8 text-xs"><SelectValue /></SelectTrigger>
-                    <SelectContent>
-                      {videoModel.resolutions.map((r) => <SelectItem key={r} value={r} className="text-xs">{r}</SelectItem>)}
-                    </SelectContent>
-                  </Select>
-                </div>
-              ) : null}
-            </div>
-
-            {videoModel.supportsAudio && (
-              <div className="space-y-1.5">
-                <div className="flex items-center justify-between">
-                  <Label className="flex items-center gap-1.5 text-[11px] text-foreground"><Volume2 className="h-3.5 w-3.5" /> Narração (áudio pt-BR)</Label>
-                  <Switch checked={videoAudio} onCheckedChange={setVideoAudio} disabled={generating} />
-                </div>
-                {videoAudio && (
-                  <Textarea value={audioPrompt} onChange={(e) => setAudioPrompt(e.target.value)} rows={2} disabled={generating}
-                    placeholder="Roteiro da narração (opcional). Vazio = IA cria a fala a partir do tema." className="text-xs" />
-                )}
-              </div>
-            )}
-          </div>
-        )}
-
-        <Button className="w-full" onClick={handleGenerate} disabled={generating || !intent.trim()}>
-          {generating ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> {progress || "Gerando…"}</> : <><Sparkles className="mr-2 h-4 w-4" /> Gerar {doc.format}</>}
-        </Button>
-        {generating && doc.format === "video" && (
-          <Button variant="outline" className="w-full" onClick={handleCancelVideo}>
-            <X className="mr-2 h-4 w-4" /> Cancelar geração
-          </Button>
-        )}
-      </div>
 
       {/* Ações contextuais */}
       {selectedEl?.type === "text" && (
@@ -412,6 +297,8 @@ export function Copilot() {
       {(selectedEl?.type === "image" || (!selectedEl && (doc.format === "image" || doc.format === "post" || doc.format === "carousel" || doc.format === "card"))) && (
         <div className="card-premium space-y-1.5 p-3">
           <Label className="text-xs">{selectedEl?.type === "image" ? "Imagem do elemento" : "Imagem de fundo do slide"}</Label>
+          <Textarea value={intent} onChange={(e) => setIntent(e.target.value)} rows={2}
+            placeholder="Descreva a imagem que a IA deve gerar (ex: prato de peixe, luz quente)" className="text-xs" />
           <div className="flex flex-wrap gap-1.5">
             <Button variant="outline" size="sm" className="h-7 text-xs" onClick={() => refineImage("ai")} disabled={!!refining}>{refining === "ai" ? <Loader2 className="mr-1 h-3 w-3 animate-spin" /> : <ImagePlus className="mr-1 h-3 w-3" />}Gerar IA</Button>
             <Button variant="outline" size="sm" className="h-7 text-xs" onClick={() => refineImage("pexels")} disabled={!!refining}>{refining === "pexels" ? <Loader2 className="mr-1 h-3 w-3 animate-spin" /> : <Search className="mr-1 h-3 w-3" />}Pexels</Button>
