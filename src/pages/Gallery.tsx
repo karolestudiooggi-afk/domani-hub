@@ -140,6 +140,7 @@ export default function Gallery() {
         sourceContent: creation.prompt || "",
         sourceTitle: creation.templateName || "",
         galleryId: creation.id,
+        brandId: creation.brandId,
       },
     });
   }

@@ -15,6 +15,7 @@ export interface Creation {
   templateId?: string;
   templateName?: string;
   sourceId?: string;
+  brandId?: string;
   published: boolean;
   createdAt: string;
 }
@@ -68,6 +69,7 @@ export async function saveCreation(input: Omit<Creation, "id" | "createdAt">): P
       template_id: input.templateId || null,
       template_name: input.templateName || null,
       source_id: input.sourceId || null,
+      brand_id: input.brandId || null,
       published: input.published,
     })
     .select()
@@ -87,6 +89,7 @@ export async function updateCreation(id: string, updates: Partial<Creation>): Pr
   if (updates.prompt !== undefined) payload.prompt = updates.prompt;
   if (updates.type) payload.type = updates.type;
   if (updates.thumbnailUrl !== undefined) payload.thumbnail_url = updates.thumbnailUrl;
+  if (updates.brandId !== undefined) payload.brand_id = updates.brandId || null;
 
   const { data, error } = await supabase
     .from("creations")
@@ -206,6 +209,7 @@ export async function saveVisualToGallery(opts: {
   templateId?: string;
   templateName?: string;
   id?: string;
+  brandId?: string;
 }): Promise<Creation | null> {
   const validUrls = await persistUrls(opts.urls);
   if (validUrls.length === 0) return null;
@@ -221,6 +225,7 @@ export async function saveVisualToGallery(opts: {
       urls: validUrls,
       thumbnailUrl: validUrls[0],
       prompt: opts.prompt,
+      brandId: opts.brandId,
     });
   }
 
@@ -231,6 +236,7 @@ export async function saveVisualToGallery(opts: {
     prompt: opts.prompt,
     templateId: opts.templateId,
     templateName: opts.templateName,
+    brandId: opts.brandId,
     published: false,
   });
 }
@@ -263,6 +269,7 @@ function mapRow(row: any): Creation {
     templateId: row.template_id || undefined,
     templateName: row.template_name || undefined,
     sourceId: row.source_id || undefined,
+    brandId: row.brand_id || undefined,
     published: row.published ?? false,
     createdAt: row.created_at,
   };

@@ -12,13 +12,14 @@ interface NavState {
   mediaUrls?: string[];
   scheduleAt?: string;
   galleryId?: string;
+  brandId?: string;
 }
 
 function buildInitial(nav: NavState | null): StudioDoc | undefined {
   if (!nav) return undefined;
   const has = nav.sourceContent || nav.prompt || nav.sourceTitle || (nav.mediaUrls?.length ?? 0) > 0;
   if (!has) return undefined;
-  const base = emptyDoc("post", null);
+  const base = emptyDoc("post", nav.brandId || null);
   return {
     ...base,
     caption: nav.sourceContent || nav.prompt || "",

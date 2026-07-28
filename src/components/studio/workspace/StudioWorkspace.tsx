@@ -95,7 +95,7 @@ function WorkspaceInner({ onBack }: { onBack?: () => void }) {
     try {
       const urls = await exportSlides();
       if (!urls.length) { toast.error("Nada para salvar ainda."); return; }
-      const criacao = await saveVisualToGallery({ urls, prompt: doc.caption, id: doc.galleryId });
+      const criacao = await saveVisualToGallery({ urls, prompt: doc.caption, id: doc.galleryId, brandId: doc.brandId || undefined });
       if (!criacao) throw new Error("falhou");
       // Primeira vez: guarda o id para os próximos "Salvar" atualizarem no lugar.
       if (!doc.galleryId) set({ galleryId: criacao.id }, false);

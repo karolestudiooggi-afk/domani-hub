@@ -569,6 +569,24 @@ export function DesignCanvas() {
           <Button variant="ghost" size="icon" className="h-7 w-7 text-destructive" onClick={delSlide} disabled={doc.slides.length === 1} title="Excluir"><Trash2 className="h-4 w-4" /></Button>
         </div>
       )}
+
+      {/* Tira com TODAS as páginas do carrossel — clique para ir até ela. */}
+      {isCarousel && (
+        <div className="flex max-w-full gap-2 overflow-x-auto pb-1">
+          {doc.slides.map((s, i) => (
+            <button
+              key={i}
+              onClick={() => setCurrentSlide(i)}
+              title={`Página ${i + 1}`}
+              className={`relative h-16 w-[52px] shrink-0 overflow-hidden rounded-md border-2 ${i === currentSlide ? "border-primary" : "border-border hover:border-primary/40"}`}
+              style={{ background: s.bg }}
+            >
+              {s.bgImage && <img src={s.bgImage} alt="" className="h-full w-full object-cover" />}
+              <span className="absolute bottom-0 right-0 bg-black/60 px-1 text-[9px] leading-tight text-white">{i + 1}</span>
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
