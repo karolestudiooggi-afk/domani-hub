@@ -49,7 +49,9 @@ export function DesignCanvas() {
     if (!el) return;
     const compute = () => {
       const avail = el.clientWidth;
-      const s = avail > 0 ? Math.min(1, avail / CANVAS_W) : 1;
+      // Cresce para preencher a largura disponível (até 1.9x) e encolhe no
+      // mobile. Antes só encolhia, por isso a arte ficava pequena no desktop.
+      const s = avail > 0 ? Math.max(0.25, Math.min(1.9, avail / CANVAS_W)) : 1;
       scaleRef.current = s;
       setScale(s);
     };
@@ -132,6 +134,9 @@ export function DesignCanvas() {
    * o fundo junto.
    */
   const [separando, setSeparando] = useState(false);
+  // Ids das peças que acabaram de sair do descolamento — ganham um quadradinho
+  // destacado por alguns segundos, estilo Canva.
+  const [recemSeparados, setRecemSeparados] = useState<string[]>([]);
 
   const descolarCamadas = async () => {
     const sl = doc.slides[currentSlide];
@@ -176,7 +181,10 @@ export function DesignCanvas() {
       setSlides(doc.slides.map((s2, i) =>
         i === currentSlide ? { ...s2, els: [...novos, ...s2.els] } : s2,
       ));
-      toast.success(`${camadas.length} camada(s) separada(s). Agora dá para mover cada uma.`);
+      // Quadradinho destacado em cada peça nova por ~8s.
+      setRecemSeparados(novos.map((n) => n.id));
+      window.setTimeout(() => setRecemSeparados([]), 8000);
+      toast.success(`${camadas.length} camada(s) separada(s). Clique em cada uma para editar.`);
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Não consegui separar as camadas.");
     } finally {
@@ -402,7 +410,7 @@ export function DesignCanvas() {
           key={e.id}
           onMouseDown={(ev) => { if (exportMode) return; ev.stopPropagation(); beginDrag(ev.clientX, ev.clientY, e, ev.shiftKey || ev.ctrlKey || ev.metaKey); }}
           onTouchStart={(ev) => { if (exportMode) return; ev.stopPropagation(); const t = ev.touches[0]; if (t) beginDrag(t.clientX, t.clientY, e, false); }}
-          className={`absolute ${exportMode ? "" : "cursor-move"} ${!exportMode && selectedElIds.includes(e.id) ? "ring-2 ring-primary" : ""}`}
+          className={`absolute ${exportMode ? "" : "cursor-move"} ${!exportMode && selectedElIds.includes(e.id) ? "ring-2 ring-primary" : ""} ${!exportMode && recemSeparados.includes(e.id) ? "outline outline-2 outline-dashed outline-violet-500" : ""}`}
           style={{ left: e.x, top: e.y, width: e.w, height: e.h, touchAction: exportMode ? undefined : "none" }}
         >
           {e.type === "text" && (
@@ -439,11 +447,29 @@ export function DesignCanvas() {
       {!exportMode && i === currentSlide && guides.y !== null && (
         <div className="pointer-events-none absolute left-0 right-0" style={{ top: guides.y, height: 1, background: "var(--dm-accent)" }} />
       )}
+      {/* Luz de scan enquanto descola (estilo Canva). */}
+      {!exportMode && separando && i === currentSlide && (
+        <div className="pointer-events-none absolute inset-0 z-20 overflow-hidden rounded-xl bg-violet-950/25">
+          <div
+            className="absolute inset-x-0 h-1/3"
+            style={{
+              animation: "dmScan 1.4s ease-in-out infinite",
+              background:
+                "linear-gradient(to bottom, transparent, rgba(139,92,246,0.55), transparent)",
+              boxShadow: "0 0 30px rgba(139,92,246,0.65)",
+            }}
+          />
+          <div className="absolute inset-x-0 bottom-3 text-center text-[11px] font-medium text-violet-100">
+            Separando as camadas…
+          </div>
+        </div>
+      )}
     </div>
   );
 
   return (
     <div className="flex h-full w-full flex-col items-center gap-4 overflow-auto p-6">
+      <style>{`@keyframes dmScan { 0% { transform: translateY(-120%); } 100% { transform: translateY(320%); } }`}</style>
       {/* presets */}
       <div className="flex flex-wrap items-center justify-center gap-1.5">
         <span className="text-[11px] text-foreground/70">Tema:</span>
