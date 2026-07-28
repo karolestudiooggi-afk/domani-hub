@@ -95,9 +95,11 @@ function WorkspaceInner({ onBack }: { onBack?: () => void }) {
     try {
       const urls = await exportSlides();
       if (!urls.length) { toast.error("Nada para salvar ainda."); return; }
-      const criacao = await saveVisualToGallery({ urls, prompt: doc.caption });
+      const criacao = await saveVisualToGallery({ urls, prompt: doc.caption, id: doc.galleryId });
       if (!criacao) throw new Error("falhou");
-      toast.success("Alterações salvas na galeria.");
+      // Primeira vez: guarda o id para os próximos "Salvar" atualizarem no lugar.
+      if (!doc.galleryId) set({ galleryId: criacao.id }, false);
+      toast.success(doc.galleryId ? "Alterações salvas nesta arte." : "Arte salva na galeria.");
     } catch {
       toast.error("Não consegui salvar. Tente de novo.");
     } finally {

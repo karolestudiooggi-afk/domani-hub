@@ -205,15 +205,27 @@ export async function saveVisualToGallery(opts: {
   prompt?: string;
   templateId?: string;
   templateName?: string;
+  id?: string;
 }): Promise<Creation | null> {
   const validUrls = await persistUrls(opts.urls);
   if (validUrls.length === 0) return null;
 
   const isVideo = validUrls.some((u) => /\.(mp4|mov|webm)/i.test(u));
   const isCarousel = validUrls.length > 1 && !isVideo;
+  const type = isVideo ? "video" : isCarousel ? "carousel" : "image";
+
+  // Se já existe (veio da galeria), ATUALIZA no lugar — não duplica.
+  if (opts.id) {
+    return updateCreation(opts.id, {
+      type,
+      urls: validUrls,
+      thumbnailUrl: validUrls[0],
+      prompt: opts.prompt,
+    });
+  }
 
   return saveCreation({
-    type: isVideo ? "video" : isCarousel ? "carousel" : "image",
+    type,
     urls: validUrls,
     thumbnailUrl: validUrls[0],
     prompt: opts.prompt,

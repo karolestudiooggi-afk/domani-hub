@@ -11,6 +11,7 @@ interface NavState {
   prompt?: string;
   mediaUrls?: string[];
   scheduleAt?: string;
+  galleryId?: string;
 }
 
 function buildInitial(nav: NavState | null): StudioDoc | undefined {
@@ -33,6 +34,7 @@ function buildInitial(nav: NavState | null): StudioDoc | undefined {
         }))
       : base.slides,
     schedule: nav.scheduleAt ? { when: "schedule", at: nav.scheduleAt } : { when: "now" },
+    galleryId: nav.galleryId,
   };
 }
 

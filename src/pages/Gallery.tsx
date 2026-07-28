@@ -139,6 +139,7 @@ export default function Gallery() {
         mediaUrls: urls,
         sourceContent: creation.prompt || "",
         sourceTitle: creation.templateName || "",
+        galleryId: creation.id,
       },
     });
   }

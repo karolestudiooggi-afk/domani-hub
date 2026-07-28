@@ -68,6 +68,8 @@ export interface StudioDoc {
   hashtags: string[];
   platforms: Platform[];
   schedule: { when: "now" | "schedule"; at?: string };
+  /** Id da criação na galeria — quando presente, "Salvar" atualiza no lugar. */
+  galleryId?: string;
 }
 
 // Canvas 4:5 (1080×1350) — padrão Instagram 2026.
