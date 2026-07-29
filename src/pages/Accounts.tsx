@@ -18,6 +18,7 @@ export default function Accounts() {
   const { accounts } = useApp();
   const pfmAccountsQuery = usePfmAccounts();
   const [connectOpen, setConnectOpen] = useState(false);
+  const [connectPlatform, setConnectPlatform] = useState<string | null>(null);
   const [disconnectingId, setDisconnectingId] = useState<string | null>(null);
   // Link do perfil (para analytics), por conta. Clica na conta para editar.
   const [linkOpen, setLinkOpen] = useState<string | null>(null);
@@ -67,7 +68,7 @@ export default function Accounts() {
           <Button
             size="sm"
             className="bg-gradient-to-r from-primary/90 via-primary/60 to-primary/30"
-            onClick={() => setConnectOpen(true)}
+            onClick={() => { setConnectPlatform(null); setConnectOpen(true); }}
           >
             <Plus className="mr-2 h-4 w-4" />
             Conectar Rede
@@ -76,7 +77,7 @@ export default function Accounts() {
       </div>
 
       {/* Connect Dialog */}
-      <ConnectAccountDialog open={connectOpen} onOpenChange={setConnectOpen} />
+      <ConnectAccountDialog open={connectOpen} onOpenChange={setConnectOpen} initialPlatform={connectPlatform} />
 
       {/* Error */}
       {pfmAccountsQuery.isError && (
@@ -211,7 +212,7 @@ export default function Accounts() {
                       variant="outline"
                       size="sm"
                       className="mt-3 w-full border-dashed"
-                      onClick={() => setConnectOpen(true)}
+                      onClick={() => { setConnectPlatform(platform); setConnectOpen(true); }}
                     >
                       <Plus className="mr-2 h-3 w-3" />
                       Conectar {cfg.name}

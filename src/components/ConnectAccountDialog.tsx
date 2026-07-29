@@ -65,11 +65,13 @@ function saveProfileUrls(urls: Record<string, string>) {
 interface ConnectAccountDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  /** Se definido, mostra SÓ essa rede (ex: clicou em "Conectar Instagram"). */
+  initialPlatform?: Platform | null;
 }
 
 // ─── Componente ────────────────────────────────────────────────
 
-export function ConnectAccountDialog({ open, onOpenChange }: ConnectAccountDialogProps) {
+export function ConnectAccountDialog({ open, onOpenChange, initialPlatform }: ConnectAccountDialogProps) {
   const { toast } = useToast();
 
   // ── Estado ────────────────────────────────────────────────────
@@ -359,7 +361,7 @@ export function ConnectAccountDialog({ open, onOpenChange }: ConnectAccountDialo
 
         {/* ── Lista de plataformas ──────────────────────────────── */}
         <div className="space-y-2">
-          {ALL_PLATFORMS.map((platform) => {
+          {(initialPlatform ? ALL_PLATFORMS.filter((p) => p === initialPlatform) : ALL_PLATFORMS).map((platform) => {
             const cfg        = PLATFORMS[platform];
             const conns      = accountsByPlatform.get(platform) || [];
             const account    = conns[0];
@@ -528,7 +530,7 @@ export function ConnectAccountDialog({ open, onOpenChange }: ConnectAccountDialo
                       onChange={(e) => updateProfileUrl(account.id, e.target.value)}
                       className="h-7 text-[11px] border-dashed"
                     />
-                    <p className="text-[9px] text-muted-foreground mt-0.5 pl-0.5">
+                    <p className="text-[11px] text-primary/80 mt-1 pl-0.5 font-medium">
                       URL do perfil público — necessário para o painel de analytics
                     </p>
                   </div>
