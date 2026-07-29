@@ -95,13 +95,13 @@ export interface AnalyticsResult {
  * Other platforms extract the username/handle from the URL.
  */
 export function buildAnalyticsAccounts(
-  pfmAccounts: { platform: string; username: string }[],
+  pfmAccounts: { platform: string; username: string; id?: string }[],
   profileUrls: Record<string, string>
 ): { platform: string; username: string }[] {
   return pfmAccounts
-    .filter((a) => a.username || profileUrls[a.platform])
+    .filter((a) => a.username || (a.id && profileUrls[a.id]) || profileUrls[a.platform])
     .map((a) => {
-      const savedUrl = profileUrls[a.platform] || "";
+      const savedUrl = (a.id && profileUrls[a.id]) || profileUrls[a.platform] || "";
       let username = a.username || "";
 
       if (savedUrl) {

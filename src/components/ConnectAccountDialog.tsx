@@ -455,20 +455,30 @@ export function ConnectAccountDialog({ open, onOpenChange }: ConnectAccountDialo
 
                 {/* Contas extras da mesma rede */}
                 {conns.slice(1).map((extra) => (
-                  <div key={extra.id} className="ml-[52px] flex items-center gap-2 rounded-lg border border-green-500/30 bg-green-500/5 px-3 py-1.5">
-                    <CheckCircle2 className="h-4 w-4 shrink-0 text-green-500" />
-                    <span className="flex-1 truncate text-xs text-green-700">
-                      {extra.username ? `@${extra.username}` : extra.name || "conectado"}
-                    </span>
-                    <Button
-                      size="icon" variant="ghost"
-                      className="h-6 w-6 text-muted-foreground hover:text-destructive"
-                      disabled={!!connecting || disconnecting === extra.id}
-                      onClick={() => handleDisconnect(extra)}
-                      title="Desconectar"
-                    >
-                      {disconnecting === extra.id ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Unlink className="h-3.5 w-3.5" />}
-                    </Button>
+                  <div key={extra.id} className="ml-[52px] space-y-1">
+                    <div className="flex items-center gap-2 rounded-lg border border-green-500/30 bg-green-500/5 px-3 py-1.5">
+                      <CheckCircle2 className="h-4 w-4 shrink-0 text-green-500" />
+                      <span className="flex-1 truncate text-xs text-green-700">
+                        {extra.username ? `@${extra.username}` : extra.name || "conectado"}
+                      </span>
+                      <Button
+                        size="icon" variant="ghost"
+                        className="h-6 w-6 text-muted-foreground hover:text-destructive"
+                        disabled={!!connecting || disconnecting === extra.id}
+                        onClick={() => handleDisconnect(extra)}
+                        title="Desconectar"
+                      >
+                        {disconnecting === extra.id ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Unlink className="h-3.5 w-3.5" />}
+                      </Button>
+                    </div>
+                    {!isBluesky && (
+                      <Input
+                        placeholder={PROFILE_URL_PLACEHOLDERS[platform] || "URL do perfil (para analytics)"}
+                        value={profileUrls[extra.id] || ""}
+                        onChange={(e) => updateProfileUrl(extra.id, e.target.value)}
+                        className="h-7 text-[11px] border-dashed"
+                      />
+                    )}
                   </div>
                 ))}
 
@@ -509,13 +519,13 @@ export function ConnectAccountDialog({ open, onOpenChange }: ConnectAccountDialo
                   </div>
                 )}
 
-                {/* ── URL de perfil para analytics ─────────────── */}
-                {isConnected && !isBluesky && (
+                {/* ── URL de perfil para analytics (por conta) ─────────────── */}
+                {isConnected && !isBluesky && account && (
                   <div className="ml-[52px]">
                     <Input
                       placeholder={PROFILE_URL_PLACEHOLDERS[platform] || "URL do perfil (para analytics)"}
-                      value={profileUrls[platform] || ""}
-                      onChange={(e) => updateProfileUrl(platform, e.target.value)}
+                      value={profileUrls[account.id] || ""}
+                      onChange={(e) => updateProfileUrl(account.id, e.target.value)}
                       className="h-7 text-[11px] border-dashed"
                     />
                     <p className="text-[9px] text-muted-foreground mt-0.5 pl-0.5">
