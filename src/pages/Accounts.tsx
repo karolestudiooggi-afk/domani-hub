@@ -157,17 +157,22 @@ export default function Accounts() {
                     </Button>
                     </div>
                     {linkOpen === account.id && (
-                      <div className="flex items-center gap-2">
-                        <Input
-                          autoFocus
-                          placeholder={`https://${account.platform}.com/perfil`}
-                          value={profileUrls[account.id] || ""}
-                          onChange={(e) => setProfileUrl(account.id, e.target.value)}
-                          className="h-8 text-xs border-dashed"
-                        />
-                        <Button size="icon" variant="ghost" className="h-8 w-8 text-green-600" title="Pronto" onClick={() => setLinkOpen(null)}>
-                          <Check className="h-4 w-4" />
-                        </Button>
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2">
+                          <Input
+                            autoFocus
+                            placeholder={`https://${account.platform}.com/perfil`}
+                            value={profileUrls[account.id] || ""}
+                            onChange={(e) => setProfileUrl(account.id, e.target.value)}
+                            className="h-8 text-xs border-dashed"
+                          />
+                          <Button size="icon" variant="ghost" className="h-8 w-8 text-green-600" title="Pronto" onClick={() => setLinkOpen(null)}>
+                            <Check className="h-4 w-4" />
+                          </Button>
+                        </div>
+                        <p className="text-[11px] font-medium text-primary/80 pl-0.5">
+                          URL do perfil público — necessário para o painel de analytics
+                        </p>
                       </div>
                     )}
                   </CardContent>
