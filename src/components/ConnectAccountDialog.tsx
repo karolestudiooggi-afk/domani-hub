@@ -406,17 +406,6 @@ export function ConnectAccountDialog({ open, onOpenChange, initialPlatform }: Co
                     {isConnected ? (
                       <>
                         <CheckCircle2 className="h-5 w-5 text-green-500" />
-                        {!isBluesky && (
-                          <Button
-                            size="sm"
-                            className="h-7 px-2 text-[11px] bg-gradient-to-r from-primary/90 via-primary/60 to-primary/30 text-white shadow-sm"
-                            disabled={!!connecting || isDisconnecting}
-                            onClick={() => handleConnect(platform)}
-                            title="Conectar outra conta desta rede"
-                          >
-                            {isConnecting ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <>+ conta</>}
-                          </Button>
-                        )}
                         <Button
                           size="sm"
                           variant="ghost"
@@ -473,6 +462,19 @@ export function ConnectAccountDialog({ open, onOpenChange, initialPlatform }: Co
                     </Button>
                   </div>
                 ))}
+
+                {/* Adicionar outra conta desta rede — botão próprio, embaixo da lista */}
+                {isConnected && !isBluesky && (
+                  <Button
+                    variant="outline"
+                    className="ml-[52px] h-8 border-dashed text-xs text-primary hover:bg-primary/5"
+                    disabled={!!connecting}
+                    onClick={() => handleConnect(platform)}
+                  >
+                    {isConnecting ? <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" /> : <span className="mr-1.5">+</span>}
+                    Conectar outra conta de {cfg.name}
+                  </Button>
+                )}
 
                 {/* ── Bluesky: form especial ───────────────────── */}
                 {isBluesky && !isConnected && (
