@@ -144,7 +144,7 @@ function WorkspaceInner({ onBack }: { onBack?: () => void }) {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="none">Sem marca</SelectItem>
-            {brands.map((b) => <SelectItem key={b.id} value={b.id}>{b.name}{b.is_default && <Star className="ml-1 inline h-3 w-3 fill-primary text-primary" />}</SelectItem>)}
+            {brands.map((b) => <SelectItem key={b.id} value={b.id}>{b.name}</SelectItem>)}
           </SelectContent>
         </Select>
 
