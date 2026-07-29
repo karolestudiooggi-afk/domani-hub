@@ -484,7 +484,7 @@ export function ConnectAccountDialog({ open, onOpenChange }: ConnectAccountDialo
 
                 {/* ── Bluesky: form especial ───────────────────── */}
                 {isBluesky && !isConnected && (
-                  <div className="ml-[52px] space-y-2 rounded-lg border border-border bg-muted/30 p-3">
+                  <div className="space-y-2 rounded-lg border border-border bg-muted/30 p-3">
                     <div className="grid grid-cols-2 gap-2">
                       <div className="space-y-1">
                         <Label className="text-xs">Handle</Label>
