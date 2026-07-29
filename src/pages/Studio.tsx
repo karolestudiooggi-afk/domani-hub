@@ -17,8 +17,10 @@ interface NavState {
 
 function buildInitial(nav: NavState | null): StudioDoc | undefined {
   if (!nav) return undefined;
-  const has = nav.sourceContent || nav.prompt || nav.sourceTitle || (nav.mediaUrls?.length ?? 0) > 0;
-  if (!has) return undefined;
+  // Só abre direto no canvas quando há IMAGEM (ex: editar da galeria).
+  // Conteúdo/texto puro ("Usar como base") vai para o gerador (AutoStudio),
+  // com o texto já preenchido no campo "O que você quer criar?".
+  if (!(nav.mediaUrls?.length ?? 0)) return undefined;
   const base = emptyDoc("post", nav.brandId || null);
   return {
     ...base,

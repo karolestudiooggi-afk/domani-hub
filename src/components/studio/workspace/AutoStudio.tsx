@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { Loader2, Sparkles, Settings2, ImagePlus, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -119,7 +120,8 @@ export function AutoStudio({ onEditInCanvas }: { onEditInCanvas: (doc: StudioDoc
   useEffect(() => { if (!brandId && defaultBrand) setBrandId(defaultBrand.id); }, [defaultBrand, brandId]);
   const brand = (brands.find((b) => b.id === brandId) || defaultBrand || null) as BrandProfile | null;
 
-  const [prompt, setPrompt] = useState("");
+  const _navSrc = (useLocation().state as { sourceContent?: string; prompt?: string } | null) || null;
+  const [prompt, setPrompt] = useState(_navSrc?.sourceContent || _navSrc?.prompt || "");
   // Foto de referência enviada pelo cliente (data URL). Quando existe, a IA
   // parte dela em vez de criar do zero.
   const [refImages, setRefImages] = useState<{ src: string; name: string }[]>([]);
