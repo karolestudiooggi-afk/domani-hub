@@ -175,7 +175,7 @@ export function OutputScreen({
         } else if (isHttp(url)) urls.push(url);
       }
       if (urls.length) {
-        await saveVisualToGallery({ urls, prompt: doc.caption, templateName: "Studio · Automático" });
+        await saveVisualToGallery({ urls, prompt: doc.caption, templateName: "Studio · Automático", id: doc.galleryId });
         toast.success("Salvo na galeria");
       }
     } catch (e) { toast.error(e instanceof Error ? e.message : "Erro ao salvar"); }

@@ -51,7 +51,7 @@ export function ArtStyles() {
       if (!images?.[0]) { toast.error("Falha ao gerar a arte."); return; }
       apply(images[0]);
       toast.success(`Arte "${style.name}" gerada`);
-      saveVisualToGallery({ urls: [images[0]], prompt: `${style.name}: ${subject}`, templateName: `Studio · ${style.name}` });
+      saveVisualToGallery({ urls: [images[0]], prompt: `${style.name}: ${subject}`, templateName: `Studio · ${style.name}`, id: doc.galleryId });
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Erro ao gerar arte");
     } finally { setBusy(null); }

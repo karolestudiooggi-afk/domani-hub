@@ -35,7 +35,7 @@ function buildInitial(nav: NavState | null): StudioDoc | undefined {
         }))
       : base.slides,
     schedule: nav.scheduleAt ? { when: "schedule", at: nav.scheduleAt } : { when: "now" },
-    galleryId: nav.galleryId,
+    galleryId: nav.galleryId || base.galleryId,
   };
 }
 

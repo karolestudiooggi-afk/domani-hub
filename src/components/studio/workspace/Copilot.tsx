@@ -142,7 +142,7 @@ export function Copilot() {
           set({ videoUrl: st.video.url, caption });
           setGenerating(false); setProgress("");
           toast.success("Vídeo gerado!");
-          saveVisualToGallery({ urls: [st.video.url], prompt: intent.trim(), templateName: "Studio · Copiloto" });
+          saveVisualToGallery({ urls: [st.video.url], prompt: intent.trim(), templateName: "Studio · Copiloto", id: doc.galleryId });
         } else if (st.status === "failed" || st.status === "nsfw") {
           stopPolling(); videoReqRef.current = null;
           setGenerating(false); setProgress("");
@@ -174,7 +174,7 @@ export function Copilot() {
         if (!img) { toast.error("Falha ao gerar imagem."); return; }
         replaceDoc({ ...doc, slides: [brandSlide([], img)], caption: intent.trim() });
         toast.success("Imagem gerada");
-        if (img) saveVisualToGallery({ urls: [img], prompt: intent.trim(), templateName: "Studio · Copiloto" });
+        if (img) saveVisualToGallery({ urls: [img], prompt: intent.trim(), templateName: "Studio · Copiloto", id: doc.galleryId });
       } else if (doc.format === "card") {
         setProgress("Escrevendo o card…");
         const { text } = await aiAssist({
@@ -201,7 +201,7 @@ export function Copilot() {
           hashtags: res.hashtags || [],
         });
         toast.success("Post gerado");
-        if (img) saveVisualToGallery({ urls: [img], prompt: intent.trim(), templateName: "Studio · Copiloto" });
+        if (img) saveVisualToGallery({ urls: [img], prompt: intent.trim(), templateName: "Studio · Copiloto", id: doc.galleryId });
       } else if (doc.format === "carousel") {
         setProgress("Montando carrossel…");
         const res = await generateContent({ prompt: `${topic}. Gere um carrossel de 5 slides.`, platforms: ["instagram"], tone: brand?.tone, language: "português brasileiro", brandProfile: brandTextProfile(brand) });
@@ -214,7 +214,7 @@ export function Copilot() {
         replaceDoc({ ...doc, slides, caption: res.posts?.instagram || res.carousel?.title || intent.trim(), hashtags: res.hashtags || [] });
         toast.success("Carrossel gerado");
         const carouselUrls = slides.map((s) => s.bgImage).filter((u): u is string => !!u);
-        if (carouselUrls.length) saveVisualToGallery({ urls: carouselUrls, prompt: intent.trim(), templateName: "Studio · Copiloto" });
+        if (carouselUrls.length) saveVisualToGallery({ urls: carouselUrls, prompt: intent.trim(), templateName: "Studio · Copiloto", id: doc.galleryId });
       } else if (doc.format === "video") {
         setProgress("Enviando para geração…");
         const model = videoModel;

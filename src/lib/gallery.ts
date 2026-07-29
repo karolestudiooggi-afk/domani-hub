@@ -218,15 +218,34 @@ export async function saveVisualToGallery(opts: {
   const isCarousel = validUrls.length > 1 && !isVideo;
   const type = isVideo ? "video" : isCarousel ? "carousel" : "image";
 
-  // Se já existe (veio da galeria), ATUALIZA no lugar — não duplica.
+  // Se tem id (todo doc nasce com um), faz UPSERT: grava NESTE item —
+  // cria se não existir, atualiza se já existir. Nunca duplica.
   if (opts.id) {
-    return updateCreation(opts.id, {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return null;
+    const org_id = await requireOrgId();
+    const row: Record<string, unknown> = {
+      id: opts.id,
+      org_id,
+      user_id: user.id,
       type,
       urls: validUrls,
-      thumbnailUrl: validUrls[0],
-      prompt: opts.prompt,
-      brandId: opts.brandId,
-    });
+      thumbnail_url: validUrls[0] || null,
+      prompt: opts.prompt || null,
+      brand_id: opts.brandId || null,
+    };
+    if (opts.templateName) row.template_name = opts.templateName;
+    // Não mexe em "published" no upsert (preserva se já foi publicado).
+    const { data, error } = await supabase
+      .from("creations")
+      .upsert(row, { onConflict: "id" })
+      .select()
+      .single();
+    if (error) {
+      console.error("Failed to upsert creation:", error);
+      return null;
+    }
+    return mapRow(data);
   }
 
   return saveCreation({

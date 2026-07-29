@@ -23,6 +23,9 @@ export function emptyDoc(format: StudioFormat = "post", brandId: string | null =
     hashtags: [],
     platforms: ["instagram"],
     schedule: { when: "now" },
+    // Id fixo desde o nascimento: todo "salvar" grava NESTE item (upsert),
+    // em vez de criar cópias. Só muda se abrir outra arte da galeria.
+    galleryId: (globalThis.crypto?.randomUUID?.() ?? uid()),
   };
 }
 
