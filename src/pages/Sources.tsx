@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useConfirm } from "@/components/ui/confirm";
 import { useNavigate } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -100,8 +101,9 @@ export default function Sources() {
     }
   };
 
+  const confirm = useConfirm();
   const handleDelete = async (id: string) => {
-    if (!window.confirm("Remover esta fonte da biblioteca? Esta ação não pode ser desfeita.")) return;
+    if (!(await confirm("Remover esta fonte da biblioteca? Esta ação não pode ser desfeita."))) return;
     await supabase.from("saved_sources").delete().eq("id", id);
     queryClient.invalidateQueries({ queryKey: ["saved_sources"] });
     toast({ title: "Fonte removida" });

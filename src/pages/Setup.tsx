@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useConfirm } from "@/components/ui/confirm";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   ArrowRight, ArrowLeft, Loader2, AlertCircle, Link2, CheckCircle2,
@@ -201,8 +202,9 @@ export default function Setup() {
   };
 
   // ── Remover chave ─────────────────────────────────────────
+  const confirm = useConfirm();
   const removeKey = async (which: "pfm" | "hf" | "apify" | "firecrawl" | "pexels") => {
-    if (!confirm("Remover essa credencial? As funcionalidades dependentes serão desativadas.")) return;
+    if (!(await confirm("Remover essa credencial? As funcionalidades dependentes serão desativadas."))) return;
     const patch: Partial<AppConfig> =
       which === "pfm" ? { postformeApiKey: "" }
       : which === "hf" ? { higgsFieldApiId: undefined, higgsFieldApiSecret: undefined }

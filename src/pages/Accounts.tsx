@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useConfirm } from "@/components/ui/confirm";
 import { Users, RefreshCw, Plus, Loader2, AlertCircle, Unlink, Globe, Link2, Check } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -35,8 +36,9 @@ export default function Accounts() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
+  const confirm = useConfirm();
   const handleDisconnect = async (pfmId: string, platformName: string) => {
-    if (!confirm(`Desconectar conta do ${platformName}?`)) return;
+    if (!(await confirm(`Desconectar conta do ${platformName}?`))) return;
     setDisconnectingId(pfmId);
     try {
       await pfmDisconnectAccount(pfmId);

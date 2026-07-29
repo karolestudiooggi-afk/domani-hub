@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { useConfirm } from "@/components/ui/confirm";
 import { supabase } from "@/integrations/supabase/client";
 import { requireOrgId } from "@/lib/org";
 import { Button } from "@/components/ui/button";
@@ -126,8 +127,9 @@ export function BrandMaterials({ brandId, brandName }: { brandId?: string | null
     }
   };
 
+  const confirm = useConfirm();
   const remove = async (id: string) => {
-    if (!confirm("Remover este material? A IA deixa de usá-lo.")) return;
+    if (!(await confirm("Remover este material? A IA deixa de usá-lo."))) return;
     const { error } = await supabase.from("brand_materials").delete().eq("id", id);
     if (error) { toast.error(error.message); return; }
     toast.success("Material removido.");

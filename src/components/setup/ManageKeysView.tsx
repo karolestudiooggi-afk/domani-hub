@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useConfirm } from "@/components/ui/confirm";
 import { ArrowLeft, ExternalLink, Loader2, Trash2, Save, Eye, EyeOff, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -155,8 +156,9 @@ function ManageKeyCard({
     }
   };
 
+  const confirm = useConfirm();
   const handleRemove = async () => {
-    if (!confirm(`Remover a chave do ${def.label}? As funcionalidades dependentes deixarão de funcionar.`)) return;
+    if (!(await confirm(`Remover a chave do ${def.label}? As funcionalidades dependentes deixarão de funcionar.`))) return;
     setBusy(true);
     try {
       await onSave({ [def.id]: undefined } as Partial<AppConfig>);
@@ -259,8 +261,9 @@ function HiggsfieldCard({
     }
   };
 
+  const confirm = useConfirm();
   const handleRemove = async () => {
-    if (!confirm("Remover credenciais do Higgsfield? Geração de vídeo e imagens IA serão desativadas.")) return;
+    if (!(await confirm("Remover credenciais do Higgsfield? Geração de vídeo e imagens IA serão desativadas."))) return;
     setBusy(true);
     try {
       await onSave({ higgsFieldApiId: undefined, higgsFieldApiSecret: undefined });

@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { ConfirmProvider } from "@/components/ui/confirm";
 import { AppProvider, useApp } from "@/contexts/AppContext";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { useRole } from "@/hooks/use-role";
@@ -95,6 +96,7 @@ const App = () => (
       <AuthProvider>
         <AppProvider>
           <TooltipProvider>
+            <ConfirmProvider>
             <Toaster />
             <Sonner />
             <BrowserRouter>
@@ -139,6 +141,7 @@ const App = () => (
                 </Routes>
               </Suspense>
             </BrowserRouter>
+            </ConfirmProvider>
           </TooltipProvider>
         </AppProvider>
       </AuthProvider>

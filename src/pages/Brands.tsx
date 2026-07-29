@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { useConfirm } from "@/components/ui/confirm";
 import { useAuth } from "@/contexts/AuthContext";
 import {
   Building2, Plus, Star, Pencil, Trash2, ChevronDown, Palette,
@@ -104,6 +105,7 @@ const emptyForm = {
 type FormState = typeof emptyForm;
 
 export default function Brands() {
+  const confirm = useConfirm();
   const { user } = useAuth();
   const [profiles, setProfiles] = useState<BrandProfile[]>([]);
   const [loading, setLoading] = useState(true);
@@ -317,7 +319,7 @@ export default function Brands() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!window.confirm("Excluir este perfil de marca? Esta ação não pode ser desfeita.")) return;
+    if (!(await confirm({ title: "Excluir marca", description: "Excluir este perfil de marca? Esta ação não pode ser desfeita.", destructive: true, confirmText: "Excluir" }))) return;
     const { error } = await supabase.from("brand_profiles").delete().eq("id", id);
     if (error) toast.error("Erro ao excluir");
     else {
@@ -462,7 +464,7 @@ export default function Brands() {
       {!loading && profiles.length > 0 && (
         <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           {profiles.map((profile) => (
-            <Card key={profile.id} className={`card-premium ${profile.is_default ? "border-primary/50 shadow-primary/10 shadow-md" : ""}`}>
+            <Card key={profile.id} className={`card-premium h-full ${profile.is_default ? "border-primary/50 shadow-primary/10 shadow-md" : ""}`}>
               <CardContent className="p-5 space-y-3">
                 <div className="flex items-start gap-3">
                   <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-primary/20 to-primary/10 shrink-0 overflow-hidden">

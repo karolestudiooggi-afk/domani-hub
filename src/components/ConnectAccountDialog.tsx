@@ -15,6 +15,7 @@
  */
 
 import { useState, useEffect, useRef, useCallback } from "react";
+import { useConfirm } from "@/components/ui/confirm";
 import {
   Loader2, CheckCircle2, Link2, RefreshCw, AlertCircle,
   XCircle, ExternalLink, Unlink, Info,
@@ -268,8 +269,9 @@ export function ConnectAccountDialog({ open, onOpenChange, initialPlatform }: Co
   }, [stopPolling]);
 
   // ── Desconectar conta ─────────────────────────────────────────
+  const confirm = useConfirm();
   const handleDisconnect = useCallback(async (account: api.PfmAccount) => {
-    if (!confirm(`Desconectar ${PLATFORMS[account.platform as Platform]?.name ?? account.platform}?`)) return;
+    if (!(await confirm(`Desconectar ${PLATFORMS[account.platform as Platform]?.name ?? account.platform}?`))) return;
     setDisconnecting(account.id);
     try {
       await api.pfmDisconnectAccount(account.id);
