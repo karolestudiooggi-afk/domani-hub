@@ -465,7 +465,7 @@ export default function Brands() {
         <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           {profiles.map((profile) => (
             <Card key={profile.id} className={`card-premium h-full ${profile.is_default ? "border-primary/50 shadow-primary/10 shadow-md" : ""}`}>
-              <CardContent className="p-5 space-y-3">
+              <CardContent className="flex h-full flex-col p-5 space-y-3">
                 <div className="flex items-start gap-3">
                   <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-primary/20 to-primary/10 shrink-0 overflow-hidden">
                     {profile.profile_photo_url ? (
@@ -479,7 +479,6 @@ export default function Brands() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
                       <h3 className="font-bold truncate">{profile.name}</h3>
-                      {profile.is_default && <Star className="h-4 w-4 text-yellow-500 fill-yellow-500 shrink-0" />}
                     </div>
                     {profile.handle && <p className="text-xs text-muted-foreground truncate">{profile.handle}</p>}
                     {!profile.handle && profile.industry && <p className="text-xs text-muted-foreground truncate">{profile.industry}</p>}
@@ -525,7 +524,7 @@ export default function Brands() {
                   </div>
                 )}
 
-                <div className="flex gap-2 pt-2 border-t">
+                <div className="mt-auto flex gap-2 pt-2 border-t">
                   <Button variant="ghost" size="sm" className="flex-1 text-xs" onClick={() => { setPreviewProfile(profile); setPreviewOpen(true); }}>
                     <Eye className="mr-1.5 h-3 w-3" /> Preview
                   </Button>
