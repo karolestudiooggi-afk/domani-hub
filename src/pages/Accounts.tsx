@@ -1,7 +1,9 @@
 import { useState } from "react";
-import { Users, RefreshCw, Plus, Loader2, AlertCircle, Unlink, Globe } from "lucide-react";
+import { Users, RefreshCw, Plus, Loader2, AlertCircle, Unlink, Globe, Link2, Check } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { userStorage } from "@/lib/storage";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ConnectAccountDialog } from "@/components/ConnectAccountDialog";
@@ -17,6 +19,18 @@ export default function Accounts() {
   const pfmAccountsQuery = usePfmAccounts();
   const [connectOpen, setConnectOpen] = useState(false);
   const [disconnectingId, setDisconnectingId] = useState<string | null>(null);
+  // Link do perfil (para analytics), por conta. Clica na conta para editar.
+  const [linkOpen, setLinkOpen] = useState<string | null>(null);
+  const [profileUrls, setProfileUrls] = useState<Record<string, string>>(() => {
+    try { return JSON.parse(userStorage.get("profile_urls") || "{}"); } catch { return {}; }
+  });
+  const setProfileUrl = (id: string, url: string) => {
+    setProfileUrls((prev) => {
+      const next = { ...prev, [id]: url };
+      userStorage.set("profile_urls", JSON.stringify(next));
+      return next;
+    });
+  };
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -103,7 +117,8 @@ export default function Accounts() {
               const cfg = PLATFORMS[account.platform as keyof typeof PLATFORMS];
               return (
                 <Card key={account.id} className="card-premium border-green-500/30">
-                  <CardContent className="flex items-center gap-4 p-5">
+                  <CardContent className="flex flex-col gap-3 p-5">
+                    <div className="flex items-center gap-4">
                     <div className={`flex h-12 w-12 items-center justify-center rounded-xl text-white text-xl shadow-lg ${cfg?.bgColor ?? "bg-gray-500"}`}>
                       {cfg?.icon ?? <Globe className="h-5 w-5" />}
                     </div>
@@ -111,11 +126,21 @@ export default function Accounts() {
                       <div className="flex items-center gap-2">
                         <h3 className="font-semibold truncate">{cfg?.name ?? account.platform}</h3>
                         <Badge className="bg-green-500/10 text-green-600 text-[10px]">ativo</Badge>
+                        {profileUrls[account.id] && <Link2 className="h-3.5 w-3.5 text-green-500" title="Link do perfil definido" />}
                       </div>
                       <p className="text-sm text-muted-foreground truncate">
                         {account.username ? `@${account.username}` : account.name || "—"}
                       </p>
                     </div>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className={`h-8 w-8 shrink-0 ${linkOpen === account.id ? "text-primary" : "text-muted-foreground hover:text-primary"}`}
+                      title="Link do perfil (para analytics)"
+                      onClick={() => setLinkOpen((cur) => (cur === account.id ? null : account.id))}
+                    >
+                      <Link2 className="h-4 w-4" />
+                    </Button>
                     <Button
                       variant="ghost"
                       size="icon"
@@ -129,6 +154,21 @@ export default function Accounts() {
                         : <Unlink className="h-4 w-4" />
                       }
                     </Button>
+                    </div>
+                    {linkOpen === account.id && (
+                      <div className="flex items-center gap-2">
+                        <Input
+                          autoFocus
+                          placeholder={`https://${account.platform}.com/perfil`}
+                          value={profileUrls[account.id] || ""}
+                          onChange={(e) => setProfileUrl(account.id, e.target.value)}
+                          className="h-8 text-xs border-dashed"
+                        />
+                        <Button size="icon" variant="ghost" className="h-8 w-8 text-green-600" title="Pronto" onClick={() => setLinkOpen(null)}>
+                          <Check className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    )}
                   </CardContent>
                 </Card>
               );
