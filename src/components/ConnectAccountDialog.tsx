@@ -466,12 +466,11 @@ export function ConnectAccountDialog({ open, onOpenChange, initialPlatform }: Co
                 {/* Adicionar outra conta desta rede — botão próprio, embaixo da lista */}
                 {isConnected && !isBluesky && (
                   <Button
-                    variant="outline"
-                    className="ml-[52px] h-8 border-dashed text-xs text-primary hover:bg-primary/5"
+                    className="ml-[52px] w-[calc(100%-52px)] bg-primary text-primary-foreground shadow-sm hover:bg-primary/90"
                     disabled={!!connecting}
                     onClick={() => handleConnect(platform)}
                   >
-                    {isConnecting ? <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" /> : <span className="mr-1.5">+</span>}
+                    {isConnecting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <span className="mr-2 text-base">+</span>}
                     Conectar outra conta de {cfg.name}
                   </Button>
                 )}
