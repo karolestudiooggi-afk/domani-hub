@@ -22,6 +22,25 @@ export class ErrorBoundary extends Component<Props, State> {
     return { hasError: true, error };
   }
 
+  componentDidCatch(error: Error) {
+    // Erro típico DEPOIS de um deploy: o navegador tem o HTML velho apontando
+    // para um arquivo .js que o build renomeou. Em vez de mostrar a tela de erro,
+    // recarrega sozinho (com trava de 15s para nunca entrar em loop).
+    const msg = error?.message || "";
+    const chunkError = /Failed to fetch dynamically imported module|Importing a module script failed|error loading dynamically imported module|dynamically imported module/i.test(msg);
+    if (chunkError) {
+      try {
+        const last = Number(sessionStorage.getItem("dm_chunk_reload_at") || 0);
+        if (Date.now() - last > 15000) {
+          sessionStorage.setItem("dm_chunk_reload_at", String(Date.now()));
+          window.location.reload();
+        }
+      } catch {
+        window.location.reload();
+      }
+    }
+  }
+
   handleReset = () => {
     this.setState({ hasError: false, error: null });
   };
