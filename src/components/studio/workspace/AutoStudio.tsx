@@ -969,9 +969,9 @@ Responda APENAS JSON: { "narracao": "<fala completa em pt-BR>", "cena": "<descri
             size="lg"
             onClick={gerarArteIA}
             disabled={generating || !prompt.trim()}
-            title="A IA cria a arte inteira, com o texto já dentro da imagem (Ideogram). Nível ChatGPT — não fica editável depois."
+            title="A IA cria a arte inteira, com o texto já dentro da imagem (Ideogram). Fica linda e pronta pra postar — mas NÃO é editável aqui. Pra editar, use o botão 'Editar no Canva'."
           >
-            <Sparkles className="mr-2 h-4 w-4" /> Gerar arte com IA (texto na imagem)
+            <Sparkles className="mr-2 h-4 w-4" /> Arte pronta com IA (não editável)
           </Button>
         )}
         {brand?.name

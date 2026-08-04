@@ -1,4 +1,3 @@
-
 /**
  * OutputScreen — tela dedicada de resultado do modo automático.
  * Preview grande dos slides/vídeo, legenda editável (com geração IA),

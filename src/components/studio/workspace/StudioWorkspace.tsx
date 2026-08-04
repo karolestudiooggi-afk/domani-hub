@@ -5,6 +5,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { saveVisualToGallery } from "@/lib/gallery";
+import { abrirNoCanva } from "@/lib/canva";
 import { Button } from "@/components/ui/button";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
@@ -89,6 +90,20 @@ function WorkspaceInner({ onBack }: { onBack?: () => void }) {
   const { doc, set, undo, redo, canUndo, canRedo, exportSlides } = useStudio();
   const [publishOpen, setPublishOpen] = useState(false);
   const [salvando, setSalvando] = useState(false);
+  const [canvaLoading, setCanvaLoading] = useState(false);
+
+  const editarNoCanva = async () => {
+    setCanvaLoading(true);
+    try {
+      const urls = await exportSlides();
+      if (!urls.length) { toast.error("Nada para enviar ao Canva ainda."); setCanvaLoading(false); return; }
+      await abrirNoCanva(urls, doc.caption || "Domani design");
+      // redireciona pro Canva; se chegar aqui é porque não redirecionou
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Erro ao abrir o Canva.");
+      setCanvaLoading(false);
+    }
+  };
 
   const handleSalvar = async () => {
     setSalvando(true);
@@ -164,6 +179,10 @@ function WorkspaceInner({ onBack }: { onBack?: () => void }) {
           <Button variant="outline" className="ml-1" onClick={handleSalvar} disabled={salvando} title="Salvar as alterações na galeria">
             {salvando ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
             <span className="hidden sm:inline">Salvar</span>
+          </Button>
+          <Button variant="outline" className="ml-1 border-[#00c4cc] text-[#00a4ab] hover:bg-[#e6fbfc] hover:text-[#008b91]" onClick={editarNoCanva} disabled={canvaLoading} title="Abrir esta arte no editor do Canva">
+            {canvaLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <PenSquare className="mr-2 h-4 w-4" />}
+            <span className="hidden sm:inline">Editar no Canva</span>
           </Button>
           <Button className="ml-1 bg-gradient-to-r from-primary/90 via-primary/60 to-primary/30" onClick={() => setPublishOpen(true)}>
             <Send className="mr-2 h-4 w-4" /> <span className="hidden sm:inline">Postar / Agendar</span>
