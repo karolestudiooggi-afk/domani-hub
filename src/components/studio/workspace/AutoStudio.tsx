@@ -962,7 +962,7 @@ Responda APENAS JSON: { "narracao": "<fala completa em pt-BR>", "cena": "<descri
             {generating ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> {progress || "Gerando…"}</> : <><Sparkles className="mr-2 h-4 w-4" /> Criar</>}
           </Button>
         )}
-        {formatChoice !== "video" && !advanced && (
+        {formatChoice !== "video" && (
           <Button
             variant="outline"
             className="w-full rounded-full border-emerald-500 text-emerald-700 hover:bg-emerald-50 hover:text-emerald-800"
