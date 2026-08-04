@@ -1,3 +1,4 @@
+
 /**
  * OutputScreen — tela dedicada de resultado do modo automático.
  * Preview grande dos slides/vídeo, legenda editável (com geração IA),
@@ -61,6 +62,7 @@ export function OutputScreen({
   const [publishing, setPublishing] = useState(false);
   const [done, setDone] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [canvaLoading, setCanvaLoading] = useState(false);
   const [capsByPlat, setCapsByPlat] = useState<Record<string, string>>(doc.captionsByPlatform || {});
 
   const isVideo = !!doc.videoUrl;
@@ -182,6 +184,34 @@ export function OutputScreen({
     finally { setSaving(false); }
   };
 
+  // Abre a arte atual no editor do Canva (sobe pro storage se precisar,
+  // pede autorização do Canva e redireciona pro editor deles).
+  const editarNoCanva = async () => {
+    if (!user) return;
+    setCanvaLoading(true);
+    try {
+      let imageUrl = media[slideIdx] || media[0];
+      if (!imageUrl) throw new Error("Sem imagem para enviar ao Canva.");
+      if (imageUrl.startsWith("data:")) {
+        const blob = dataUrlToBlob(imageUrl);
+        const path = `${user.id}/canva/cv_${uuid()}.png`;
+        const { error } = await supabase.storage.from("media").upload(path, blob, { contentType: "image/png" });
+        if (error) throw error;
+        imageUrl = supabase.storage.from("media").getPublicUrl(path).data.publicUrl;
+      }
+      const { data, error } = await supabase.functions.invoke("canva-start", {
+        body: { imageUrl, title: (doc.caption || "Domani design").slice(0, 50) },
+      });
+      if (error) throw error;
+      if (!data?.url) throw new Error("Não consegui iniciar o Canva.");
+      // Vai pro Canva autorizar → volta pro callback → abre o editor com a arte.
+      window.location.href = data.url;
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Erro ao abrir o Canva.");
+      setCanvaLoading(false);
+    }
+  };
+
   return (
     <div className="mx-auto max-w-4xl px-4 py-8">
       <div className="mb-6 flex items-center gap-2">
@@ -223,6 +253,11 @@ export function OutputScreen({
           <Button variant="outline" size="sm" className="w-full" onClick={handleSaveGallery} disabled={saving}>
             {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Copy className="mr-2 h-4 w-4" />} Salvar na galeria
           </Button>
+          {!isVideo && (
+            <Button variant="outline" size="sm" className="w-full border-[#00c4cc] text-[#00a4ab] hover:bg-[#e6fbfc] hover:text-[#008b91]" onClick={editarNoCanva} disabled={canvaLoading}>
+              {canvaLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <PenTool className="mr-2 h-4 w-4" />} Editar no Canva
+            </Button>
+          )}
         </div>
 
         {/* ── Publicação ── */}

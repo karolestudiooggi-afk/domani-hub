@@ -1,4 +1,5 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
+import { toast } from "sonner";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -90,6 +91,21 @@ function GuestOnly({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
+// Quando o Canva devolve com erro (?canva_error=...), mostra um aviso e limpa a URL.
+function CanvaReturnHandler() {
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const err = params.get("canva_error");
+    if (err) {
+      toast.error(`Canva: ${err}`);
+      params.delete("canva_error");
+      const qs = params.toString();
+      window.history.replaceState({}, "", window.location.pathname + (qs ? `?${qs}` : ""));
+    }
+  }, []);
+  return null;
+}
+
 const App = () => (
   <ErrorBoundary>
     <QueryClientProvider client={queryClient}>
@@ -100,6 +116,7 @@ const App = () => (
             <Toaster />
             <Sonner />
             <BrowserRouter>
+              <CanvaReturnHandler />
               <Suspense fallback={<PageLoader />}>
                 <Routes>
                   {/* Auth routes (guest only) */}
